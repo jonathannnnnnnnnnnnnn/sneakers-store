@@ -355,24 +355,26 @@ const toggleWishlist = (productId: string, e: React.MouseEvent) => {
       <span className="text-xs uppercase font-extrabold tracking-wider text-orange-500">
         {product.gender || product.category}
       </span>
-      <h3 className="font-bold text-gray-900 text-lg mt-1 hover:text-orange-500 transition-colors">
-        {product.name}
-      </h3>
+<h3 className="font-bold text-gray-900 text-xs sm:text-base mt-1 line-clamp-1 hover:text-orange-500 transition-colors">
+  {product.name}
+</h3>
     </Link>
     {/* <p className="text-gray-500 text-xs line-clamp-2 mt-1">
       {product.description || "Premium quality sneakers and apparel."}
     </p> */}
   </div>
 
-                <div className="flex items-center justify-between mt-1 pt-2 border-t">
-                  <span className="text-xl font-black text-black">${product.price.toFixed(2)}</span>
-                  <button
-                    onClick={() => addToCart(product)}
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm shadow-sm active:scale-95"
-                  >
-                    + Add
-                  </button>
-                </div>
+<div className="flex items-center justify-between gap-1 mt-1 pt-2 border-t">
+  <span className="text-xs sm:text-base font-black text-black truncate">
+    ${product.price.toFixed(2)}
+  </span>
+  <button
+    onClick={() => addToCart(product)}
+    className="whitespace-nowrap bg-orange-500 hover:bg-orange-600 text-white font-bold py-1 px-2 sm:px-3 text-[11px] sm:text-xs rounded-lg transition-colors flex-shrink-0"
+  >
+    + Add
+  </button>
+</div>
               </div>
             ))}
           </div>
