@@ -83,7 +83,7 @@ export default function Navbar({
         <div className="flex items-center gap-6 relative">
           <Link
             href="/login"
-            className="text-sm font-semibold text-gray-600 hover:text-black transition-colors"
+            className="hidden md:block text-sm font-semibold text-gray-700 hover:text-black transition-colors"
           >
             Login / Register
           </Link>
@@ -156,7 +156,7 @@ export default function Navbar({
               <Link
                 href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-[10px] sm:text-xs font-medium text-gray-700 whitespace-nowrap"
+                className="text-lg font-bold text-gray-900 hover:text-orange-500 transition-colors pt-4 border-t border-gray-100 block "
               >
                 Login / Register
               </Link>
