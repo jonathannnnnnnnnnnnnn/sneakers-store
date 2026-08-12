@@ -335,7 +335,7 @@ const toggleWishlist = (productId: string, e: React.MouseEvent) => {
 >
   <div>
     <Link href={`/products/${product.id}`} className="block">
-    <div className="w-full h-64 relative rounded-xl overflow-hidden bg-gray-100 mb-4 cursor-pointer">
+    <div className="w-full h-36 sm:h-52 relative rounded-xl overflow-hidden bg-gray-100 mb-2 cursor-pointer">
   <img
     src={product.image_url || "/placeholder.png"}
     alt={product.name}
