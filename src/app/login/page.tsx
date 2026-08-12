@@ -69,7 +69,7 @@ export default function AuthPage() {
                   type="text"
                   required={!isLogin}
                   className="w-full px-3 py-2 border border-gray-300 bg-white text-gray-900 placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                  placeholder="John Doe"
+                  // placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -84,7 +84,7 @@ export default function AuthPage() {
                 type="email"
                 required
                 className="w-full px-3 py-2 border border-gray-300 bg-white text-gray-900 placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                placeholder="you@example.com"
+                // placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -98,7 +98,7 @@ export default function AuthPage() {
                 type="password"
                 required
                 className="w-full px-3 py-2 border border-gray-300 bg-white text-gray-900 placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                placeholder="••••••••"
+                // placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
