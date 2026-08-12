@@ -27,7 +27,7 @@ export default function Details({ product, onAddToCart }: DetailsProps) {
           </span>
         </div>
         <span className="text-gray-400 line-through text-sm">
-          ${product.originalPrice.toFixed(2)}
+          ${product.originalPrice?.toFixed(2)}
         </span>
       </div>
 
