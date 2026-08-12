@@ -156,7 +156,7 @@ export default function Navbar({
               <Link
                 href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-left text-black hover:text-orange-500 pt-4 border-t border-gray-100"
+                className="hidden sm:block text-xs font-medium text-gray-700 hover:text-black"
               >
                 Login / Register
               </Link>

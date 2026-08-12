@@ -327,7 +327,7 @@ const toggleWishlist = (productId: string, e: React.MouseEvent) => {
         {loading ? (
           <div className="text-center py-20 text-gray-500">Loading catalog from database...</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {filteredProducts.map((product) => (
               <div
   key={product.id}
