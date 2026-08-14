@@ -23,6 +23,7 @@ export interface Product {
   gender: string;
   images: string[];
   thumbnails?: string[];
+  brand?: string;
 }
 
 export interface CartItem {

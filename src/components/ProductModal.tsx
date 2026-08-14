@@ -15,7 +15,7 @@ interface Product {
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (product: any) => void;
 }
 
 export default function ProductModal({ product, onClose, onAddToCart }: ProductModalProps) {
