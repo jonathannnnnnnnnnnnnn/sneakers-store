@@ -22,8 +22,13 @@ export default function Footer() {
           
           {/* Brand Info */}
           <div className="md:col-span-1">
-            <Link href="/" className="text-3xl font-black text-white tracking-tight">
-              sneakers
+            <Link href="/" className="inline-flex items-center gap-2 group">
+              <span className="bg-orange-500 text-white font-black text-xs sm:text-sm w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                ⚡
+              </span>
+              <span className="text-xl sm:text-2xl font-black text-white tracking-tight leading-none">
+                SOLE<span className="text-orange-500">VAULT.</span>
+              </span>
             </Link>
             <p className="text-xs text-gray-400 mt-4 leading-relaxed">
               Your ultimate destination for authentic sneakers, limited drops, and premium streetwear logic.
@@ -87,7 +92,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
-          <p>© {new Date().getFullYear()} sneakers Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Sole Vault Inc. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-gray-300">Privacy Policy</a>
             <a href="#" className="hover:text-gray-300">Terms of Service</a>
