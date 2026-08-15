@@ -333,7 +333,9 @@ export default function Home() {
                         onClick={() => addToCart(product)}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1"
                       >
-                        🛒 Add
+                        <span>🛒</span>
+                        <span className="hidden sm:inline">Add to Cart</span>
+                        <span className="sm:hidden">Add</span>
                       </button>
                     </div>
                   </div>
@@ -426,7 +428,9 @@ export default function Home() {
                         onClick={() => addToCart(product)}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1"
                       >
-                        🛒 Add
+                        <span>🛒</span>
+                        <span className="hidden sm:inline">Add to Cart</span>
+                        <span className="sm:hidden">Add</span>
                       </button>
                     </div>
                   </div>
@@ -535,6 +539,7 @@ export default function Home() {
                       >
                         <span>🛒</span>
                         <span className="hidden sm:inline">Add to Cart</span>
+                        <span className="sm:hidden">Add</span>
                       </button>
                     </div>
                   </div>

@@ -24,6 +24,7 @@ export default function Navbar({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileSearchExpanded, setIsMobileSearchExpanded] = useState(false);
   const [animateCart, setAnimateCart] = useState(false);
   const [animateWishlist, setAnimateWishlist] = useState(false);
   
@@ -33,6 +34,7 @@ export default function Navbar({
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
 
   // Initialize Supabase browser client
   const supabase = createBrowserClient(
@@ -103,10 +105,15 @@ export default function Navbar({
     }
   }, [searchQuery]);
 
-  // Close search on click outside
+  // Close search dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(e.target as Node) &&
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(e.target as Node)
+      ) {
         setIsSearchOpen(false);
       }
     };
@@ -124,24 +131,26 @@ export default function Navbar({
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2 sm:gap-4">
           
-          {/* Mobile Menu Toggle Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden p-2 text-gray-700 hover:text-black focus:outline-none"
-            aria-label="Open Menu"
-          >
-            <span className="text-xl">☰</span>
-          </button>
+          {/* Left: Mobile Menu Toggle + Brand Logo */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-1.5 text-gray-700 hover:text-black focus:outline-none"
+              aria-label="Open Menu"
+            >
+              <span className="text-xl">☰</span>
+            </button>
 
-          {/* Brand Logo - SOLE VAULT */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <div className="bg-orange-500 text-white font-black text-sm w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              ⚡
-            </div>
-            <span className="font-black text-lg sm:text-xl tracking-wider text-gray-900">
-              SOLE<span className="text-orange-500">VAULT.</span>
-            </span>
-          </Link>
+            {/* Brand Logo - SOLE VAULT */}
+            <Link href="/" className="flex items-center gap-2 group shrink-0">
+              <div className="bg-orange-500 text-white font-black text-sm w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                ⚡
+              </div>
+              <span className="font-black text-lg sm:text-xl tracking-wider text-gray-900">
+                SOLE<span className="text-orange-500">VAULT.</span>
+              </span>
+            </Link>
+          </div>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-6 text-xs font-extrabold uppercase tracking-wider text-gray-600">
@@ -159,18 +168,18 @@ export default function Navbar({
             </Link>
           </nav>
 
-          {/* Real-Time Interactive Search Bar */}
-          <div ref={searchRef} className="relative flex-1 max-w-xs sm:max-w-md mx-1 sm:mx-2">
+          {/* Desktop Search Bar (Hidden on mobile) */}
+          <div ref={searchRef} className="hidden md:block relative flex-1 max-w-xs sm:max-w-md mx-2">
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search kicks, brands..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
-                className="w-full bg-gray-100 hover:bg-gray-100/80 focus:bg-white text-gray-900 text-xs font-semibold py-2 pl-8 sm:pl-9 pr-7 sm:pr-8 rounded-full border border-transparent focus:border-orange-500 outline-none transition-all"
+                className="w-full bg-gray-100 hover:bg-gray-100/80 focus:bg-white text-gray-900 text-xs font-semibold py-2 pl-9 pr-8 rounded-full border border-transparent focus:border-orange-500 outline-none transition-all"
               />
-              <span className="absolute left-2.5 sm:left-3 top-2.5 text-xs text-gray-400">🔍</span>
+              <span className="absolute left-3 top-2.5 text-xs text-gray-400">🔍</span>
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
@@ -181,7 +190,7 @@ export default function Navbar({
               )}
             </div>
 
-            {/* Search Dropdown Results */}
+            {/* Desktop Search Dropdown Results */}
             {isSearchOpen && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl overflow-hidden z-50">
                 {searchResults.length > 0 ? (
@@ -224,9 +233,19 @@ export default function Navbar({
             )}
           </div>
 
-          {/* User, Wishlist & Cart Actions */}
+          {/* Right Actions: Mobile Search Toggle, Account, Desktop Wishlist & Cart */}
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             
+            {/* Mobile Search Toggle Icon */}
+            <button
+              onClick={() => setIsMobileSearchExpanded(!isMobileSearchExpanded)}
+              className="md:hidden p-2 text-gray-700 hover:text-black transition-colors"
+              title="Search"
+              aria-label="Toggle Search"
+            >
+              <span className="text-base">🔍</span>
+            </button>
+
             {/* User Icon + Hover Dropdown */}
             <div 
               className="relative"
@@ -247,7 +266,7 @@ export default function Navbar({
                 )}
               </button>
 
-              {/* User Hover Menu */}
+              {/* User Menu Dropdown */}
               {isUserMenuOpen && (
                 <div className="absolute right-0 top-full pt-2 w-52 z-50 animate-fadeIn">
                   <div className="bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden py-1">
@@ -299,10 +318,10 @@ export default function Navbar({
               )}
             </div>
 
-            {/* Wishlist Icon & Badge */}
+            {/* Desktop Wishlist Icon & Badge (Hidden on Mobile, accessed via Drawer on mobile) */}
             <Link
               href="/wishlist"
-              className="p-2 text-gray-700 hover:text-black relative flex items-center justify-center"
+              className="hidden md:flex p-2 text-gray-700 hover:text-black relative items-center justify-center"
               title="Wishlist"
             >
               <span className="text-base">❤️</span>
@@ -317,7 +336,7 @@ export default function Navbar({
               )}
             </Link>
 
-            {/* Cart Icon & Badge */}
+            {/* Cart Icon & Badge (Always visible on mobile & desktop) */}
             <button
               onClick={toggleCart}
               className="p-2 text-gray-700 hover:text-black relative flex items-center justify-center"
@@ -336,6 +355,68 @@ export default function Navbar({
             </button>
           </div>
         </div>
+
+        {/* Expandable Mobile Search Dropdown Input */}
+        {isMobileSearchExpanded && (
+          <div ref={mobileSearchRef} className="md:hidden px-4 pb-3 pt-1 border-t border-gray-100 bg-white shadow-md">
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                placeholder="Search sneakers, drops..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+                className="w-full bg-gray-100 text-gray-900 text-xs font-semibold py-2 pl-9 pr-8 rounded-xl border border-gray-200 focus:border-orange-500 outline-none"
+              />
+              <span className="absolute left-3 text-xs text-gray-400">🔍</span>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 text-xs text-gray-400 hover:text-black"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Mobile Search Results */}
+            {isSearchOpen && (
+              <div className="mt-2 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden max-h-60 overflow-y-auto">
+                {searchResults.length > 0 ? (
+                  searchResults.map((product) => (
+                    <Link
+                      key={product.id}
+                      href={`/products/${product.id}`}
+                      onClick={() => {
+                        setIsSearchOpen(false);
+                        setIsMobileSearchExpanded(false);
+                      }}
+                      className="flex items-center gap-3 p-2.5 border-b border-gray-100 last:border-none"
+                    >
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="w-8 h-8 object-cover rounded-md bg-gray-100 shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-xs text-gray-900 truncate">
+                          {product.name}
+                        </h4>
+                      </div>
+                      <span className="font-black text-xs text-black shrink-0">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="p-3 text-center text-xs text-gray-500">
+                    No drops matching "{searchQuery}"
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </header>
 
       {/* --- LEFT SLIDE-OUT MOBILE DRAWER --- */}
@@ -377,8 +458,8 @@ export default function Navbar({
         </div>
 
         {/* Navigation Links */}
-        <nav className="p-5 flex-1 space-y-2">
-          <p className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-4">Navigation</p>
+        <nav className="p-5 flex-1 space-y-2 overflow-y-auto">
+          <p className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2">Navigation</p>
           
           <Link
             href="/"
@@ -423,6 +504,46 @@ export default function Navbar({
             <span>Collections</span>
             <span>→</span>
           </Link>
+
+          <hr className="my-3 border-gray-100" />
+
+          <p className="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2">My Vault</p>
+
+          {/* My Wishlist link inside Drawer */}
+          <Link
+            href="/wishlist"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center justify-between p-3 rounded-xl font-bold text-xs text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+          >
+            <div className="flex items-center gap-2.5">
+              <span>❤️</span>
+              <span>My Wishlist</span>
+            </div>
+            {wishlistCount > 0 && (
+              <span className="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
+
+          {/* My Cart trigger inside Drawer */}
+          <button
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              toggleCart();
+            }}
+            className="w-full flex items-center justify-between p-3 rounded-xl font-bold text-xs text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors text-left"
+          >
+            <div className="flex items-center gap-2.5">
+              <span>🛒</span>
+              <span>My Cart</span>
+            </div>
+            {cartCount > 0 && (
+              <span className="bg-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
+                {cartCount}
+              </span>
+            )}
+          </button>
         </nav>
 
         {/* Drawer Footer / Account Link */}
@@ -430,7 +551,7 @@ export default function Navbar({
           <Link
             href={user ? "/account" : "/login"}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full bg-black hover:bg-orange-500 text-white font-bold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
+            className="w-full bg-black hover:bg-orange-500 text-white font-bold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
           >
             <span>👤</span>
             <span>{user ? "My Dashboard" : "Login / Account"}</span>

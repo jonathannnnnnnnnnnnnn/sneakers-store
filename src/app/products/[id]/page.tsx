@@ -393,7 +393,7 @@ export default function ProductDetailPage({
                   onClick={handleAddToCart}
                   className="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl transition-colors shadow-md active:scale-95"
                 >
-                  + Add to Cart
+                  🛒 Add to Cart
                 </button>
               </div>
             </div>

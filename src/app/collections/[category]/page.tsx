@@ -384,6 +384,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                           >
                             <span>🛒</span>
                             <span className="hidden sm:inline">Add to Cart</span>
+                            <span className="sm:hidden">Add</span>
                           </button>
                         </div>
                       </div>
