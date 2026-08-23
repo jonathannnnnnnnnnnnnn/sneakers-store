@@ -1,0 +1,4372 @@
+[
+  {
+    "id": "1",
+    "name": "Nike Air Force 1 '07",
+    "company": "Nike",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 115,
+    "description": "The radiance lives on in the classic b-ball icon with clean leather finishes and bold details.",
+    "image_url": "/images/products/1/1.jpg",
+    "images": [
+      "/images/products/1/1.jpg",
+      "/images/products/1/2.jpg",
+      "/images/products/1/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/1/1.jpg",
+      "/images/products/1/2.jpg",
+      "/images/products/1/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "2",
+    "name": "Nike Dunk Low Retro",
+    "company": "Nike",
+    "category": "Running",
+    "gender": "men",
+    "price": 115,
+    "description": "Created for the hardwood but taken to the streets, returning with crisp overlays and original team colors.",
+    "image_url": "/images/products/2/1.jpg",
+    "images": [
+      "/images/products/2/1.jpg",
+      "/images/products/2/2.jpg",
+      "/images/products/2/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/2/1.jpg",
+      "/images/products/2/2.jpg",
+      "/images/products/2/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "3",
+    "name": "Nike Air Max 90",
+    "company": "Nike",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 130,
+    "description": "Nothing as fly, nothing as comfortable, nothing as proven with signature Waffle outsole and Max Air cushioning.",
+    "image_url": "/images/products/3/1.jpg",
+    "images": [
+      "/images/products/3/1.jpg",
+      "/images/products/3/2.jpg",
+      "/images/products/3/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/3/1.jpg",
+      "/images/products/3/2.jpg",
+      "/images/products/3/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.8
+  },
+  {
+    "id": "4",
+    "name": "Nike Air Max 97",
+    "company": "Nike",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 175,
+    "description": "Features the original ripple design inspired by Japanese bullet trains for high-speed street style.",
+    "image_url": "/images/products/4/1.jpg",
+    "images": [
+      "/images/products/4/1.jpg",
+      "/images/products/4/2.jpg",
+      "/images/products/4/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/4/1.jpg",
+      "/images/products/4/2.jpg",
+      "/images/products/4/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "5",
+    "name": "Nike Zoom Vomero 5",
+    "company": "Nike",
+    "category": "Retro",
+    "gender": "men",
+    "price": 160,
+    "description": "Carve a new lane for yourself in rich layering that includes complex mesh, synthetic suede, and plastic accents.",
+    "image_url": "/images/products/5/1.jpg",
+    "images": [
+      "/images/products/5/1.jpg",
+      "/images/products/5/2.jpg",
+      "/images/products/5/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/5/1.jpg",
+      "/images/products/5/2.jpg",
+      "/images/products/5/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "6",
+    "name": "Nike Blazer Mid '77 Vintage",
+    "company": "Nike",
+    "category": "Training",
+    "gender": "men",
+    "price": 105,
+    "description": "Harnessing the old-school look of Nike basketball with a textured vintage midsole finish.",
+    "image_url": "/images/products/6/1.jpg",
+    "images": [
+      "/images/products/6/1.jpg",
+      "/images/products/6/2.jpg",
+      "/images/products/6/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/6/1.jpg",
+      "/images/products/6/2.jpg",
+      "/images/products/6/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "7",
+    "name": "Nike Tech Hera",
+    "company": "Nike",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 110,
+    "description": "Chunky modern lifestyle silhouette with raised textile upper and comfortable everyday cushioning.",
+    "image_url": "/images/products/7/1.jpg",
+    "images": [
+      "/images/products/7/1.jpg",
+      "/images/products/7/2.jpg",
+      "/images/products/7/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/7/1.jpg",
+      "/images/products/7/2.jpg",
+      "/images/products/7/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "8",
+    "name": "Nike P-6000",
+    "company": "Nike",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 120,
+    "description": "A mashup of past Pegasus sneakers, bringing 2000s running tech into the modern lifestyle era.",
+    "image_url": "/images/products/8/1.jpg",
+    "images": [
+      "/images/products/8/1.jpg",
+      "/images/products/8/2.jpg",
+      "/images/products/8/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/8/1.jpg",
+      "/images/products/8/2.jpg",
+      "/images/products/8/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "9",
+    "name": "Nike Air Presto",
+    "company": "Nike",
+    "category": "Slides",
+    "gender": "men",
+    "price": 140,
+    "description": "The t-shirt for your feet with a sleek stretch mesh upper and supportive midfoot cage.",
+    "image_url": "/images/products/9/1.jpg",
+    "images": [
+      "/images/products/9/1.jpg",
+      "/images/products/9/2.jpg",
+      "/images/products/9/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/9/1.jpg",
+      "/images/products/9/2.jpg",
+      "/images/products/9/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "10",
+    "name": "Nike Terminator High",
+    "company": "Nike",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 125,
+    "description": "Straight from the vault, bringing effortless 1985 hoops style with oversized retro heel branding.",
+    "image_url": "/images/products/10/1.jpg",
+    "images": [
+      "/images/products/10/1.jpg",
+      "/images/products/10/2.jpg",
+      "/images/products/10/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/10/1.jpg",
+      "/images/products/10/2.jpg",
+      "/images/products/10/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "11",
+    "name": "Air Jordan 1 Retro High OG",
+    "company": "Jordan",
+    "category": "Running",
+    "gender": "men",
+    "price": 180,
+    "description": "The legendary sneaker that started it all, built with premium leather overlays and iconic Wings branding.",
+    "image_url": "/images/products/11/1.jpg",
+    "images": [
+      "/images/products/11/1.jpg",
+      "/images/products/11/2.jpg",
+      "/images/products/11/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/11/1.jpg",
+      "/images/products/11/2.jpg",
+      "/images/products/11/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "12",
+    "name": "Air Jordan 4 Retro",
+    "company": "Jordan",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 215,
+    "description": "Timeless streetwear holy grail featuring molded eyestays, side netting, and visible Air cushioning.",
+    "image_url": "/images/products/12/1.jpg",
+    "images": [
+      "/images/products/12/1.jpg",
+      "/images/products/12/2.jpg",
+      "/images/products/12/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/12/1.jpg",
+      "/images/products/12/2.jpg",
+      "/images/products/12/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.3
+  },
+  {
+    "id": "13",
+    "name": "Air Jordan 3 Retro",
+    "company": "Jordan",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 200,
+    "description": "Iconic elephant print overlays combine with premium leather for an unmatched court-to-street look.",
+    "image_url": "/images/products/13/1.jpg",
+    "images": [
+      "/images/products/13/1.jpg",
+      "/images/products/13/2.jpg",
+      "/images/products/13/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/13/1.jpg",
+      "/images/products/13/2.jpg",
+      "/images/products/13/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "14",
+    "name": "Air Jordan 11 Retro",
+    "company": "Jordan",
+    "category": "Retro",
+    "gender": "men",
+    "price": 230,
+    "description": "Patent leather elegance fused with high-performance basketball history for maximum street prestige.",
+    "image_url": "/images/products/14/1.jpg",
+    "images": [
+      "/images/products/14/1.jpg",
+      "/images/products/14/2.jpg",
+      "/images/products/14/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/14/1.jpg",
+      "/images/products/14/2.jpg",
+      "/images/products/14/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "15",
+    "name": "Air Jordan 5 Retro",
+    "company": "Jordan",
+    "category": "Training",
+    "gender": "men",
+    "price": 200,
+    "description": "WWII fighter plane-inspired midsole flames paired with lace locks and reflective tongue details.",
+    "image_url": "/images/products/15/1.jpg",
+    "images": [
+      "/images/products/15/1.jpg",
+      "/images/products/15/2.jpg",
+      "/images/products/15/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/15/1.jpg",
+      "/images/products/15/2.jpg",
+      "/images/products/15/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "16",
+    "name": "Jordan Luka 2",
+    "company": "Jordan",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 130,
+    "description": "Engineered for maximum step-back control and modern multidirectional court speed.",
+    "image_url": "/images/products/16/1.jpg",
+    "images": [
+      "/images/products/16/1.jpg",
+      "/images/products/16/2.jpg",
+      "/images/products/16/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/16/1.jpg",
+      "/images/products/16/2.jpg",
+      "/images/products/16/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "17",
+    "name": "Jordan Tatum 1",
+    "company": "Jordan",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 120,
+    "description": "Lightweight performance basketball model engineered with reduced rubber weight and responsive Zoom Air.",
+    "image_url": "/images/products/17/1.jpg",
+    "images": [
+      "/images/products/17/1.jpg",
+      "/images/products/17/2.jpg",
+      "/images/products/17/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/17/1.jpg",
+      "/images/products/17/2.jpg",
+      "/images/products/17/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "18",
+    "name": "Air Jordan 6 Retro",
+    "company": "Jordan",
+    "category": "Slides",
+    "gender": "men",
+    "price": 200,
+    "description": "First championship sneaker aesthetic with sleek paneling, heel pull tab, and icy translucent outsole.",
+    "image_url": "/images/products/18/1.jpg",
+    "images": [
+      "/images/products/18/1.jpg",
+      "/images/products/18/2.jpg",
+      "/images/products/18/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/18/1.jpg",
+      "/images/products/18/2.jpg",
+      "/images/products/18/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "19",
+    "name": "Adidas Samba OG",
+    "company": "Adidas",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 100,
+    "description": "Born on the pitch, this low-profile silhouette features a leather upper and signature gum sole.",
+    "image_url": "/images/products/19/1.jpg",
+    "images": [
+      "/images/products/19/1.jpg",
+      "/images/products/19/2.jpg",
+      "/images/products/19/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/19/1.jpg",
+      "/images/products/19/2.jpg",
+      "/images/products/19/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "20",
+    "name": "Adidas Gazelle Indoor",
+    "company": "Adidas",
+    "category": "Running",
+    "gender": "men",
+    "price": 120,
+    "description": "Classic suede trainer updated with a translucent gum rubber outsole that wraps around the shoe.",
+    "image_url": "/images/products/20/1.jpg",
+    "images": [
+      "/images/products/20/1.jpg",
+      "/images/products/20/2.jpg",
+      "/images/products/20/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/20/1.jpg",
+      "/images/products/20/2.jpg",
+      "/images/products/20/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "21",
+    "name": "Adidas Campus 00s",
+    "company": "Adidas",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 110,
+    "description": "Y2K skate culture revival with extra-chunky proportions, fat laces, and soft suede construction.",
+    "image_url": "/images/products/21/1.jpg",
+    "images": [
+      "/images/products/21/1.jpg",
+      "/images/products/21/2.jpg",
+      "/images/products/21/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/21/1.jpg",
+      "/images/products/21/2.jpg",
+      "/images/products/21/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "22",
+    "name": "Adidas Forum Low",
+    "company": "Adidas",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 100,
+    "description": "80s hardwood legacy with removable ankle strap design and layered leather upper.",
+    "image_url": "/images/products/22/1.jpg",
+    "images": [
+      "/images/products/22/1.jpg",
+      "/images/products/22/2.jpg",
+      "/images/products/22/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/22/1.jpg",
+      "/images/products/22/2.jpg",
+      "/images/products/22/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "23",
+    "name": "Adidas Ultraboost Light",
+    "company": "Adidas",
+    "category": "Retro",
+    "gender": "men",
+    "price": 190,
+    "description": "Next-gen Light BOOST midsole technology offering incredible energy return and supreme comfort.",
+    "image_url": "/images/products/23/1.jpg",
+    "images": [
+      "/images/products/23/1.jpg",
+      "/images/products/23/2.jpg",
+      "/images/products/23/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/23/1.jpg",
+      "/images/products/23/2.jpg",
+      "/images/products/23/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "24",
+    "name": "Adidas Rivalry Low",
+    "company": "Adidas",
+    "category": "Training",
+    "gender": "men",
+    "price": 100,
+    "description": "Vintage basketball shoe adapted for the modern casual wardrobe with retro leather overlays.",
+    "image_url": "/images/products/24/1.jpg",
+    "images": [
+      "/images/products/24/1.jpg",
+      "/images/products/24/2.jpg",
+      "/images/products/24/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/24/1.jpg",
+      "/images/products/24/2.jpg",
+      "/images/products/24/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "25",
+    "name": "Adidas Handball Spezial",
+    "company": "Adidas",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 110,
+    "description": "First introduced in 1979 for indoor sports, now an essential terrace fashion staple.",
+    "image_url": "/images/products/25/1.jpg",
+    "images": [
+      "/images/products/25/1.jpg",
+      "/images/products/25/2.jpg",
+      "/images/products/25/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/25/1.jpg",
+      "/images/products/25/2.jpg",
+      "/images/products/25/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "26",
+    "name": "Adidas Superstar",
+    "company": "Adidas",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 100,
+    "description": "The timeless rubber shell-toe classic that broke boundaries on basketball courts and hip-hop stages.",
+    "image_url": "/images/products/26/1.jpg",
+    "images": [
+      "/images/products/26/1.jpg",
+      "/images/products/26/2.jpg",
+      "/images/products/26/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/26/1.jpg",
+      "/images/products/26/2.jpg",
+      "/images/products/26/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "27",
+    "name": "Adidas NMD_R1",
+    "company": "Adidas",
+    "category": "Slides",
+    "gender": "men",
+    "price": 150,
+    "description": "Futuristic street runner with responsive Boost midsole and signature midsole plugs.",
+    "image_url": "/images/products/27/1.jpg",
+    "images": [
+      "/images/products/27/1.jpg",
+      "/images/products/27/2.jpg",
+      "/images/products/27/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/27/1.jpg",
+      "/images/products/27/2.jpg",
+      "/images/products/27/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "28",
+    "name": "New Balance 9060",
+    "company": "New Balance",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 150,
+    "description": "Futuristic expressions of classic 99X series design with sculpted pod midsole and bold proportions.",
+    "image_url": "/images/products/28/1.jpg",
+    "images": [
+      "/images/products/28/1.jpg",
+      "/images/products/28/2.jpg",
+      "/images/products/28/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/28/1.jpg",
+      "/images/products/28/2.jpg",
+      "/images/products/28/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "29",
+    "name": "New Balance 550",
+    "company": "New Balance",
+    "category": "Running",
+    "gender": "men",
+    "price": 110,
+    "description": "Simple and clean retro low-top basketball silhouette originally debuted in 1989.",
+    "image_url": "/images/products/29/1.jpg",
+    "images": [
+      "/images/products/29/1.jpg",
+      "/images/products/29/2.jpg",
+      "/images/products/29/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/29/1.jpg",
+      "/images/products/29/2.jpg",
+      "/images/products/29/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "30",
+    "name": "New Balance 2002R",
+    "company": "New Balance",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 145,
+    "description": "Reinterpretation of 2000s technical running design with N-ergy shock absorbing outsole.",
+    "image_url": "/images/products/30/1.jpg",
+    "images": [
+      "/images/products/30/1.jpg",
+      "/images/products/30/2.jpg",
+      "/images/products/30/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/30/1.jpg",
+      "/images/products/30/2.jpg",
+      "/images/products/30/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.9
+  },
+  {
+    "id": "31",
+    "name": "New Balance 1906R",
+    "company": "New Balance",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 155,
+    "description": "Tech-runner aesthetics equipped with N-ergy cushioning and Web outsole support.",
+    "image_url": "/images/products/31/1.jpg",
+    "images": [
+      "/images/products/31/1.jpg",
+      "/images/products/31/2.jpg",
+      "/images/products/31/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/31/1.jpg",
+      "/images/products/31/2.jpg",
+      "/images/products/31/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "32",
+    "name": "New Balance 990v6 Made in USA",
+    "company": "New Balance",
+    "category": "Retro",
+    "gender": "men",
+    "price": 200,
+    "description": "Premium American craftsmanship combined with FuelCell foam midsole technology.",
+    "image_url": "/images/products/32/1.jpg",
+    "images": [
+      "/images/products/32/1.jpg",
+      "/images/products/32/2.jpg",
+      "/images/products/32/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/32/1.jpg",
+      "/images/products/32/2.jpg",
+      "/images/products/32/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "33",
+    "name": "New Balance 574 Core",
+    "company": "New Balance",
+    "category": "Training",
+    "gender": "men",
+    "price": 90,
+    "description": "The quintessential understated classic trainer constructed with pigskin and mesh.",
+    "image_url": "/images/products/33/1.jpg",
+    "images": [
+      "/images/products/33/1.jpg",
+      "/images/products/33/2.jpg",
+      "/images/products/33/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/33/1.jpg",
+      "/images/products/33/2.jpg",
+      "/images/products/33/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "34",
+    "name": "New Balance 327",
+    "company": "New Balance",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 100,
+    "description": "70s heritage runner redesigned with oversized 'N' logo and lugged trail outsole wrap.",
+    "image_url": "/images/products/34/1.jpg",
+    "images": [
+      "/images/products/34/1.jpg",
+      "/images/products/34/2.jpg",
+      "/images/products/34/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/34/1.jpg",
+      "/images/products/34/2.jpg",
+      "/images/products/34/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "35",
+    "name": "New Balance 860v2",
+    "company": "New Balance",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 150,
+    "description": "Retro open-mesh performance runner adapted seamlessly for modern street style.",
+    "image_url": "/images/products/35/1.jpg",
+    "images": [
+      "/images/products/35/1.jpg",
+      "/images/products/35/2.jpg",
+      "/images/products/35/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/35/1.jpg",
+      "/images/products/35/2.jpg",
+      "/images/products/35/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "36",
+    "name": "New Balance 530",
+    "company": "New Balance",
+    "category": "Slides",
+    "gender": "men",
+    "price": 100,
+    "description": "Throwback metallic aesthetic with ABZORB heel cushioning for all-day comfort.",
+    "image_url": "/images/products/36/1.jpg",
+    "images": [
+      "/images/products/36/1.jpg",
+      "/images/products/36/2.jpg",
+      "/images/products/36/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/36/1.jpg",
+      "/images/products/36/2.jpg",
+      "/images/products/36/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "37",
+    "name": "Vans Knu Skool",
+    "company": "Vans",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 75,
+    "description": "Reissued 90s puffy low-top with oversized Sidestripe and thick puffed tongue.",
+    "image_url": "/images/products/37/1.jpg",
+    "images": [
+      "/images/products/37/1.jpg",
+      "/images/products/37/2.jpg",
+      "/images/products/37/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/37/1.jpg",
+      "/images/products/37/2.jpg",
+      "/images/products/37/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "38",
+    "name": "Vans Old Skool Core Classics",
+    "company": "Vans",
+    "category": "Running",
+    "gender": "men",
+    "price": 70,
+    "description": "The first to bare the iconic side stripe, durable canvas and suede skate low-top.",
+    "image_url": "/images/products/38/1.jpg",
+    "images": [
+      "/images/products/38/1.jpg",
+      "/images/products/38/2.jpg",
+      "/images/products/38/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/38/1.jpg",
+      "/images/products/38/2.jpg",
+      "/images/products/38/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "39",
+    "name": "Vans Sk8-Hi",
+    "company": "Vans",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 80,
+    "description": "Legendary high-top lace-up sneaker with padded collars for flexibility and support.",
+    "image_url": "/images/products/39/1.jpg",
+    "images": [
+      "/images/products/39/1.jpg",
+      "/images/products/39/2.jpg",
+      "/images/products/39/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/39/1.jpg",
+      "/images/products/39/2.jpg",
+      "/images/products/39/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.4
+  },
+  {
+    "id": "40",
+    "name": "Vans Authentic",
+    "company": "Vans",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 60,
+    "description": "The heritage original Vans low-top profile with signature rubber waffle outsole.",
+    "image_url": "/images/products/40/1.jpg",
+    "images": [
+      "/images/products/40/1.jpg",
+      "/images/products/40/2.jpg",
+      "/images/products/40/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/40/1.jpg",
+      "/images/products/40/2.jpg",
+      "/images/products/40/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "41",
+    "name": "Vans Slip-On Pro",
+    "company": "Vans",
+    "category": "Retro",
+    "gender": "men",
+    "price": 65,
+    "description": "Classic canvas slip-on upgraded with PopCush sockliners and DURACAP rubber underlays.",
+    "image_url": "/images/products/41/1.jpg",
+    "images": [
+      "/images/products/41/1.jpg",
+      "/images/products/41/2.jpg",
+      "/images/products/41/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/41/1.jpg",
+      "/images/products/41/2.jpg",
+      "/images/products/41/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "42",
+    "name": "Vans Half Cab",
+    "company": "Vans",
+    "category": "Training",
+    "gender": "men",
+    "price": 80,
+    "description": "Steve Caballero’s legendary mid-top skate shoe engineered for peak durability.",
+    "image_url": "/images/products/42/1.jpg",
+    "images": [
+      "/images/products/42/1.jpg",
+      "/images/products/42/2.jpg",
+      "/images/products/42/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/42/1.jpg",
+      "/images/products/42/2.jpg",
+      "/images/products/42/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "43",
+    "name": "Vans LXVI Graph",
+    "company": "Vans",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 85,
+    "description": "Ultra-lightweight modern construction offering street aesthetic with technical comfort.",
+    "image_url": "/images/products/43/1.jpg",
+    "images": [
+      "/images/products/43/1.jpg",
+      "/images/products/43/2.jpg",
+      "/images/products/43/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/43/1.jpg",
+      "/images/products/43/2.jpg",
+      "/images/products/43/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "44",
+    "name": "Vans Rowley XLT",
+    "company": "Vans",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 110,
+    "description": "2000s archival Geoff Rowley pro model reissue built with EVA midsole and padded collar.",
+    "image_url": "/images/products/44/1.jpg",
+    "images": [
+      "/images/products/44/1.jpg",
+      "/images/products/44/2.jpg",
+      "/images/products/44/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/44/1.jpg",
+      "/images/products/44/2.jpg",
+      "/images/products/44/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "45",
+    "name": "Yeezy Boost 350 V2",
+    "company": "Yeezy",
+    "category": "Slides",
+    "gender": "men",
+    "price": 230,
+    "description": "Reinvented Primeknit upper with full-length Boost midsole encapsulation.",
+    "image_url": "/images/products/45/1.jpg",
+    "images": [
+      "/images/products/45/1.jpg",
+      "/images/products/45/2.jpg",
+      "/images/products/45/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/45/1.jpg",
+      "/images/products/45/2.jpg",
+      "/images/products/45/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "46",
+    "name": "Yeezy Foam Runner",
+    "company": "Yeezy",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 90,
+    "description": "Futuristic single-piece EVA foam and harvested algae compound molded slip-on.",
+    "image_url": "/images/products/46/1.jpg",
+    "images": [
+      "/images/products/46/1.jpg",
+      "/images/products/46/2.jpg",
+      "/images/products/46/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/46/1.jpg",
+      "/images/products/46/2.jpg",
+      "/images/products/46/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "47",
+    "name": "Yeezy Slide",
+    "company": "Yeezy",
+    "category": "Running",
+    "gender": "men",
+    "price": 70,
+    "description": "Injected EVA foam minimalist slide engineered with deep horizontal outsole grooves.",
+    "image_url": "/images/products/47/1.jpg",
+    "images": [
+      "/images/products/47/1.jpg",
+      "/images/products/47/2.jpg",
+      "/images/products/47/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/47/1.jpg",
+      "/images/products/47/2.jpg",
+      "/images/products/47/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "48",
+    "name": "Yeezy Boost 700",
+    "company": "Yeezy",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 300,
+    "description": "Chunky dad-shoe pioneer featuring premium suede, leather, mesh overlays, and Boost tech.",
+    "image_url": "/images/products/48/1.jpg",
+    "images": [
+      "/images/products/48/1.jpg",
+      "/images/products/48/2.jpg",
+      "/images/products/48/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/48/1.jpg",
+      "/images/products/48/2.jpg",
+      "/images/products/48/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.7
+  },
+  {
+    "id": "49",
+    "name": "Yeezy 500",
+    "company": "Yeezy",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 210,
+    "description": "Retro bulbous adiprene+ cushioning system layered with cow suede and mesh.",
+    "image_url": "/images/products/49/1.jpg",
+    "images": [
+      "/images/products/49/1.jpg",
+      "/images/products/49/2.jpg",
+      "/images/products/49/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/49/1.jpg",
+      "/images/products/49/2.jpg",
+      "/images/products/49/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "50",
+    "name": "Yeezy 380",
+    "company": "Yeezy",
+    "category": "Retro",
+    "gender": "men",
+    "price": 230,
+    "description": "Sock-like Primeknit construction resting atop a smooth, elevated Boost unit.",
+    "image_url": "/images/products/50/1.jpg",
+    "images": [
+      "/images/products/50/1.jpg",
+      "/images/products/50/2.jpg",
+      "/images/products/50/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/50/1.jpg",
+      "/images/products/50/2.jpg",
+      "/images/products/50/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "51",
+    "name": "Yeezy Quantum",
+    "company": "Yeezy",
+    "category": "Training",
+    "gender": "men",
+    "price": 250,
+    "description": "High-top lifestyle basketball crossover featuring reflective heel counter and wavy side panels.",
+    "image_url": "/images/products/51/1.jpg",
+    "images": [
+      "/images/products/51/1.jpg",
+      "/images/products/51/2.jpg",
+      "/images/products/51/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/51/1.jpg",
+      "/images/products/51/2.jpg",
+      "/images/products/51/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "52",
+    "name": "PUMA x VANDYTHEPINK Suede XLI",
+    "company": "Puma",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 75,
+    "description": "Iconic full suede upper combined with signature lateral Formstrip.",
+    "image_url": "/images/products/52/1.jpg",
+    "images": [
+      "/images/products/52/1.jpg",
+      "/images/products/52/2.jpg",
+      "/images/products/52/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/52/1.jpg",
+      "/images/products/52/2.jpg",
+      "/images/products/52/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "53",
+    "name": "Puma Palermo",
+    "company": "Puma",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 90,
+    "description": "Terrace culture classic featuring signature tag on upper and gum rubber outsole.",
+    "image_url": "/images/products/53/1.jpg",
+    "images": [
+      "/images/products/53/1.jpg",
+      "/images/products/53/2.jpg",
+      "/images/products/53/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/53/1.jpg",
+      "/images/products/53/2.jpg",
+      "/images/products/53/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "54",
+    "name": "Puma Velophasis",
+    "company": "Puma",
+    "category": "Slides",
+    "gender": "men",
+    "price": 120,
+    "description": "2000s Y2K running aesthetic mixed with contemporary mesh overlays.",
+    "image_url": "/images/products/54/1.jpg",
+    "images": [
+      "/images/products/54/1.jpg",
+      "/images/products/54/2.jpg",
+      "/images/products/54/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/54/1.jpg",
+      "/images/products/54/2.jpg",
+      "/images/products/54/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "55",
+    "name": "Puma RS-X Efekt",
+    "company": "Puma",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 110,
+    "description": "Angular design elements paired with comfortable RS tech cushioning.",
+    "image_url": "/images/products/55/1.jpg",
+    "images": [
+      "/images/products/55/1.jpg",
+      "/images/products/55/2.jpg",
+      "/images/products/55/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/55/1.jpg",
+      "/images/products/55/2.jpg",
+      "/images/products/55/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "56",
+    "name": "Puma Slipstream",
+    "company": "Puma",
+    "category": "Running",
+    "gender": "men",
+    "price": 85,
+    "description": "1987 court sneaker brought back with clean leather cuts and retro colorways.",
+    "image_url": "/images/products/56/1.jpg",
+    "images": [
+      "/images/products/56/1.jpg",
+      "/images/products/56/2.jpg",
+      "/images/products/56/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/56/1.jpg",
+      "/images/products/56/2.jpg",
+      "/images/products/56/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "57",
+    "name": "Puma Army Trainer",
+    "company": "Puma",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 90,
+    "description": "German military surplus inspired trainer featuring premium leather and suede toe cap.",
+    "image_url": "/images/products/57/1.jpg",
+    "images": [
+      "/images/products/57/1.jpg",
+      "/images/products/57/2.jpg",
+      "/images/products/57/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/57/1.jpg",
+      "/images/products/57/2.jpg",
+      "/images/products/57/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "58",
+    "name": "Puma MB.03",
+    "company": "Puma",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 125,
+    "description": "LaMelo Ball signature performance shoe with wild claw cutouts and Nitro foam.",
+    "image_url": "/images/products/58/1.jpg",
+    "images": [
+      "/images/products/58/1.jpg",
+      "/images/products/58/2.jpg",
+      "/images/products/58/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/58/1.jpg",
+      "/images/products/58/2.jpg",
+      "/images/products/58/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "59",
+    "name": "Asics GEL-Kayano 14",
+    "company": "Asics",
+    "category": "Retro",
+    "gender": "men",
+    "price": 150,
+    "description": "Late 2000s tech runner aesthetic reinterpreted with metallic mesh overlays.",
+    "image_url": "/images/products/59/1.jpg",
+    "images": [
+      "/images/products/59/1.jpg",
+      "/images/products/59/2.jpg",
+      "/images/products/59/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/59/1.jpg",
+      "/images/products/59/2.jpg",
+      "/images/products/59/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "60",
+    "name": "Asics GEL-NYC",
+    "company": "Asics",
+    "category": "Training",
+    "gender": "men",
+    "price": 130,
+    "description": "Hybrid construction combining heritage GEL-Nimbus and GEL-MC Plus upper components.",
+    "image_url": "/images/products/60/1.jpg",
+    "images": [
+      "/images/products/60/1.jpg",
+      "/images/products/60/2.jpg",
+      "/images/products/60/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/60/1.jpg",
+      "/images/products/60/2.jpg",
+      "/images/products/60/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "61",
+    "name": "Asics GT-2160",
+    "company": "Asics",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 120,
+    "description": "Sleek tech runner honoring early 2010s GT-2000 series technical design language.",
+    "image_url": "/images/products/61/1.jpg",
+    "images": [
+      "/images/products/61/1.jpg",
+      "/images/products/61/2.jpg",
+      "/images/products/61/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/61/1.jpg",
+      "/images/products/61/2.jpg",
+      "/images/products/61/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "62",
+    "name": "Asics GEL-1130",
+    "company": "Asics",
+    "category": "Luxury",
+    "gender": "men",
+    "price": 95,
+    "description": "Ninth iteration of GEL-1000 series with open mesh panels and stability gel technology.",
+    "image_url": "/images/products/62/1.jpg",
+    "images": [
+      "/images/products/62/1.jpg",
+      "/images/products/62/2.jpg",
+      "/images/products/62/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/62/1.jpg",
+      "/images/products/62/2.jpg",
+      "/images/products/62/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "63",
+    "name": "Asics GEL-Quantum 360 VII",
+    "company": "Asics",
+    "category": "Slides",
+    "gender": "men",
+    "price": 170,
+    "description": "360 degrees of GEL technology cushioning for maximum impact absorption.",
+    "image_url": "/images/products/63/1.jpg",
+    "images": [
+      "/images/products/63/1.jpg",
+      "/images/products/63/2.jpg",
+      "/images/products/63/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/63/1.jpg",
+      "/images/products/63/2.jpg",
+      "/images/products/63/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "64",
+    "name": "Asics Japan S",
+    "company": "Asics",
+    "category": "Basketball",
+    "gender": "men",
+    "price": 80,
+    "description": "Low-top retro basketball sneaker inspired by 1981 archive models.",
+    "image_url": "/images/products/64/1.jpg",
+    "images": [
+      "/images/products/64/1.jpg",
+      "/images/products/64/2.jpg",
+      "/images/products/64/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/64/1.jpg",
+      "/images/products/64/2.jpg",
+      "/images/products/64/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "65",
+    "name": "Balenciaga Track Sneaker",
+    "company": "Balenciaga",
+    "category": "Running",
+    "gender": "men",
+    "price": 1050,
+    "description": "High-end multi-paneled dynamic high-performance technical trail sneaker.",
+    "image_url": "/images/products/65/1.jpg",
+    "images": [
+      "/images/products/65/1.jpg",
+      "/images/products/65/2.jpg",
+      "/images/products/65/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/65/1.jpg",
+      "/images/products/65/2.jpg",
+      "/images/products/65/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "66",
+    "name": "Balenciaga Triple S",
+    "company": "Balenciaga",
+    "category": "Streetwear",
+    "gender": "men",
+    "price": 1100,
+    "description": "The pioneer of luxury chunky sneakers with stacked 3-layer composite outsole.",
+    "image_url": "/images/products/66/1.jpg",
+    "images": [
+      "/images/products/66/1.jpg",
+      "/images/products/66/2.jpg",
+      "/images/products/66/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/66/1.jpg",
+      "/images/products/66/2.jpg",
+      "/images/products/66/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.5
+  },
+  {
+    "id": "67",
+    "name": "Balenciaga Defender Sneaker",
+    "company": "Balenciaga",
+    "category": "Skateboarding",
+    "gender": "men",
+    "price": 1150,
+    "description": "Extreme tire-tread sole unit design wrapping around an distressed upper.",
+    "image_url": "/images/products/67/1.jpg",
+    "images": [
+      "/images/products/67/1.jpg",
+      "/images/products/67/2.jpg",
+      "/images/products/67/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/67/1.jpg",
+      "/images/products/67/2.jpg",
+      "/images/products/67/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "68",
+    "name": "Balenciaga Runner Sneaker",
+    "company": "Balenciaga",
+    "category": "Retro",
+    "gender": "men",
+    "price": 1150,
+    "description": "Distressed DIY aesthetic tech-runner featuring exposed glue and raw edges.",
+    "image_url": "/images/products/68/1.jpg",
+    "images": [
+      "/images/products/68/1.jpg",
+      "/images/products/68/2.jpg",
+      "/images/products/68/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/68/1.jpg",
+      "/images/products/68/2.jpg",
+      "/images/products/68/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "69",
+    "name": "Balenciaga Cargo Sneaker",
+    "company": "Balenciaga",
+    "category": "Training",
+    "gender": "men",
+    "price": 1250,
+    "description": "Oversized exaggerated runway volume constructed from high-tech mesh and microfiber.",
+    "image_url": "/images/products/69/1.jpg",
+    "images": [
+      "/images/products/69/1.jpg",
+      "/images/products/69/2.jpg",
+      "/images/products/69/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/69/1.jpg",
+      "/images/products/69/2.jpg",
+      "/images/products/69/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "70",
+    "name": "Balenciaga Phantom Sneaker",
+    "company": "Balenciaga",
+    "category": "Outdoor",
+    "gender": "men",
+    "price": 895,
+    "description": "Lightweight breathable monochromatic mesh design with distinctive side logo.",
+    "image_url": "/images/products/70/1.jpg",
+    "images": [
+      "/images/products/70/1.jpg",
+      "/images/products/70/2.jpg",
+      "/images/products/70/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/70/1.jpg",
+      "/images/products/70/2.jpg",
+      "/images/products/70/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "71",
+    "name": "Nike Dunk Low LX Women's",
+    "company": "Nike",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 125,
+    "description": "Upgraded luxury texture panels on the iconic low-top silhouette.",
+    "image_url": "/images/products/71/1.jpg",
+    "images": [
+      "/images/products/71/1.jpg",
+      "/images/products/71/2.jpg",
+      "/images/products/71/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/71/1.jpg",
+      "/images/products/71/2.jpg",
+      "/images/products/71/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "72",
+    "name": "Nike Air Force 1 Shadow",
+    "company": "Nike",
+    "category": "Slides",
+    "gender": "women",
+    "price": 130,
+    "description": "A playful twist on classic AF1 design with double Swooshes and stacked midsole.",
+    "image_url": "/images/products/72/1.jpg",
+    "images": [
+      "/images/products/72/1.jpg",
+      "/images/products/72/2.jpg",
+      "/images/products/72/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/72/1.jpg",
+      "/images/products/72/2.jpg",
+      "/images/products/72/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "73",
+    "name": "Nike Air Max 1 '87",
+    "company": "Nike",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 140,
+    "description": "The first sneaker with visible Air cushioning, updated with elevated material mixes.",
+    "image_url": "/images/products/73/1.jpg",
+    "images": [
+      "/images/products/73/1.jpg",
+      "/images/products/73/2.jpg",
+      "/images/products/73/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/73/1.jpg",
+      "/images/products/73/2.jpg",
+      "/images/products/73/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "74",
+    "name": "Nike Phoenix Waffle",
+    "company": "Nike",
+    "category": "Running",
+    "gender": "women",
+    "price": 100,
+    "description": "Retro waffle outsole meets exaggerated stack height for clean daily wear.",
+    "image_url": "/images/products/74/1.jpg",
+    "images": [
+      "/images/products/74/1.jpg",
+      "/images/products/74/2.jpg",
+      "/images/products/74/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/74/1.jpg",
+      "/images/products/74/2.jpg",
+      "/images/products/74/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "75",
+    "name": "Nike Gamma Force",
+    "company": "Nike",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 95,
+    "description": "Layers upon layers of classic b-ball style fused with subtle platform lift.",
+    "image_url": "/images/products/75/1.jpg",
+    "images": [
+      "/images/products/75/1.jpg",
+      "/images/products/75/2.jpg",
+      "/images/products/75/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/75/1.jpg",
+      "/images/products/75/2.jpg",
+      "/images/products/75/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.8
+  },
+  {
+    "id": "76",
+    "name": "Nike Air Max Plus",
+    "company": "Nike",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 180,
+    "description": "Futuristic flame arches and Tuned Air technology provide statement street style.",
+    "image_url": "/images/products/76/1.jpg",
+    "images": [
+      "/images/products/76/1.jpg",
+      "/images/products/76/2.jpg",
+      "/images/products/76/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/76/1.jpg",
+      "/images/products/76/2.jpg",
+      "/images/products/76/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "77",
+    "name": "Nike Dunk High LX",
+    "company": "Nike",
+    "category": "Retro",
+    "gender": "women",
+    "price": 135,
+    "description": "Premium leather high-top profile tailored specifically with feminine details.",
+    "image_url": "/images/products/77/1.jpg",
+    "images": [
+      "/images/products/77/1.jpg",
+      "/images/products/77/2.jpg",
+      "/images/products/77/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/77/1.jpg",
+      "/images/products/77/2.jpg",
+      "/images/products/77/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "78",
+    "name": "Nike V2K Run",
+    "company": "Nike",
+    "category": "Training",
+    "gender": "women",
+    "price": 120,
+    "description": "Fast-forward Y2K design with metallic accents and dual-density foam midsole.",
+    "image_url": "/images/products/78/1.jpg",
+    "images": [
+      "/images/products/78/1.jpg",
+      "/images/products/78/2.jpg",
+      "/images/products/78/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/78/1.jpg",
+      "/images/products/78/2.jpg",
+      "/images/products/78/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "79",
+    "name": "Nike TC 7900",
+    "company": "Nike",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 120,
+    "description": "Built tough for everyday wear with heavy-duty synthetic overlays and thick foam.",
+    "image_url": "/images/products/79/1.jpg",
+    "images": [
+      "/images/products/79/1.jpg",
+      "/images/products/79/2.jpg",
+      "/images/products/79/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/79/1.jpg",
+      "/images/products/79/2.jpg",
+      "/images/products/79/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "80",
+    "name": "Nike Air Max 270",
+    "company": "Nike",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 160,
+    "description": "Features Nike's biggest heel Air unit yet for super-soft ride and bold look.",
+    "image_url": "/images/products/80/1.jpg",
+    "images": [
+      "/images/products/80/1.jpg",
+      "/images/products/80/2.jpg",
+      "/images/products/80/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/80/1.jpg",
+      "/images/products/80/2.jpg",
+      "/images/products/80/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "81",
+    "name": "Nike Cortez SE",
+    "company": "Nike",
+    "category": "Slides",
+    "gender": "women",
+    "price": 90,
+    "description": "1972 track pioneer refreshed with updated toe box room and premium leather.",
+    "image_url": "/images/products/81/1.jpg",
+    "images": [
+      "/images/products/81/1.jpg",
+      "/images/products/81/2.jpg",
+      "/images/products/81/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/81/1.jpg",
+      "/images/products/81/2.jpg",
+      "/images/products/81/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "82",
+    "name": "Nike Air Huarache Craft",
+    "company": "Nike",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 130,
+    "description": "Hugs your foot with stretch fabric upper while adding an updated heel cage structure.",
+    "image_url": "/images/products/82/1.jpg",
+    "images": [
+      "/images/products/82/1.jpg",
+      "/images/products/82/2.jpg",
+      "/images/products/82/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/82/1.jpg",
+      "/images/products/82/2.jpg",
+      "/images/products/82/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "83",
+    "name": "Air Jordan 1 Elevate Low",
+    "company": "Jordan",
+    "category": "Running",
+    "gender": "women",
+    "price": 135,
+    "description": "Rises to the occasion with a lifted platform sole and legendary original shape.",
+    "image_url": "/images/products/83/1.jpg",
+    "images": [
+      "/images/products/83/1.jpg",
+      "/images/products/83/2.jpg",
+      "/images/products/83/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/83/1.jpg",
+      "/images/products/83/2.jpg",
+      "/images/products/83/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "84",
+    "name": "Air Jordan 4 Retro Canyon Purple",
+    "company": "Jordan",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 200,
+    "description": "Textured suede upper highlighted by speckled paint hits on the midsole.",
+    "image_url": "/images/products/84/1.jpg",
+    "images": [
+      "/images/products/84/1.jpg",
+      "/images/products/84/2.jpg",
+      "/images/products/84/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/84/1.jpg",
+      "/images/products/84/2.jpg",
+      "/images/products/84/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.3
+  },
+  {
+    "id": "85",
+    "name": "Air Jordan 1 Mid SE",
+    "company": "Jordan",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 125,
+    "description": "Special edition mid-cut design showcasing seasonal color palettes and premium suede.",
+    "image_url": "/images/products/85/1.jpg",
+    "images": [
+      "/images/products/85/1.jpg",
+      "/images/products/85/2.jpg",
+      "/images/products/85/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/85/1.jpg",
+      "/images/products/85/2.jpg",
+      "/images/products/85/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "86",
+    "name": "Air Jordan 3 Retro Rust Pink",
+    "company": "Jordan",
+    "category": "Retro",
+    "gender": "women",
+    "price": 190,
+    "description": "Soft muted nubuck leather upper paired with traditional elephant print.",
+    "image_url": "/images/products/86/1.jpg",
+    "images": [
+      "/images/products/86/1.jpg",
+      "/images/products/86/2.jpg",
+      "/images/products/86/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/86/1.jpg",
+      "/images/products/86/2.jpg",
+      "/images/products/86/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "87",
+    "name": "Air Jordan 1 Low SE",
+    "company": "Jordan",
+    "category": "Training",
+    "gender": "women",
+    "price": 115,
+    "description": "Always fresh low-top silhouette decorated with special embroidery and stitch detail.",
+    "image_url": "/images/products/87/1.jpg",
+    "images": [
+      "/images/products/87/1.jpg",
+      "/images/products/87/2.jpg",
+      "/images/products/87/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/87/1.jpg",
+      "/images/products/87/2.jpg",
+      "/images/products/87/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "88",
+    "name": "Jordan Sophia Slide",
+    "company": "Jordan",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 80,
+    "description": "Cross-strap padded slide with Air technology built right into the platform footbed.",
+    "image_url": "/images/products/88/1.jpg",
+    "images": [
+      "/images/products/88/1.jpg",
+      "/images/products/88/2.jpg",
+      "/images/products/88/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/88/1.jpg",
+      "/images/products/88/2.jpg",
+      "/images/products/88/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "89",
+    "name": "Air Jordan 11 Low Rose Gold",
+    "company": "Jordan",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 180,
+    "description": "Sleek low-top icon crafted with metallic foil patent leather mudguard.",
+    "image_url": "/images/products/89/1.jpg",
+    "images": [
+      "/images/products/89/1.jpg",
+      "/images/products/89/2.jpg",
+      "/images/products/89/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/89/1.jpg",
+      "/images/products/89/2.jpg",
+      "/images/products/89/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "90",
+    "name": "Air Jordan 2 Retro Soft Pink",
+    "company": "Jordan",
+    "category": "Slides",
+    "gender": "women",
+    "price": 175,
+    "description": "Italian luxury inspired court shoe featuring subtle pastel accents.",
+    "image_url": "/images/products/90/1.jpg",
+    "images": [
+      "/images/products/90/1.jpg",
+      "/images/products/90/2.jpg",
+      "/images/products/90/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/90/1.jpg",
+      "/images/products/90/2.jpg",
+      "/images/products/90/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "91",
+    "name": "Air Jordan 1 Triple Stack",
+    "company": "Jordan",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 175,
+    "description": "Low-profile basketball classic constructed with reflective lace locks and clear outsole.",
+    "image_url": "/images/products/91/1.jpg",
+    "images": [
+      "/images/products/91/1.jpg",
+      "/images/products/91/2.jpg",
+      "/images/products/91/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/91/1.jpg",
+      "/images/products/91/2.jpg",
+      "/images/products/91/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "92",
+    "name": "Adidas Samba OG W",
+    "company": "Adidas",
+    "category": "Running",
+    "gender": "women",
+    "price": 100,
+    "description": "Slim indoor soccer silhouette tailored specifically with soft leather uppers.",
+    "image_url": "/images/products/92/1.jpg",
+    "images": [
+      "/images/products/92/1.jpg",
+      "/images/products/92/2.jpg",
+      "/images/products/92/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/92/1.jpg",
+      "/images/products/92/2.jpg",
+      "/images/products/92/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "93",
+    "name": "Adidas Gazelle Bold",
+    "company": "Adidas",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 120,
+    "description": "Triple-stacked gum sole update to the classic Gazelle suede sneaker.",
+    "image_url": "/images/products/93/1.jpg",
+    "images": [
+      "/images/products/93/1.jpg",
+      "/images/products/93/2.jpg",
+      "/images/products/93/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/93/1.jpg",
+      "/images/products/93/2.jpg",
+      "/images/products/93/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "94",
+    "name": "Adidas Campus 00s W",
+    "company": "Adidas",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 110,
+    "description": "Chunky proportions and collegiate colorway soft suede low-top trainer.",
+    "image_url": "/images/products/94/1.jpg",
+    "images": [
+      "/images/products/94/1.jpg",
+      "/images/products/94/2.jpg",
+      "/images/products/94/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/94/1.jpg",
+      "/images/products/94/2.jpg",
+      "/images/products/94/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "95",
+    "name": "Adidas Forum Bonega",
+    "company": "Adidas",
+    "category": "Retro",
+    "gender": "women",
+    "price": 110,
+    "description": "Bold platform outsole elevates the classic 80s court silhouette.",
+    "image_url": "/images/products/95/1.jpg",
+    "images": [
+      "/images/products/95/1.jpg",
+      "/images/products/95/2.jpg",
+      "/images/products/95/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/95/1.jpg",
+      "/images/products/95/2.jpg",
+      "/images/products/95/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "96",
+    "name": "Adidas Astir",
+    "company": "Adidas",
+    "category": "Training",
+    "gender": "women",
+    "price": 100,
+    "description": "2000s tech running inspired design featuring oversized eyelets and mix of materials.",
+    "image_url": "/images/products/96/1.jpg",
+    "images": [
+      "/images/products/96/1.jpg",
+      "/images/products/96/2.jpg",
+      "/images/products/96/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/96/1.jpg",
+      "/images/products/96/2.jpg",
+      "/images/products/96/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "97",
+    "name": "Adidas Stan Smith Bonega",
+    "company": "Adidas",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 110,
+    "description": "Minimalist tennis classic upgraded with a thick wedge platform midsole.",
+    "image_url": "/images/products/97/1.jpg",
+    "images": [
+      "/images/products/97/1.jpg",
+      "/images/products/97/2.jpg",
+      "/images/products/97/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/97/1.jpg",
+      "/images/products/97/2.jpg",
+      "/images/products/97/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "98",
+    "name": "Adidas Nizza Platform",
+    "company": "Adidas",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 75,
+    "description": "Casual canvas high-top design elevated on a vulcanized rubber platform.",
+    "image_url": "/images/products/98/1.jpg",
+    "images": [
+      "/images/products/98/1.jpg",
+      "/images/products/98/2.jpg",
+      "/images/products/98/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/98/1.jpg",
+      "/images/products/98/2.jpg",
+      "/images/products/98/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "99",
+    "name": "Adidas Ozweego",
+    "company": "Adidas",
+    "category": "Slides",
+    "gender": "women",
+    "price": 120,
+    "description": "Distinctive eyestay tubing and Adiprene cushioning for 90s tech appeal.",
+    "image_url": "/images/products/99/1.jpg",
+    "images": [
+      "/images/products/99/1.jpg",
+      "/images/products/99/2.jpg",
+      "/images/products/99/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/99/1.jpg",
+      "/images/products/99/2.jpg",
+      "/images/products/99/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "100",
+    "name": "Adidas Response CL W",
+    "company": "Adidas",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 130,
+    "description": "Layered mesh upper paying homage to archival 2000s trail running shoes.",
+    "image_url": "/images/products/100/1.jpg",
+    "images": [
+      "/images/products/100/1.jpg",
+      "/images/products/100/2.jpg",
+      "/images/products/100/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/100/1.jpg",
+      "/images/products/100/2.jpg",
+      "/images/products/100/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "101",
+    "name": "Adidas Ultraboost 1.0 W",
+    "company": "Adidas",
+    "category": "Running",
+    "gender": "women",
+    "price": 190,
+    "description": "Original Primeknit weave pattern paired with maximum cushion Boost sole.",
+    "image_url": "/images/products/101/1.jpg",
+    "images": [
+      "/images/products/101/1.jpg",
+      "/images/products/101/2.jpg",
+      "/images/products/101/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/101/1.jpg",
+      "/images/products/101/2.jpg",
+      "/images/products/101/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "102",
+    "name": "New Balance Ellipse",
+    "company": "New Balance",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 110,
+    "description": "Retro basketball style crafted with smooth leather and pastel paneling accents.",
+    "image_url": "/images/products/102/1.jpg",
+    "images": [
+      "/images/products/102/1.jpg",
+      "/images/products/102/2.jpg",
+      "/images/products/102/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/102/1.jpg",
+      "/images/products/102/2.jpg",
+      "/images/products/102/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.9
+  },
+  {
+    "id": "103",
+    "name": "New Balance WX608v5",
+    "company": "New Balance",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 150,
+    "description": "Sculpted dual-density midsole featuring ABZORB and SBS cushioning.",
+    "image_url": "/images/products/103/1.jpg",
+    "images": [
+      "/images/products/103/1.jpg",
+      "/images/products/103/2.jpg",
+      "/images/products/103/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/103/1.jpg",
+      "/images/products/103/2.jpg",
+      "/images/products/103/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "104",
+    "name": "New Balance 530 Metallic",
+    "company": "New Balance",
+    "category": "Retro",
+    "gender": "women",
+    "price": 100,
+    "description": "Casual Y2K tech runner in soft tonal and metallic silver color schemes.",
+    "image_url": "/images/products/104/1.jpg",
+    "images": [
+      "/images/products/104/1.jpg",
+      "/images/products/104/2.jpg",
+      "/images/products/104/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/104/1.jpg",
+      "/images/products/104/2.jpg",
+      "/images/products/104/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "105",
+    "name": "New Balance Fresh Foam X Hierro v9",
+    "company": "New Balance",
+    "category": "Training",
+    "gender": "women",
+    "price": 100,
+    "description": "70s-inspired runner featuring lightweight materials and exaggerated tread.",
+    "image_url": "/images/products/105/1.jpg",
+    "images": [
+      "/images/products/105/1.jpg",
+      "/images/products/105/2.jpg",
+      "/images/products/105/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/105/1.jpg",
+      "/images/products/105/2.jpg",
+      "/images/products/105/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "106",
+    "name": "New Balance DynaSoft Nitrel v6",
+    "company": "New Balance",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 160,
+    "description": "Deconstructed jagged suede overlays over breathable mesh chassis.",
+    "image_url": "/images/products/106/1.jpg",
+    "images": [
+      "/images/products/106/1.jpg",
+      "/images/products/106/2.jpg",
+      "/images/products/106/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/106/1.jpg",
+      "/images/products/106/2.jpg",
+      "/images/products/106/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "107",
+    "name": "New Balance 574 Platform",
+    "company": "New Balance",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 100,
+    "description": "Classic 574 upper mounted atop an elevated EVA stack midsole.",
+    "image_url": "/images/products/107/1.jpg",
+    "images": [
+      "/images/products/107/1.jpg",
+      "/images/products/107/2.jpg",
+      "/images/products/107/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/107/1.jpg",
+      "/images/products/107/2.jpg",
+      "/images/products/107/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "108",
+    "name": "New Balance 1906R White Gold",
+    "company": "New Balance",
+    "category": "Football",
+    "gender": "men",
+    "price": 155,
+    "description": "A beautifully crafted launch edition of the iconic 442 Elite FG V3 model combines modern craft with timeless design.",
+    "image_url": "/images/products/108/1.jpg",
+    "images": [
+      "/images/products/108/1.jpg",
+      "/images/products/108/2.jpg",
+      "/images/products/108/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/108/1.jpg",
+      "/images/products/108/2.jpg",
+      "/images/products/108/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "109",
+    "name": "New Balance 530 Lace",
+    "company": "New Balance",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 185,
+    "description": "Sleek Pigskin mesh upper combined with ENCAP midsole technology.",
+    "image_url": "/images/products/109/1.jpg",
+    "images": [
+      "/images/products/109/1.jpg",
+      "/images/products/109/2.jpg",
+      "/images/products/109/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/109/1.jpg",
+      "/images/products/109/2.jpg",
+      "/images/products/109/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "110",
+    "name": "New Balance 480",
+    "company": "New Balance",
+    "category": "Running",
+    "gender": "women",
+    "price": 90,
+    "description": "Clean, simple court style inspired by original game-worn basketball classics.",
+    "image_url": "/images/products/110/1.jpg",
+    "images": [
+      "/images/products/110/1.jpg",
+      "/images/products/110/2.jpg",
+      "/images/products/110/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/110/1.jpg",
+      "/images/products/110/2.jpg",
+      "/images/products/110/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "111",
+    "name": "New Balance 480 High",
+    "company": "New Balance",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 110,
+    "description": "Inspired by styles worn by skaters in the '80s and '90s, these shoes are built for life on and off the board. This version features a full-length Fuel Cell midsole and reinforced toe cap to comfortably stand up to the stresses of skateboarding.",
+    "image_url": "/images/products/111/1.jpg",
+    "images": [
+      "/images/products/111/1.jpg",
+      "/images/products/111/2.jpg",
+      "/images/products/111/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/111/1.jpg",
+      "/images/products/111/2.jpg",
+      "/images/products/111/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.4
+  },
+  {
+    "id": "112",
+    "name": "Vans Old Skool Stackform",
+    "company": "Vans",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 85,
+    "description": "Sidestripe silhouette reimagined with a 34mm platform sole.",
+    "image_url": "/images/products/112/1.jpg",
+    "images": [
+      "/images/products/112/1.jpg",
+      "/images/products/112/2.jpg",
+      "/images/products/112/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/112/1.jpg",
+      "/images/products/112/2.jpg",
+      "/images/products/112/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "113",
+    "name": "Vans Sk8-Hi Tapered",
+    "company": "Vans",
+    "category": "Retro",
+    "gender": "women",
+    "price": 80,
+    "description": "Deconstructed high-top featuring a slimmer, fitted profile than the original.",
+    "image_url": "/images/products/113/1.jpg",
+    "images": [
+      "/images/products/113/1.jpg",
+      "/images/products/113/2.jpg",
+      "/images/products/113/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/113/1.jpg",
+      "/images/products/113/2.jpg",
+      "/images/products/113/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "114",
+    "name": "Vans Knu Skool W",
+    "company": "Vans",
+    "category": "Training",
+    "gender": "women",
+    "price": 75,
+    "description": "Chunky 90s low-top reissue with 3D-molded Sidestripe and heel pulls.",
+    "image_url": "/images/products/114/1.jpg",
+    "images": [
+      "/images/products/114/1.jpg",
+      "/images/products/114/2.jpg",
+      "/images/products/114/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/114/1.jpg",
+      "/images/products/114/2.jpg",
+      "/images/products/114/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "115",
+    "name": "Vans Authentic Platform",
+    "company": "Vans",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 70,
+    "description": "Original low-top design combined with elevated platform sidewalls.",
+    "image_url": "/images/products/115/1.jpg",
+    "images": [
+      "/images/products/115/1.jpg",
+      "/images/products/115/2.jpg",
+      "/images/products/115/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/115/1.jpg",
+      "/images/products/115/2.jpg",
+      "/images/products/115/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "116",
+    "name": "Vans Classic Slip-On Checkerboard",
+    "company": "Vans",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 65,
+    "description": "The world-famous canvas slip-on decorated with iconic checkerboard print.",
+    "image_url": "/images/products/116/1.jpg",
+    "images": [
+      "/images/products/116/1.jpg",
+      "/images/products/116/2.jpg",
+      "/images/products/116/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/116/1.jpg",
+      "/images/products/116/2.jpg",
+      "/images/products/116/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "117",
+    "name": "Vans Style 36",
+    "company": "Vans",
+    "category": "Slides",
+    "gender": "women",
+    "price": 75,
+    "description": "Retro precursor to the Old Skool featuring a smaller toe box design.",
+    "image_url": "/images/products/117/1.jpg",
+    "images": [
+      "/images/products/117/1.jpg",
+      "/images/products/117/2.jpg",
+      "/images/products/117/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/117/1.jpg",
+      "/images/products/117/2.jpg",
+      "/images/products/117/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "118",
+    "name": "Vans Upland",
+    "company": "Vans",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 90,
+    "description": "90s retro skate style with slim profile and flying 'V' logo.",
+    "image_url": "/images/products/118/1.jpg",
+    "images": [
+      "/images/products/118/1.jpg",
+      "/images/products/118/2.jpg",
+      "/images/products/118/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/118/1.jpg",
+      "/images/products/118/2.jpg",
+      "/images/products/118/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "119",
+    "name": "Vans Mary Jane",
+    "company": "Vans",
+    "category": "Running",
+    "gender": "women",
+    "price": 65,
+    "description": "Nostalgic silhouette featuring buckle strap details and rubber waffle outsoles.",
+    "image_url": "/images/products/119/1.jpg",
+    "images": [
+      "/images/products/119/1.jpg",
+      "/images/products/119/2.jpg",
+      "/images/products/119/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/119/1.jpg",
+      "/images/products/119/2.jpg",
+      "/images/products/119/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "120",
+    "name": "Vans UltraRange EXO",
+    "company": "Vans",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 100,
+    "description": "All-terrain lifestyle trainer with UltraCush midsole and EXO skeleton support.",
+    "image_url": "/images/products/120/1.jpg",
+    "images": [
+      "/images/products/120/1.jpg",
+      "/images/products/120/2.jpg",
+      "/images/products/120/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/120/1.jpg",
+      "/images/products/120/2.jpg",
+      "/images/products/120/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.7
+  },
+  {
+    "id": "121",
+    "name": "Yeezy Boost 350 V2 Bone",
+    "company": "Yeezy",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 230,
+    "description": "Crisp triple-white Primeknit upper featuring translucent lateral side stripe.",
+    "image_url": "/images/products/121/1.jpg",
+    "images": [
+      "/images/products/121/1.jpg",
+      "/images/products/121/2.jpg",
+      "/images/products/121/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/121/1.jpg",
+      "/images/products/121/2.jpg",
+      "/images/products/121/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "122",
+    "name": "Yeezy Foam Runner Onyx",
+    "company": "Yeezy",
+    "category": "Retro",
+    "gender": "women",
+    "price": 90,
+    "description": "All-black sculpted slip-on crafted with molded EVA foam vents.",
+    "image_url": "/images/products/122/1.jpg",
+    "images": [
+      "/images/products/122/1.jpg",
+      "/images/products/122/2.jpg",
+      "/images/products/122/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/122/1.jpg",
+      "/images/products/122/2.jpg",
+      "/images/products/122/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "123",
+    "name": "Yeezy Slide Pure",
+    "company": "Yeezy",
+    "category": "Training",
+    "gender": "women",
+    "price": 70,
+    "description": "Clean minimalist slide with soft footbed layer and deep serrated outsole.",
+    "image_url": "/images/products/123/1.jpg",
+    "images": [
+      "/images/products/123/1.jpg",
+      "/images/products/123/2.jpg",
+      "/images/products/123/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/123/1.jpg",
+      "/images/products/123/2.jpg",
+      "/images/products/123/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "124",
+    "name": "Yeezy 500 Soft Vision",
+    "company": "Yeezy",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 210,
+    "description": "Pastel lavender suede overlays with adiprene+ cushioning.",
+    "image_url": "/images/products/124/1.jpg",
+    "images": [
+      "/images/products/124/1.jpg",
+      "/images/products/124/2.jpg",
+      "/images/products/124/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/124/1.jpg",
+      "/images/products/124/2.jpg",
+      "/images/products/124/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "125",
+    "name": "Yeezy Boost 700 Analog",
+    "company": "Yeezy",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 300,
+    "description": "Neutral cream tones layered in mesh, leather, and suede with internal Boost.",
+    "image_url": "/images/products/125/1.jpg",
+    "images": [
+      "/images/products/125/1.jpg",
+      "/images/products/125/2.jpg",
+      "/images/products/125/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/125/1.jpg",
+      "/images/products/125/2.jpg",
+      "/images/products/125/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "126",
+    "name": "Yeezy 380 Mist",
+    "company": "Yeezy",
+    "category": "Slides",
+    "gender": "women",
+    "price": 230,
+    "description": "Earthy camouflage patterned Primeknit upper on a curved wedge Boost sole.",
+    "image_url": "/images/products/126/1.jpg",
+    "images": [
+      "/images/products/126/1.jpg",
+      "/images/products/126/2.jpg",
+      "/images/products/126/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/126/1.jpg",
+      "/images/products/126/2.jpg",
+      "/images/products/126/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "127",
+    "name": "Yeezy Slide Bone",
+    "company": "Yeezy",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 70,
+    "description": "Off-white molded slide providing lightweight durability and immediate step-in comfort.",
+    "image_url": "/images/products/127/1.jpg",
+    "images": [
+      "/images/products/127/1.jpg",
+      "/images/products/127/2.jpg",
+      "/images/products/127/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/127/1.jpg",
+      "/images/products/127/2.jpg",
+      "/images/products/127/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "128",
+    "name": "Puma Mayze Leather",
+    "company": "Puma",
+    "category": "Running",
+    "gender": "women",
+    "price": 90,
+    "description": "Stacked platform sole paired with clean leather upper and foil branding.",
+    "image_url": "/images/products/128/1.jpg",
+    "images": [
+      "/images/products/128/1.jpg",
+      "/images/products/128/2.jpg",
+      "/images/products/128/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/128/1.jpg",
+      "/images/products/128/2.jpg",
+      "/images/products/128/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "129",
+    "name": "Puma Cali Dream",
+    "company": "Puma",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 85,
+    "description": "West Coast relaxed vibe featuring insert midsole details and stacked sole.",
+    "image_url": "/images/products/129/1.jpg",
+    "images": [
+      "/images/products/129/1.jpg",
+      "/images/products/129/2.jpg",
+      "/images/products/129/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/129/1.jpg",
+      "/images/products/129/2.jpg",
+      "/images/products/129/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "130",
+    "name": "Puma Suede Mayu",
+    "company": "Puma",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 95,
+    "description": "Exaggerated proportions and wrapped platform midsole on a suede base.",
+    "image_url": "/images/products/130/1.jpg",
+    "images": [
+      "/images/products/130/1.jpg",
+      "/images/products/130/2.jpg",
+      "/images/products/130/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/130/1.jpg",
+      "/images/products/130/2.jpg",
+      "/images/products/130/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "131",
+    "name": "Puma Palermo Special Vintage W",
+    "company": "Puma",
+    "category": "Retro",
+    "gender": "women",
+    "price": 90,
+    "description": "Vibrant terrace classic with T-toe construction and authentic gum sole.",
+    "image_url": "/images/products/131/1.jpg",
+    "images": [
+      "/images/products/131/1.jpg",
+      "/images/products/131/2.jpg",
+      "/images/products/131/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/131/1.jpg",
+      "/images/products/131/2.jpg",
+      "/images/products/131/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "132",
+    "name": "Puma RS-X Efekt W",
+    "company": "Puma",
+    "category": "Training",
+    "gender": "women",
+    "price": 110,
+    "description": "Futuristic running-inspired silhouette with angular overlays and bold accents.",
+    "image_url": "/images/products/132/1.jpg",
+    "images": [
+      "/images/products/132/1.jpg",
+      "/images/products/132/2.jpg",
+      "/images/products/132/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/132/1.jpg",
+      "/images/products/132/2.jpg",
+      "/images/products/132/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "133",
+    "name": "Puma GV Special Bloom",
+    "company": "Puma",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 95,
+    "description": "Vintage-treated leather uppers give an authentic pre-loved retro vibe.",
+    "image_url": "/images/products/133/1.jpg",
+    "images": [
+      "/images/products/133/1.jpg",
+      "/images/products/133/2.jpg",
+      "/images/products/133/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/133/1.jpg",
+      "/images/products/133/2.jpg",
+      "/images/products/133/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "134",
+    "name": "Puma Velocity Nitro 3",
+    "company": "Puma",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 135,
+    "description": "Lightweight NITRO foam propulsion engineered for performance and running comfort.",
+    "image_url": "/images/products/134/1.jpg",
+    "images": [
+      "/images/products/134/1.jpg",
+      "/images/products/134/2.jpg",
+      "/images/products/134/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/134/1.jpg",
+      "/images/products/134/2.jpg",
+      "/images/products/134/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "135",
+    "name": "Puma Carina 2.0",
+    "company": "Puma",
+    "category": "Slides",
+    "gender": "women",
+    "price": 70,
+    "description": "80s beach town design updated with wide vertical lines on the midsole.",
+    "image_url": "/images/products/135/1.jpg",
+    "images": [
+      "/images/products/135/1.jpg",
+      "/images/products/135/2.jpg",
+      "/images/products/135/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/135/1.jpg",
+      "/images/products/135/2.jpg",
+      "/images/products/135/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "136",
+    "name": "Asics GEL-KAYANO 33 GS",
+    "company": "Asics",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 150,
+    "description": "Vintage technical running aesthetic blended with modern chic pastel hits.",
+    "image_url": "/images/products/136/1.jpg",
+    "images": [
+      "/images/products/136/1.jpg",
+      "/images/products/136/2.jpg",
+      "/images/products/136/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/136/1.jpg",
+      "/images/products/136/2.jpg",
+      "/images/products/136/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "137",
+    "name": "Asics GEL-NYC Metallic",
+    "company": "Asics",
+    "category": "Running",
+    "gender": "women",
+    "price": 130,
+    "description": "Reflective technical mesh runner suited for high-tempo lifestyle wear.",
+    "image_url": "/images/products/137/1.jpg",
+    "images": [
+      "/images/products/137/1.jpg",
+      "/images/products/137/2.jpg",
+      "/images/products/137/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/137/1.jpg",
+      "/images/products/137/2.jpg",
+      "/images/products/137/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "138",
+    "name": "Asics GT-2160 Cream",
+    "company": "Asics",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 120,
+    "description": "Heritage runner crafted with segmented midsole structure and GEL inserts.",
+    "image_url": "/images/products/138/1.jpg",
+    "images": [
+      "/images/products/138/1.jpg",
+      "/images/products/138/2.jpg",
+      "/images/products/138/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/138/1.jpg",
+      "/images/products/138/2.jpg",
+      "/images/products/138/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.5
+  },
+  {
+    "id": "139",
+    "name": "Asics GEL-1130 Oyster Grey",
+    "company": "Asics",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 95,
+    "description": "Late 2000s runner inspired by stability models, offering timeless comfort.",
+    "image_url": "/images/products/139/1.jpg",
+    "images": [
+      "/images/products/139/1.jpg",
+      "/images/products/139/2.jpg",
+      "/images/products/139/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/139/1.jpg",
+      "/images/products/139/2.jpg",
+      "/images/products/139/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "140",
+    "name": "Asics GEL-Cumulus 28",
+    "company": "Asics",
+    "category": "Retro",
+    "gender": "women",
+    "price": 140,
+    "description": "PureGEL technology and FF BLAST PLUS foam for ultra-soft landings.",
+    "image_url": "/images/products/140/1.jpg",
+    "images": [
+      "/images/products/140/1.jpg",
+      "/images/products/140/2.jpg",
+      "/images/products/140/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/140/1.jpg",
+      "/images/products/140/2.jpg",
+      "/images/products/140/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "141",
+    "name": "Asics Japan S PF",
+    "company": "Asics",
+    "category": "Training",
+    "gender": "women",
+    "price": 85,
+    "description": "Heritage court shoe redesigned with a modified platform midsole.",
+    "image_url": "/images/products/141/1.jpg",
+    "images": [
+      "/images/products/141/1.jpg",
+      "/images/products/141/2.jpg",
+      "/images/products/141/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/141/1.jpg",
+      "/images/products/141/2.jpg",
+      "/images/products/141/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "142",
+    "name": "Asics Skyhand OG",
+    "company": "Asics",
+    "category": "Outdoor",
+    "gender": "women",
+    "price": 100,
+    "description": "Slim retro indoor court sneaker featuring premium suede upper detail.",
+    "image_url": "/images/products/142/1.jpg",
+    "images": [
+      "/images/products/142/1.jpg",
+      "/images/products/142/2.jpg",
+      "/images/products/142/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/142/1.jpg",
+      "/images/products/142/2.jpg",
+      "/images/products/142/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "143",
+    "name": "Asics Novablast 5 GS",
+    "company": "Asics",
+    "category": "Luxury",
+    "gender": "women",
+    "price": 140,
+    "description": "Geometrically sculpted energetic bounce runner with modern street style.",
+    "image_url": "/images/products/143/1.jpg",
+    "images": [
+      "/images/products/143/1.jpg",
+      "/images/products/143/2.jpg",
+      "/images/products/143/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/143/1.jpg",
+      "/images/products/143/2.jpg",
+      "/images/products/143/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "144",
+    "name": "Balenciaga Triple S Clear Sole",
+    "company": "Balenciaga",
+    "category": "Slides",
+    "gender": "women",
+    "price": 1150,
+    "description": "Iconic chunky shoe equipped with translucent TPU injected bubble midsole.",
+    "image_url": "/images/products/144/1.jpg",
+    "images": [
+      "/images/products/144/1.jpg",
+      "/images/products/144/2.jpg",
+      "/images/products/144/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/144/1.jpg",
+      "/images/products/144/2.jpg",
+      "/images/products/144/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "145",
+    "name": "Balenciaga Track Sneaker Beige",
+    "company": "Balenciaga",
+    "category": "Basketball",
+    "gender": "women",
+    "price": 1050,
+    "description": "Complex high-fashion trail design featuring 128 overlapping panels.",
+    "image_url": "/images/products/145/1.jpg",
+    "images": [
+      "/images/products/145/1.jpg",
+      "/images/products/145/2.jpg",
+      "/images/products/145/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/145/1.jpg",
+      "/images/products/145/2.jpg",
+      "/images/products/145/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": true,
+    "rating": 4.2
+  },
+  {
+    "id": "146",
+    "name": "Balenciaga Defender Pink",
+    "company": "Balenciaga",
+    "category": "Running",
+    "gender": "women",
+    "price": 1150,
+    "description": "Extreme tire-tread sole unit rendered in bold high-fashion colorways.",
+    "image_url": "/images/products/146/1.jpg",
+    "images": [
+      "/images/products/146/1.jpg",
+      "/images/products/146/2.jpg",
+      "/images/products/146/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/146/1.jpg",
+      "/images/products/146/2.jpg",
+      "/images/products/146/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "147",
+    "name": "Balenciaga Runner Metallic W",
+    "company": "Balenciaga",
+    "category": "Streetwear",
+    "gender": "women",
+    "price": 1150,
+    "description": "Vintage worn-out treatment tech runner with layered mesh and metallic synthetic.",
+    "image_url": "/images/products/147/1.jpg",
+    "images": [
+      "/images/products/147/1.jpg",
+      "/images/products/147/2.jpg",
+      "/images/products/147/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/147/1.jpg",
+      "/images/products/147/2.jpg",
+      "/images/products/147/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.8
+  },
+  {
+    "id": "148",
+    "name": "Balenciaga WOMEN'S 3XL TULLE SNEAKER IN WHITE/PINK",
+    "company": "Balenciaga",
+    "category": "Skateboarding",
+    "gender": "women",
+    "price": 1250,
+    "description": "Exaggerated runway proportions with signature embroidered toe sizing.",
+    "image_url": "/images/products/148/1.jpg",
+    "images": [
+      "/images/products/148/1.jpg",
+      "/images/products/148/2.jpg",
+      "/images/products/148/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/148/1.jpg",
+      "/images/products/148/2.jpg",
+      "/images/products/148/3.jpg"
+    ],
+    "isTrending": true,
+    "isTech": false,
+    "rating": 4.3
+  },
+  {
+    "id": "149",
+    "name": "Balenciaga Speed 2.0",
+    "company": "Balenciaga",
+    "category": "Retro",
+    "gender": "women",
+    "price": 995,
+    "description": "Sock trainer icon featuring 3D knit construction and segmented sole unit.",
+    "image_url": "/images/products/149/1.jpg",
+    "images": [
+      "/images/products/149/1.jpg",
+      "/images/products/149/2.jpg",
+      "/images/products/149/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/149/1.jpg",
+      "/images/products/149/2.jpg",
+      "/images/products/149/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": true,
+    "rating": 4.6
+  },
+  {
+    "id": "150",
+    "name": "Balenciaga Bouncer Sneaker",
+    "company": "Balenciaga",
+    "category": "Training",
+    "gender": "women",
+    "price": 1150,
+    "description": "Extreme rounded tread outsole paired with mesh and nylon distressed upper.",
+    "image_url": "/images/products/150/1.jpg",
+    "images": [
+      "/images/products/150/1.jpg",
+      "/images/products/150/2.jpg",
+      "/images/products/150/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/150/1.jpg",
+      "/images/products/150/2.jpg",
+      "/images/products/150/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "151",
+    "name": "Nike Mercurial Superfly 11 Elite FG",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "men",
+    "price": 285,
+    "description": "High-cut speed football boots built for explosive acceleration on firm ground pitches.",
+    "image_url": "/images/products/151/1.jpg",
+    "images": [
+      "/images/products/151/1.jpg",
+      "/images/products/151/2.jpg",
+      "/images/products/151/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/151/1.jpg",
+      "/images/products/151/2.jpg",
+      "/images/products/151/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "152",
+    "name": "Nike Phantom GX 2 Elite FG",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "men",
+    "price": 270,
+    "description": "Precision football boots engineered with sticky Gripknit for maximum ball control.",
+    "image_url": "/images/products/152/1.jpg",
+    "images": [
+      "/images/products/152/1.jpg",
+      "/images/products/152/2.jpg",
+      "/images/products/152/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/152/1.jpg",
+      "/images/products/152/2.jpg",
+      "/images/products/152/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "153",
+    "name": "Nike Tiempo Maestro Elite",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "men",
+    "price": 240,
+    "description": "Soft FlyTouch Plus leather boots for exceptional feel, control, and defender stability.",
+    "image_url": "/images/products/153/1.jpg",
+    "images": [
+      "/images/products/153/1.jpg",
+      "/images/products/153/2.jpg",
+      "/images/products/153/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/153/1.jpg",
+      "/images/products/153/2.jpg",
+      "/images/products/153/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "154",
+    "name": "adidas Predator Elite FT FG",
+    "company": "adidas",
+    "category": "Football",
+    "gender": "men",
+    "price": 280,
+    "description": "Fold-over tongue football boots featuring Strikeskin rubber fins for swerve and power.",
+    "image_url": "/images/products/154/1.jpg",
+    "images": [
+      "/images/products/154/1.jpg",
+      "/images/products/154/2.jpg",
+      "/images/products/154/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/154/1.jpg",
+      "/images/products/154/2.jpg",
+      "/images/products/154/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "155",
+    "name": "adidas F50 Elite Fast Rebirth FG",
+    "company": "adidas",
+    "category": "Football",
+    "gender": "men",
+    "price": 260,
+    "description": "Iconic ultra-lightweight speed boot with Fibertouch upper and Sprintframe 360 soleplate.",
+    "image_url": "/images/products/155/1.jpg",
+    "images": [
+      "/images/products/155/1.jpg",
+      "/images/products/155/2.jpg",
+      "/images/products/155/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/155/1.jpg",
+      "/images/products/155/2.jpg",
+      "/images/products/155/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "156",
+    "name": "Puma Future 9 Ultimate CA MX FG",
+    "company": "Puma",
+    "category": "Football",
+    "gender": "men",
+    "price": 220,
+    "description": "Adaptive fit football boots with FUZIONFIT360 dual mesh and 3D grip textures.",
+    "image_url": "/images/products/156/1.jpg",
+    "images": [
+      "/images/products/156/1.jpg",
+      "/images/products/156/2.jpg",
+      "/images/products/156/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/156/1.jpg",
+      "/images/products/156/2.jpg",
+      "/images/products/156/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "157",
+    "name": "Puma Ultra 5 Ultimate FG",
+    "company": "Puma",
+    "category": "Football",
+    "gender": "men",
+    "price": 220,
+    "description": "Ultra-light speed boot built with PWRTAPE support and SPEEDSORT outsole.",
+    "image_url": "/images/products/157/1.jpg",
+    "images": [
+      "/images/products/157/1.jpg",
+      "/images/products/157/2.jpg",
+      "/images/products/157/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/157/1.jpg",
+      "/images/products/157/2.jpg",
+      "/images/products/157/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "158",
+    "name": "New Balance Furon Elite FG V9",
+    "company": "New Balance",
+    "category": "Football",
+    "gender": "men",
+    "price": 225,
+    "description": "Hypoknit upper speed boot with offset lacing for clean strike zones.",
+    "image_url": "/images/products/158/1.jpg",
+    "images": [
+      "/images/products/158/1.jpg",
+      "/images/products/158/2.jpg",
+      "/images/products/158/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/158/1.jpg",
+      "/images/products/158/2.jpg",
+      "/images/products/158/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "159",
+    "name": "Mizuno Morelia Neo IV Beta FG",
+    "company": "Mizuno",
+    "category": "Football",
+    "gender": "men",
+    "price": 320,
+    "description": "Handcrafted premium K-Leather speed boots made in Japan for elite touch.",
+    "image_url": "/images/products/159/1.jpg",
+    "images": [
+      "/images/products/159/1.jpg",
+      "/images/products/159/2.jpg",
+      "/images/products/159/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/159/1.jpg",
+      "/images/products/159/2.jpg",
+      "/images/products/159/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "160",
+    "name": "Nike Premier 3 FG Boot",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "men",
+    "price": 120,
+    "description": "Timeless supple kangaroo leather boot with fold-over tongue and classic conical studs.",
+    "image_url": "/images/products/160/1.jpg",
+    "images": [
+      "/images/products/160/1.jpg",
+      "/images/products/160/2.jpg",
+      "/images/products/160/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/160/1.jpg",
+      "/images/products/160/2.jpg",
+      "/images/products/160/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "161",
+    "name": "Nike Mercurial Vapor 17 Elite SE",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "men",
+    "price": 90,
+    "description": "Turf football shoes with Zoom Air unit and high-traction rubber lug outsole.",
+    "image_url": "/images/products/161/1.jpg",
+    "images": [
+      "/images/products/161/1.jpg",
+      "/images/products/161/2.jpg",
+      "/images/products/161/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/161/1.jpg",
+      "/images/products/161/2.jpg",
+      "/images/products/161/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "162",
+    "name": "adidas Copa Pure IV Elite FG",
+    "company": "adidas",
+    "category": "Football",
+    "gender": "men",
+    "price": 230,
+    "description": "Quilted Fusionskin leather forefoot for soft touch and refined ball command.",
+    "image_url": "/images/products/162/1.jpg",
+    "images": [
+      "/images/products/162/1.jpg",
+      "/images/products/162/2.jpg",
+      "/images/products/162/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/162/1.jpg",
+      "/images/products/162/2.jpg",
+      "/images/products/162/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "163",
+    "name": "adidas Samba Classic Indoor Shoes",
+    "company": "adidas",
+    "category": "Football",
+    "gender": "men",
+    "price": 75,
+    "description": "Iconic indoor futsal soccer shoe with non-marking gum rubber outsole.",
+    "image_url": "/images/products/163/1.jpg",
+    "images": [
+      "/images/products/163/1.jpg",
+      "/images/products/163/2.jpg",
+      "/images/products/163/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/163/1.jpg",
+      "/images/products/163/2.jpg",
+      "/images/products/163/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "164",
+    "name": "Puma King Ultimate FG/AG",
+    "company": "Puma",
+    "category": "Football",
+    "gender": "men",
+    "price": 200,
+    "description": "Non-animal K-BETTER upper material giving classic touch and durability.",
+    "image_url": "/images/products/164/1.jpg",
+    "images": [
+      "/images/products/164/1.jpg",
+      "/images/products/164/2.jpg",
+      "/images/products/164/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/164/1.jpg",
+      "/images/products/164/2.jpg",
+      "/images/products/164/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "165",
+    "name": "Nike Flight Official Match Football",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "unisex",
+    "price": 165,
+    "description": "Official match ball featuring Aerowsculpt molded grooves for consistent flight.",
+    "image_url": "/images/products/165/1.jpg",
+    "images": [
+      "/images/products/165/1.jpg",
+      "/images/products/165/2.jpg",
+      "/images/products/165/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/165/1.jpg",
+      "/images/products/165/2.jpg",
+      "/images/products/165/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "166",
+    "name": "adidas UCL Pro Match Ball",
+    "company": "adidas",
+    "category": "Football",
+    "gender": "unisex",
+    "price": 170,
+    "description": "Thermally bonded seamless official UEFA Champions League match soccer ball.",
+    "image_url": "/images/products/166/1.jpg",
+    "images": [
+      "/images/products/166/1.jpg",
+      "/images/products/166/2.jpg",
+      "/images/products/166/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/166/1.jpg",
+      "/images/products/166/2.jpg",
+      "/images/products/166/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "167",
+    "name": "Nike Charge Shin Guards",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "unisex",
+    "price": 22,
+    "description": "Hard shell protection with foam backing for comfortable match shin coverage.",
+    "image_url": "/images/products/167/1.jpg",
+    "images": [
+      "/images/products/167/1.jpg",
+      "/images/products/167/2.jpg",
+      "/images/products/167/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/167/1.jpg",
+      "/images/products/167/2.jpg",
+      "/images/products/167/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "168",
+    "name": "adidas Predator Pro Goalkeeper Gloves",
+    "company": "adidas",
+    "category": "Football",
+    "gender": "unisex",
+    "price": 130,
+    "description": "Match-grade negative cut goalkeeper gloves with URG 2.0 latex grip palm.",
+    "image_url": "/images/products/168/1.jpg",
+    "images": [
+      "/images/products/168/1.jpg",
+      "/images/products/168/2.jpg",
+      "/images/products/168/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/168/1.jpg",
+      "/images/products/168/2.jpg",
+      "/images/products/168/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "169",
+    "name": "Puma Orbita LaLiga Match Soccer Ball",
+    "company": "Puma",
+    "category": "Football",
+    "gender": "unisex",
+    "price": 150,
+    "description": "FIFA Quality Pro match ball engineered for low water absorption and true trajectory.",
+    "image_url": "/images/products/169/1.jpg",
+    "images": [
+      "/images/products/169/1.jpg",
+      "/images/products/169/2.jpg",
+      "/images/products/169/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/169/1.jpg",
+      "/images/products/169/2.jpg",
+      "/images/products/169/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "170",
+    "name": "NikeGrip Vapor Strike",
+    "company": "Nike",
+    "category": "Football",
+    "gender": "unisex",
+    "price": 30,
+    "description": "Anti-slip yarns and targeted cushioning designed to minimize boot slippage.",
+    "image_url": "/images/products/170/1.jpg",
+    "images": [
+      "/images/products/170/1.jpg",
+      "/images/products/170/2.jpg",
+      "/images/products/170/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/170/1.jpg",
+      "/images/products/170/2.jpg",
+      "/images/products/170/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "171",
+    "name": "Nike Solo Swoosh Heavyweight Hoodie",
+    "company": "Nike",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 110,
+    "description": "Premium loopback fleece oversized hoodie with minimal front Swoosh embroidery.",
+    "image_url": "/images/products/171/1.jpg",
+    "images": [
+      "/images/products/171/1.jpg",
+      "/images/products/171/2.jpg",
+      "/images/products/171/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/171/1.jpg",
+      "/images/products/171/2.jpg",
+      "/images/products/171/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "172",
+    "name": "Nike Tech Fleece Joggers",
+    "company": "Nike",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 120,
+    "description": "Slim tapered lightweight thermal fleece pants with zippered utility pocket.",
+    "image_url": "/images/products/172/1.jpg",
+    "images": [
+      "/images/products/172/1.jpg",
+      "/images/products/172/2.jpg",
+      "/images/products/172/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/172/1.jpg",
+      "/images/products/172/2.jpg",
+      "/images/products/172/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "173",
+    "name": "adidas Beckenbauer Track Jacket",
+    "company": "adidas",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 95,
+    "description": "Classic 3-Stripes zip track jacket styled with retro standing collar.",
+    "image_url": "/images/products/173/1.jpg",
+    "images": [
+      "/images/products/173/1.jpg",
+      "/images/products/173/2.jpg",
+      "/images/products/173/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/173/1.jpg",
+      "/images/products/173/2.jpg",
+      "/images/products/173/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "174",
+    "name": "adidas 3-STRIPES T-SHIRT",
+    "company": "adidas",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 40,
+    "description": "Everyday soft cotton jersey tee with bold embroidered Trefoil chest graphic.",
+    "image_url": "/images/products/174/1.jpg",
+    "images": [
+      "/images/products/174/1.jpg",
+      "/images/products/174/2.jpg",
+      "/images/products/174/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/174/1.jpg",
+      "/images/products/174/2.jpg",
+      "/images/products/174/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "175",
+    "name": "Puma T7 Iconic Track Pants",
+    "company": "Puma",
+    "category": "Apparel & Accessories",
+    "gender": "women",
+    "price": 70,
+    "description": "Heritage streetwear track pants with 7cm signature side stripe inserts.",
+    "image_url": "/images/products/175/1.jpg",
+    "images": [
+      "/images/products/175/1.jpg",
+      "/images/products/175/2.jpg",
+      "/images/products/175/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/175/1.jpg",
+      "/images/products/175/2.jpg",
+      "/images/products/175/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "176",
+    "name": "New Balance Athletics Crewneck",
+    "company": "New Balance",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 85,
+    "description": "Relaxed French terry fleece crewneck sweatshirt with embroidered chest crest.",
+    "image_url": "/images/products/176/1.jpg",
+    "images": [
+      "/images/products/176/1.jpg",
+      "/images/products/176/2.jpg",
+      "/images/products/176/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/176/1.jpg",
+      "/images/products/176/2.jpg",
+      "/images/products/176/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "177",
+    "name": "Vans Off The Wall Graphic Tee",
+    "company": "Vans",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 38,
+    "description": "Heavy carded ringspun cotton skate tee with classic skateboard back print.",
+    "image_url": "/images/products/177/1.jpg",
+    "images": [
+      "/images/products/177/1.jpg",
+      "/images/products/177/2.jpg",
+      "/images/products/177/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/177/1.jpg",
+      "/images/products/177/2.jpg",
+      "/images/products/177/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "178",
+    "name": "Balenciaga Speed Hunter Hoodie",
+    "company": "Balenciaga",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 950,
+    "description": "Luxury heavy cotton vintage-wash hoodie with boyband style artwork print.",
+    "image_url": "/images/products/178/1.jpg",
+    "images": [
+      "/images/products/178/1.jpg",
+      "/images/products/178/2.jpg",
+      "/images/products/178/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/178/1.jpg",
+      "/images/products/178/2.jpg",
+      "/images/products/178/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.9
+  },
+  {
+    "id": "179",
+    "name": "Yeezy Gap Engineered Heavy Hoodie",
+    "company": "Yeezy",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 240,
+    "description": "Double-layered seamless heavy fleece hoodie with dramatic cropped boxy fit.",
+    "image_url": "/images/products/179/1.jpg",
+    "images": [
+      "/images/products/179/1.jpg",
+      "/images/products/179/2.jpg",
+      "/images/products/179/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/179/1.jpg",
+      "/images/products/179/2.jpg",
+      "/images/products/179/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "180",
+    "name": "Asics Actibreeze Utility Jacket",
+    "company": "Asics",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 130,
+    "description": "Breathable technical windbreaker coat designed with techwear ventilation mapping.",
+    "image_url": "/images/products/180/1.jpg",
+    "images": [
+      "/images/products/180/1.jpg",
+      "/images/products/180/2.jpg",
+      "/images/products/180/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/180/1.jpg",
+      "/images/products/180/2.jpg",
+      "/images/products/180/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "181",
+    "name": "Nike Club Fleece Oversized Sweatpants",
+    "company": "Nike",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 65,
+    "description": "Soft brushed fleece joggers featuring an elastic waistband and open hems.",
+    "image_url": "/images/products/181/1.jpg",
+    "images": [
+      "/images/products/181/1.jpg",
+      "/images/products/181/2.jpg",
+      "/images/products/181/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/181/1.jpg",
+      "/images/products/181/2.jpg",
+      "/images/products/181/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "182",
+    "name": "Nike Heritage Crossbody Bag",
+    "company": "Nike",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 35,
+    "description": "Durable polyester shoulder bag with zippered main compartment and front pocket.",
+    "image_url": "/images/products/182/1.jpg",
+    "images": [
+      "/images/products/182/1.jpg",
+      "/images/products/182/2.jpg",
+      "/images/products/182/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/182/1.jpg",
+      "/images/products/182/2.jpg",
+      "/images/products/182/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "183",
+    "name": "adidas Trefoil Bucket Hat",
+    "company": "adidas",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 32,
+    "description": "Washed cotton twill bucket hat featuring embroidered front Trefoil logo.",
+    "image_url": "/images/products/183/1.jpg",
+    "images": [
+      "/images/products/183/1.jpg",
+      "/images/products/183/2.jpg",
+      "/images/products/183/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/183/1.jpg",
+      "/images/products/183/2.jpg",
+      "/images/products/183/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "184",
+    "name": "adidas Tiro 23 League Training Pants",
+    "company": "adidas",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 55,
+    "description": "AEROREADY moisture-absorbing track pants with ankle zips for easy removal.",
+    "image_url": "/images/products/184/1.jpg",
+    "images": [
+      "/images/products/184/1.jpg",
+      "/images/products/184/2.jpg",
+      "/images/products/184/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/184/1.jpg",
+      "/images/products/184/2.jpg",
+      "/images/products/184/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "185",
+    "name": "Puma ESS Logo Heavy Fleece Shorts",
+    "company": "Puma",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 42,
+    "description": "Casual french terry shorts with side pockets and elastic drawstring belt.",
+    "image_url": "/images/products/185/1.jpg",
+    "images": [
+      "/images/products/185/1.jpg",
+      "/images/products/185/2.jpg",
+      "/images/products/185/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/185/1.jpg",
+      "/images/products/185/2.jpg",
+      "/images/products/185/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.4
+  },
+  {
+    "id": "186",
+    "name": "New Balance Athletics Canvas Tote",
+    "company": "New Balance",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 45,
+    "description": "Heavyweight cotton canvas tote bag with bold woven crest graphic label.",
+    "image_url": "/images/products/186/1.jpg",
+    "images": [
+      "/images/products/186/1.jpg",
+      "/images/products/186/2.jpg",
+      "/images/products/186/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/186/1.jpg",
+      "/images/products/186/2.jpg",
+      "/images/products/186/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  },
+  {
+    "id": "187",
+    "name": "Vans Drop V Kohana Snapback Cap",
+    "company": "Vans",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 28,
+    "description": "6-panel structured snapback cap with embroidered Vans graphic on front.",
+    "image_url": "/images/products/187/1.jpg",
+    "images": [
+      "/images/products/187/1.jpg",
+      "/images/products/187/2.jpg",
+      "/images/products/187/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/187/1.jpg",
+      "/images/products/187/2.jpg",
+      "/images/products/187/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.5
+  },
+  {
+    "id": "188",
+    "name": "Balenciaga Logo Embroidered Cap",
+    "company": "Balenciaga",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 450,
+    "description": "Distressed organic cotton baseball cap featuring tonal logo front embroidery.",
+    "image_url": "/images/products/188/1.jpg",
+    "images": [
+      "/images/products/188/1.jpg",
+      "/images/products/188/2.jpg",
+      "/images/products/188/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/188/1.jpg",
+      "/images/products/188/2.jpg",
+      "/images/products/188/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.8
+  },
+  {
+    "id": "189",
+    "name": "Jordan Essentials Fleece Crewneck",
+    "company": "Nike",
+    "category": "Apparel & Accessories",
+    "gender": "men",
+    "price": 75,
+    "description": "Heavyweight fleece pullover sweatshirt with subtle Jumpman chest patch.",
+    "image_url": "/images/products/189/1.jpg",
+    "images": [
+      "/images/products/189/1.jpg",
+      "/images/products/189/2.jpg",
+      "/images/products/189/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/189/1.jpg",
+      "/images/products/189/2.jpg",
+      "/images/products/189/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.7
+  },
+  {
+    "id": "190",
+    "name": "Converse Chuck Taylor Utility Backpack",
+    "company": "Converse",
+    "category": "Apparel & Accessories",
+    "gender": "unisex",
+    "price": 60,
+    "description": "Everyday laptop backpack crafted with durable poly canvas and double zip compartments.",
+    "image_url": "/images/products/190/1.jpg",
+    "images": [
+      "/images/products/190/1.jpg",
+      "/images/products/190/2.jpg",
+      "/images/products/190/3.jpg"
+    ],
+    "gallery": [
+      "/images/products/190/1.jpg",
+      "/images/products/190/2.jpg",
+      "/images/products/190/3.jpg"
+    ],
+    "isTrending": false,
+    "isTech": false,
+    "rating": 4.6
+  }
+]

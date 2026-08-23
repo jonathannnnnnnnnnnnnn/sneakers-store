@@ -45,14 +45,15 @@ export async function middleware(request: NextRequest) {
     }
 
     // Extract role from user metadata (or profile)
-    const role = user.user_metadata?.role || 'buyer'
+const role = user?.user_metadata?.role || 'buyer';
+const isAdminEmail = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
-    // If logged in but NOT an admin -> Gate them out!
-    if (role !== 'admin') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/unauthorized' // Or redirect to home '/'
-      return NextResponse.redirect(url)
-    }
+// If logged in but NOT an admin by role OR email -> Gate them out!
+if (role !== 'admin' && !isAdminEmail) {
+  const url = request.nextUrl.clone();
+  url.pathname = '/login'; // Sends them to login instead of 404 /unauthorized
+  return NextResponse.redirect(url);
+}
   }
 
   // 4. PROTECT BUYER CHECKOUT/ACCOUNT ROUTES

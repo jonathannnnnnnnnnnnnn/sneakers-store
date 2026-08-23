@@ -140,7 +140,14 @@ export default function WishlistPage() {
         <main className="max-w-6xl mx-auto px-3 sm:px-4 py-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black">YOUR FAVORITES ❤️</h1>
+              <h1 className="text-2xl sm:text-3xl font-black">YOUR FAVORITES <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="#ef4444"
+    className="w-10 h-10 inline-block"
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg></h1>
               <p className="text-gray-500 text-xs sm:text-sm mt-1">
                 {favoriteProducts.length} {favoriteProducts.length === 1 ? "item" : "items"} saved in your wishlist
               </p>
@@ -158,7 +165,21 @@ export default function WishlistPage() {
 
           {favoriteProducts.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-3xl border border-gray-200 shadow-sm max-w-lg mx-auto px-4">
-              <span className="text-5xl block mb-4">💔</span>
+              {/* <span className="text-5xl block mb-4">💔</span> */}
+              <div className="w-12 h-12 text-gray-300 mx-auto mb-4">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-full h-full"
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+</div>
               <h2 className="text-xl font-bold mb-2">Your wishlist is empty</h2>
               <p className="text-gray-500 text-sm mb-6">
                 Explore our catalog and click the heart icon on any drop to save it here.

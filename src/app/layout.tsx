@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,21 +42,40 @@ export const metadata: Metadata = {
   },
 };
 
-// export default function RootLayout({ children }: LayoutProps<"/">) {
-//   return (
-//     <html
-//       lang="en"
-//       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-//     >
-//       <body className="min-h-full flex flex-col bg-white text-gray-900">{children}</body>
-//     </html>
-//   );
-// }
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="antialiased bg-gray-50 text-gray-900">{children}</body>
+      <head>
+        {/* Hide Google Translate original top bar and tooltips */}
+        <style>{`
+          .goog-te-banner-frame { display: none !important; }
+          body { top: 0px !important; }
+          .skiptranslate { display: none !important; }
+          #google_translate_element { display: none; }
+        `}</style>
+      </head>
+      <body className="antialiased bg-gray-50 text-gray-900">
+        {/* Hidden Google Translate container */}
+        <div id="google_translate_element" />
+
+        {/* Script initializer */}
+        <Script id="google-translate-init" strategy="afterInteractive">
+          {`
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                autoDisplay: false
+              }, 'google_translate_element');
+            }
+          `}
+        </Script>
+        <Script
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
+
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,3 +1,4 @@
+// src/app/page.tsx
 "use client";
 
 import Link from "next/link";
@@ -16,18 +17,32 @@ interface CartItem {
   quantity: number;
 }
 
-// Helper function to calculate a realistic dynamic discount per product ID
 const getDiscountPercent = (id: string) => {
   const hash = id.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const rates = [10, 15, 20, 25, 30];
   return rates[hash % rates.length];
 };
 
+// SVG Heart Icons
+const HeartIcon = ({ filled }: { filled: boolean }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill={filled ? "#ef4444" : "none"}
+    stroke={filled ? "#ef4444" : "#111827"}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-4 h-4 transition-all"
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+);
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [maxPrice, setMaxPrice] = useState(300);
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -35,21 +50,33 @@ export default function Home() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Pagination State for Main Grid
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  // Carousel State for Hero Section
   const [heroIndex, setHeroIndex] = useState(0);
-  const heroProducts = allProducts.filter((p) => p.isTrending).length > 0
-    ? allProducts.filter((p) => p.isTrending).slice(0, 4)
-    : allProducts.slice(0, 4);
+  const heroProducts =
+    allProducts.filter((p) => p.isTrending).length > 0
+      ? allProducts.filter((p) => p.isTrending).slice(0, 4)
+      : allProducts.slice(0, 4);
 
-  // Horizontal Scroll Refs for Swipeable Rows
   const kicksRowRef = useRef<HTMLDivElement>(null);
   const techRowRef = useRef<HTMLDivElement>(null);
 
-  // Auto-slide Hero Carousel
+  // Drop Radar Mock Countdown Timer
+  const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 32, seconds: 45 });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
+        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     if (heroProducts.length === 0) return;
     const timer = setInterval(() => {
@@ -58,28 +85,22 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [heroProducts]);
 
-  // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, selectedBrand, searchQuery, maxPrice]);
+  }, [selectedCategory, selectedBrand, searchQuery]);
 
-  // Load Saved Wishlist & Cart
   useEffect(() => {
     const savedWishlist = localStorage.getItem("sneaker_wishlist");
     if (savedWishlist) {
       try {
         setWishlist(JSON.parse(savedWishlist));
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     }
     const savedCart = localStorage.getItem("sneaker_cart");
     if (savedCart) {
       try {
         setCart(JSON.parse(savedCart));
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     }
   }, []);
 
@@ -91,14 +112,13 @@ export default function Home() {
   const toggleWishlist = (productId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-
     let updated: string[];
     if (wishlist.includes(productId)) {
       updated = wishlist.filter((id) => id !== productId);
       showToast("Removed from Wishlist");
     } else {
       updated = [...wishlist, productId];
-      showToast("Saved to Wishlist ❤️");
+      showToast("Saved to Wishlist");
     }
     setWishlist(updated);
     localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
@@ -141,20 +161,21 @@ export default function Home() {
           return item;
         })
         .filter(Boolean) as CartItem[];
-
       localStorage.setItem("sneaker_cart", JSON.stringify(updated));
       return updated;
     });
   };
 
-  const scrollRow = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
+  const scrollRow = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    direction: "left" | "right"
+  ) => {
     if (ref.current) {
       const scrollAmount = direction === "left" ? -320 : 320;
       ref.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
-  // Filtering Logic
   const filteredProducts = allProducts.filter((product) => {
     const matchesCategory =
       selectedCategory === "All" ||
@@ -162,29 +183,41 @@ export default function Home() {
 
     const matchesSearch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (product.company && product.company.toLowerCase().includes(searchQuery.toLowerCase()));
+      (product.company &&
+        product.company.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesBrand =
       selectedBrand === "All" ||
-      (product.company && product.company.toLowerCase() === selectedBrand.toLowerCase());
+      (product.company &&
+        product.company.toLowerCase() === selectedBrand.toLowerCase());
 
-    const matchesPrice = product.price <= maxPrice;
-
-    return matchesCategory && matchesSearch && matchesBrand && matchesPrice;
+    return matchesCategory && matchesSearch && matchesBrand;
   });
 
-  // Pagination Logic
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Category Rows
-  const trendingKicks = allProducts.filter((p) => p.category === "Basketball" || p.category === "Retro");
-  const streetwearTech = allProducts.filter((p) => p.category === "Streetwear" || p.category === "Running");
+  const trendingKicks = allProducts.filter(
+    (p) => p.category === "Basketball" || p.category === "Retro"
+  );
+  const streetwearTech = allProducts.filter(
+    (p) => p.category === "Streetwear" || p.category === "Running"
+  );
 
-  const brandList = ["NIKE", "ADIDAS", "JORDAN", "PUMA", "NOTHING TECH", "OAKLEY", "YEEZY", "SUPREME"];
+  const brandList = [
+    "NIKE",
+    "ADIDAS",
+    "JORDAN",
+    "PUMA",
+    "VANS",
+    "NEW BALANCE  ",
+    "YEEZY",
+    "ASICS",
+    "BALENCIAGA",
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between overflow-x-hidden">
@@ -204,11 +237,10 @@ export default function Home() {
           onUpdateQuantity={updateQuantity}
         />
 
-        <main className="max-w-7xl mx-auto px-4 py-6 space-y-12">
-          
+        <main className="max-w-7xl mx-auto pt-10 px-4 py-6 space-y-14">
           {/* Hero Banner Carousel */}
           {heroProducts.length > 0 && (
-            <div className="relative w-full h-80 sm:h-96 md:h-[420px] rounded-3xl overflow-hidden bg-black text-white shadow-xl">
+            <div className="relative w-full h-80 sm:h-96 md:h-[620px] rounded-3xl overflow-hidden bg-black text-white shadow-xl">
               <img
                 src={heroProducts[heroIndex]?.image_url}
                 alt="Featured Drop"
@@ -234,7 +266,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Carousel Indicators */}
               <div className="absolute bottom-4 right-6 flex gap-2">
                 {heroProducts.map((_, idx) => (
                   <button
@@ -249,12 +280,149 @@ export default function Home() {
             </div>
           )}
 
+          {/* SHOP BY BRAND GRID */}
+{/* SHOP BY BRAND CAROUSEL (MOBILE) / GRID (DESKTOP) */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-orange-500 font-extrabold text-[10px] uppercase tracking-widest block">
+                  Direct Gateways
+                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                  SHOP BY BRAND
+                </h2>
+              </div>
+              <Link
+                href="/collections#brands"
+                className="text-xs font-bold text-gray-500 hover:text-black transition-colors flex items-center gap-1"
+              >
+                <span>All Brands</span>
+                <span>→</span>
+              </Link>
+            </div>
+
+            <div className="flex sm:grid sm:grid-cols-5 gap-3 sm:gap-4 overflow-x-auto pb-4 sm:pb-0 scrollbar-none snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0">
+              {[
+                {
+                  name: "Nike",
+                  tag: "Swoosh Vault",
+                  logo: "NIKE",
+                  slug: "nike",
+                  bg: "from-zinc-900 to-black text-white",
+                },
+                {
+                  name: "Jordan",
+                  tag: "Flight Club Retros",
+                  logo: "JORDAN",
+                  slug: "jordan",
+                  bg: "from-red-950/40 to-black text-white",
+                },
+                {
+                  name: "Adidas",
+                  tag: "3-Stripes & YZY",
+                  logo: "ADIDAS",
+                  slug: "adidas",
+                  bg: "from-zinc-900 to-black text-white",
+                },
+                {
+                  name: "New Balance",
+                  tag: "Crafted Cushioning",
+                  logo: "NB 99X",
+                  slug: "new-balance",
+                  bg: "from-stone-900 to-black text-white",
+                },
+                {
+                  name: "Asics",
+                  tag: "Gel-Kayano Series",
+                  logo: "ASICS",
+                  slug: "asics",
+                  bg: "from-blue-950/40 to-black text-white",
+                },
+              ].map((brand, idx) => (
+                <Link
+                  key={idx}
+                  href={`/collections?brand=${brand.slug}`}
+                  className="min-w-[75vw] sm:min-w-0 flex-shrink-0 sm:flex-1 snap-center"
+                >
+                  <div
+                    className={`h-36 rounded-2xl p-4 bg-gradient-to-b ${brand.bg} border border-zinc-800 shadow-md hover:border-orange-500/50 hover:scale-[1.02] transition-all group flex flex-col justify-between cursor-pointer relative overflow-hidden`}
+                  >
+                    <div className="flex justify-between items-start">
+                      <span className="font-black tracking-tighter text-2xl text-gray-200 group-hover:text-orange-400 transition-colors">
+                        {brand.logo}
+                      </span>
+                      <span className="text-xs text-gray-500 group-hover:translate-x-1 transition-transform">
+                        ↗
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-black text-base text-white">{brand.name}</h3>
+                      <p className="text-xs text-gray-400 font-medium truncate mt-0.5">
+                        {brand.tag}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* DROP RADAR / LIMITED RELEASE COUNTDOWN */}
+          <section className="bg-zinc-950 border border-zinc-800 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+              <div className="space-y-2 max-w-lg text-center md:text-left">
+                <span className="bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block">
+                  ⚡ Drop Radar Exclusive
+                </span>
+                <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
+                  AIR JORDAN 4 RETRO "BRED REIMAGINED"
+                </h2>
+                <p className="text-gray-400 text-xs sm:text-sm">
+                  Supplies are extremely limited. Lock in your notification alert to jump the queue at drop time.
+                </p>
+
+                {/* Countdown Timer */}
+                <div className="flex justify-center md:justify-start gap-3 pt-3">
+                  {[
+                    { label: "HRS", val: String(timeLeft.hours).padStart(2, "0") },
+                    { label: "MINS", val: String(timeLeft.minutes).padStart(2, "0") },
+                    { label: "SECS", val: String(timeLeft.seconds).padStart(2, "0") },
+                  ].map((unit, idx) => (
+                    <div key={idx} className="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-center min-w-[60px]">
+                      <span className="text-xl font-black font-mono text-orange-400 block">{unit.val}</span>
+                      <span className="text-[9px] font-extrabold text-gray-500 uppercase">{unit.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                <img
+                  src="https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=600&auto=format&fit=crop"
+                  alt="Drop Teaser"
+                  className="w-44 h-32 object-cover rounded-2xl border border-zinc-800 shadow-md"
+                />
+                <button
+                  onClick={() => showToast("Added to Drop Radar alerts!")}
+                  className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white font-extrabold px-6 py-4 rounded-2xl text-xs sm:text-sm transition-all shadow-lg active:scale-95 whitespace-nowrap"
+                >
+                  Notify Me At Drop 🔔
+                </button>
+              </div>
+            </div>
+          </section>
+
           {/* Horizontal Scroll Row 1 - Trending Kicks */}
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl md:text-3xl font-black tracking-tight">TRENDING KICKS 🔥</h2>
-                <p className="text-gray-500 text-xs sm:text-sm">Swipe or scroll through our top footwear selections</p>
+                <h2 className="text-2xl md:text-3xl font-black tracking-tight">
+                  TRENDING KICKS 🔥
+                </h2>
+                <p className="text-gray-500 text-xs sm:text-sm">
+                  Swipe or scroll through our top footwear selections
+                </p>
               </div>
               <div className="flex gap-2">
                 <button
@@ -286,17 +454,15 @@ export default function Home() {
                     key={product.id}
                     className="min-w-[240px] max-w-[240px] bg-white rounded-2xl p-3 sm:p-4 border border-gray-200 shadow-sm flex-shrink-0 group flex flex-col justify-between relative"
                   >
-                    {/* Dynamic Discount Tag */}
                     <div className="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider z-10 shadow-sm">
                       -{discount}% OFF
                     </div>
 
-                    {/* Wishlist Button */}
                     <button
                       onClick={(e) => toggleWishlist(product.id, e)}
-                      className="absolute top-3 right-3 bg-white/90 p-1.5 rounded-full shadow-md z-10 hover:scale-110 transition-transform text-xs"
+                      className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
                     >
-                      {isLiked ? "❤️" : "🤍"}
+                      <HeartIcon filled={isLiked} />
                     </button>
 
                     <div>
@@ -316,7 +482,9 @@ export default function Home() {
                             In Stock
                           </span>
                         </div>
-                        <h3 className="font-bold text-sm text-gray-900 line-clamp-1">{product.name}</h3>
+                        <h3 className="font-bold text-sm text-gray-900 line-clamp-1">
+                          {product.name}
+                        </h3>
                       </Link>
                     </div>
 
@@ -334,7 +502,7 @@ export default function Home() {
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1"
                       >
                         <span>🛒</span>
-                        <span className="hidden sm:inline">Add to Cart</span>
+                        <span className="hidden sm:inline">Add</span>
                         <span className="sm:hidden">Add</span>
                       </button>
                     </div>
@@ -348,8 +516,12 @@ export default function Home() {
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl md:text-3xl font-black tracking-tight">STREETWEAR TECH 🎧</h2>
-                <p className="text-gray-500 text-xs sm:text-sm">Cyberpunk headphones, smartwear, and gear</p>
+                <h2 className="text-2xl md:text-3xl font-black tracking-tight">
+                  STREETWEAR TECH 🎧
+                </h2>
+                <p className="text-gray-500 text-xs sm:text-sm">
+                  Cyberpunk headphones, smartwear, and gear
+                </p>
               </div>
               <div className="flex gap-2">
                 <button
@@ -381,17 +553,15 @@ export default function Home() {
                     key={product.id}
                     className="min-w-[240px] max-w-[240px] bg-white rounded-2xl p-3 sm:p-4 border border-gray-200 shadow-sm flex-shrink-0 group flex flex-col justify-between relative"
                   >
-                    {/* Dynamic Discount Tag */}
                     <div className="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider z-10 shadow-sm">
                       -{discount}% OFF
                     </div>
 
-                    {/* Wishlist Button */}
                     <button
                       onClick={(e) => toggleWishlist(product.id, e)}
-                      className="absolute top-3 right-3 bg-white/90 p-1.5 rounded-full shadow-md z-10 hover:scale-110 transition-transform text-xs"
+                      className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
                     >
-                      {isLiked ? "❤️" : "🤍"}
+                      <HeartIcon filled={isLiked} />
                     </button>
 
                     <div>
@@ -411,7 +581,9 @@ export default function Home() {
                             In Stock
                           </span>
                         </div>
-                        <h3 className="font-bold text-sm text-gray-900 line-clamp-1">{product.name}</h3>
+                        <h3 className="font-bold text-sm text-gray-900 line-clamp-1">
+                          {product.name}
+                        </h3>
                       </Link>
                     </div>
 
@@ -429,7 +601,7 @@ export default function Home() {
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1"
                       >
                         <span>🛒</span>
-                        <span className="hidden sm:inline">Add to Cart</span>
+                        <span className="hidden sm:inline">Add</span>
                         <span className="sm:hidden">Add</span>
                       </button>
                     </div>
@@ -439,17 +611,80 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Main Catalog Section */}
+          {/* COMMUNITY / STYLED ON INSTAGRAM GALLERY */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-orange-500 font-extrabold text-[10px] uppercase tracking-widest block">
+                  #SOLEVAULT
+                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                  STYLED ON INSTAGRAM
+                </h2>
+              </div>
+              <span className="text-xs font-bold text-gray-400">Tag us to get featured</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              {[
+                {
+                  tag: "@kicks_by_alex",
+                  shoe: "Dunk Low Panda",
+                  img: "https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=600&auto=format&fit=crop",
+                },
+                {
+                  tag: "@sole_fits",
+                  shoe: "Yeezy 350 V2",
+                  img: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600&auto=format&fit=crop",
+                },
+                {
+                  tag: "@drip_daily",
+                  shoe: "Jordan 1 Retro High",
+                  img: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop",
+                },
+                {
+                  tag: "@street_culture",
+                  shoe: "New Balance 9060",
+                  img: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&auto=format&fit=crop",
+                },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="relative rounded-2xl overflow-hidden h-48 sm:h-64 group cursor-pointer border border-gray-200 shadow-sm"
+                >
+                  <img
+                    src={item.img}
+                    alt={item.tag}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex flex-col justify-end opacity-90 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white font-extrabold text-xs">{item.tag}</span>
+                    <span className="text-orange-400 text-[10px] font-bold">{item.shoe}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Main Catalog Section with See All Button */}
           <section className="space-y-6 pt-6 border-t border-gray-200">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-black">FULL CATALOG</h2>
-                <p className="text-gray-500 text-sm">
-                  Showing <span className="font-bold text-black">{filteredProducts.length}</span> total items
-                </p>
+              <div className="flex items-center justify-between w-full md:w-auto">
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-black">FULL CATALOG</h2>
+                  <p className="text-gray-500 text-sm">
+                    Showing <span className="font-bold text-black">{filteredProducts.length}</span> items
+                  </p>
+                </div>
+
+                <Link
+                  href="/catalog"
+                  className="md:hidden bg-orange-500 hover:bg-orange-600 text-white text-xs font-black px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1"
+                >
+                  See All 190 →
+                </Link>
               </div>
 
-              {/* Filter controls */}
               <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
                 <input
                   type="text"
@@ -469,7 +704,20 @@ export default function Home() {
                   <option value="Adidas">Adidas</option>
                   <option value="Jordan">Jordan</option>
                   <option value="Puma">Puma</option>
+                  <option value="New Balance">New Balance</option>
+                  <option value="Vans">Vans</option>
+                  <option value="Yeezy">Yeezy</option>
+                  <option value="Asics">Asics</option>
+                  <option value="Balenciaga">Balenciaga</option>
                 </select>
+
+                <Link
+                  href="/catalog"
+                  className="hidden md:inline-flex bg-orange-500 hover:bg-orange-600 text-white font-extrabold px-5 py-2 rounded-xl text-sm transition-all shadow-sm items-center gap-1.5 whitespace-nowrap"
+                >
+                  <span>See All (190 Items)</span>
+                  <span>→</span>
+                </Link>
               </div>
             </div>
 
@@ -485,17 +733,15 @@ export default function Home() {
                     key={product.id}
                     className="bg-white rounded-2xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-lg transition-all relative group flex flex-col justify-between"
                   >
-                    {/* Dynamic Discount Badge */}
                     <div className="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider z-10 shadow-sm">
                       -{discount}% OFF
                     </div>
 
-                    {/* Wishlist Button */}
                     <button
                       onClick={(e) => toggleWishlist(product.id, e)}
-                      className="absolute top-3 right-3 bg-white/90 p-1.5 sm:p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform text-xs sm:text-sm"
+                      className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
                     >
-                      {isLiked ? "❤️" : "🤍"}
+                      <HeartIcon filled={isLiked} />
                     </button>
 
                     <div>
@@ -547,7 +793,7 @@ export default function Home() {
               })}
             </div>
 
-            {/* Truncated Mobile-Friendly Pagination Controls */}
+            {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-1 sm:gap-2 pt-8 max-w-full overflow-x-auto py-2">
                 <button
@@ -639,7 +885,7 @@ export default function Home() {
               ⚡ Limited Time Offer
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-5xl font-black leading-tight">
-              GET 20% OFF YOUR FIRST TECH ORDER
+              GET 20% OFF YOUR FIRST KICKS ORDER
             </h2>
             <p className="text-white/90 text-xs sm:text-sm">
               Sign up for inner circle drops or use code{" "}

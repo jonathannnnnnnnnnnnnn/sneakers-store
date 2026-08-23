@@ -16,13 +16,34 @@ interface CartItem {
   size?: number;
 }
 
+// Reusable Heart Icon Component
+const HeartIcon = ({ filled }: { filled: boolean }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill={filled ? "#ef4444" : "none"}
+    stroke={filled ? "#ef4444" : "#111827"}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-4 h-4 transition-all"
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+);
+
 export default function ProductDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = use(params);
-  const product = allProducts.find((p) => String(p.id) === id);
+  const resolvedParams = use(params);
+  const rawId = resolvedParams?.id ? decodeURIComponent(resolvedParams.id).trim() : "";
+
+  const product = allProducts.find((p) => {
+  const pId = String(p.id).trim();
+  return pId === rawId || pId === rawId.toLowerCase();
+});
 
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -165,7 +186,7 @@ export default function ProductDetailPage({
     } else {
       wishlistArray.push(product.id);
       setIsWishlisted(true);
-      showToast("Saved to Wishlist ❤️");
+      showToast("Saved to Wishlist");
     }
 
     setWishlistCount(wishlistArray.length);
@@ -258,7 +279,7 @@ export default function ProductDetailPage({
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
-                className="w-full h-96 md:h-[450px] relative bg-gray-100 rounded-2xl overflow-hidden group shadow-inner select-none cursor-grab active:cursor-grabbing"
+                className="w-full h-80 md:h-[580px] lg:h-[620px] relative bg-[#f5f5f5] rounded-2xl overflow-hidden group shadow-inner select-none cursor-grab active:cursor-grabbing"
               >
                 {/* Active Image */}
                 <img
@@ -268,12 +289,12 @@ export default function ProductDetailPage({
                 />
 
                 {/* Wishlist Button */}
-                <button
-                  onClick={toggleWishlist}
-                  className="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-3 rounded-full shadow-md hover:scale-110 transition-transform z-20"
-                >
-                  <span className="text-xl">{isWishlisted ? "❤️" : "🤍"}</span>
-                </button>
+<button
+  onClick={() => toggleWishlist()}
+  className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
+>
+  <HeartIcon filled={isWishlisted} />
+</button>
 
                 {/* Carousel Arrows */}
                 {productImages.length > 1 && (
@@ -340,7 +361,7 @@ export default function ProductDetailPage({
             </div>
 
             {/* Right Column: Info & Actions */}
-            <div className="flex flex-col justify-between space-y-6">
+            <div className="flex flex-col justify-start gap-2">
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-black uppercase tracking-wider text-orange-500">
@@ -386,6 +407,14 @@ export default function ProductDetailPage({
                   </div>
                 </div>
               </div>
+
+              {/* Fit Guarantee Callout */}
+<div className="mt-4 p-3.5 bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-2.5 text-xs text-gray-700 font-medium">
+  <span className="text-sm">ⓘ</span>
+  <span>
+    <strong className="font-bold text-gray-900">True to size.</strong> We recommend ordering your usual size.
+  </span>
+</div>
 
               {/* Add to Cart Button */}
               <div className="pt-4 border-t border-gray-100">
@@ -442,6 +471,29 @@ export default function ProductDetailPage({
           <span className="text-sm font-semibold">{toast}</span>
         </div>
       )}
+
+                        {/* Value Proposition Grid */}
+      <section className="max-w-7xl mx-auto px-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 my-6 sm:my-12">
+          {[
+            { icon: "✈️", title: "Free Worldwide Shipping", desc: "On all orders over $150" },
+            { icon: "🛡️", title: "100% Verified Authentic", desc: "Every item hand-checked by experts" },
+            { icon: "🔄", title: "30-Day Easy Returns", desc: "Hassle-free exchanges & refunds" },
+            { icon: "🔒", title: "Encrypted Checkout", desc: "Bank-level secure payments" },
+          ].map((feature, idx) => (
+            <div
+              key={idx}
+              className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-200 shadow-sm flex items-start gap-4"
+            >
+              <span className="text-2xl sm:text-3xl">{feature.icon}</span>
+              <div>
+                <h4 className="font-bold text-gray-900 text-xs sm:text-sm">{feature.title}</h4>
+                <p className="text-gray-500 text-[11px] sm:text-xs mt-1">{feature.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <Footer />
     </div>
