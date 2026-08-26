@@ -3,9 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
 import { allProducts, Product } from "@/data/products";
 import { CATEGORY_COUNTS, BRAND_COUNTS } from "@/lib/product-counts";
+import { createClient } from "@/lib/supabase/client";
+import { useStore } from "@/context/StoreContext";
+
+const supabase = createClient();
 
 interface NavbarProps {
   cartCount: number;
@@ -13,6 +16,7 @@ interface NavbarProps {
   toggleCart: () => void;
   activeFilter?: string;
   onFilterChange?: (filter: string) => void;
+  onSignOut?: () => void; // Optional callback to notify parent page on logout
 }
 
 const COLLECTIONS_NAV = [
@@ -54,12 +58,14 @@ const COLLECTIONS_NAV = [
 ];
 
 export default function Navbar({
-  cartCount,
-  wishlistCount,
   toggleCart,
   activeFilter,
+  onSignOut,
 }: NavbarProps) {
   const router = useRouter();
+  const { user, cart, wishlistIds } = useStore();
+  const contextCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const contextWishlistCount = wishlistIds.length;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -69,59 +75,51 @@ export default function Navbar({
   
   // Hover & UI States
   const [isCollectionsHovered, setIsCollectionsHovered] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
 
-  // Initialize Supabase browser client
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data?.user || null);
-    };
-
-    fetchUser();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [supabase]);
-
   const handleSignOut = async () => {
+    if (user) {
+      localStorage.removeItem(`sneaker_cart_${user.id}`);
+      localStorage.removeItem(`sneaker_wishlist_${user.id}`);
+    }
+
+    // Clear generic & guest storage keys
+    localStorage.removeItem("sneaker_cart");
+    localStorage.removeItem("pending_order");
+    localStorage.removeItem("sneaker_wishlist");
+    localStorage.removeItem("sneaker_cart_guest");
+    localStorage.removeItem("sneaker_wishlist_guest");
+
     await supabase.auth.signOut();
     setIsUserMenuOpen(false);
-    setUser(null);
+
+    if (onSignOut) {
+      onSignOut();
+    }
+
     router.push("/");
     router.refresh();
   };
 
   useEffect(() => {
-    if (cartCount > 0) {
+    if (contextCartCount > 0) {
       setAnimateCart(true);
       const timer = setTimeout(() => setAnimateCart(false), 300);
       return () => clearTimeout(timer);
     }
-  }, [cartCount]);
+  }, [contextCartCount]);
 
   useEffect(() => {
-    if (wishlistCount > 0) {
+    if (contextWishlistCount > 0) {
       setAnimateWishlist(true);
       const timer = setTimeout(() => setAnimateWishlist(false), 300);
       return () => clearTimeout(timer);
     }
-  }, [wishlistCount]);
+  }, [contextWishlistCount]);
 
   useEffect(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -271,7 +269,7 @@ const handleLanguageChange = (langCode: string) => {
 
               {/* Collections Mega Menu Dropdown */}
               {isCollectionsHovered && (
-                <div className="absolute top-full -left-20 w-[930px] bg-white rounded-3xl border border-gray-200 shadow-2xl p-6 z-50 transition-all animate-fadeIn">
+                <div className="absolute top-full -left-20 w-[75vw] max-w-[890px] bg-white rounded-3xl border border-gray-200 shadow-2xl p-6 z-50 transition-all animate-fadeIn">
                   <div className="flex justify-between items-center pb-4 mb-4 border-b border-gray-100">
                     <div>
                       <h3 className="font-black text-sm uppercase text-gray-900 tracking-wider">Curated Collections</h3>
@@ -287,7 +285,7 @@ const handleLanguageChange = (langCode: string) => {
                   </div>
 
                   {/* 3 Columns Layout */}
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="grid grid-cols-3 gap-2">
                     {COLLECTIONS_NAV.map((group) => (
                       <div key={group.category} className="space-y-3">
                         <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider block border-b border-gray-50 pb-1">
@@ -299,7 +297,7 @@ const handleLanguageChange = (langCode: string) => {
                               key={item.name}
                               href={item.href}
                               onClick={() => setIsCollectionsHovered(false)}
-                              className="group flex items-center justify-between p-2 rounded-xl hover:bg-orange-50/80 transition-colors"
+                              className="group flex items-center justify-start gap-2 p-1 p-3 rounded-xl hover:bg-orange-50/80 transition-colors"
                             >
                               <div className="flex items-center gap-2">
                                 <span className="text-xs group-hover:scale-110 transition-transform">{item.icon}</span>
@@ -470,8 +468,8 @@ const handleLanguageChange = (langCode: string) => {
               <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 24 24"
-  fill={wishlistCount > 0 ? "#ef4444" : "none"}
-  stroke={wishlistCount > 0 ? "#ef4444" : "currentColor"}
+              fill={contextWishlistCount > 0 ? "#ef4444" : "none"}
+              stroke={contextWishlistCount > 0 ? "#ef4444" : "currentColor"}
   strokeWidth="2"
   strokeLinecap="round"
   strokeLinejoin="round"
@@ -479,13 +477,13 @@ const handleLanguageChange = (langCode: string) => {
 >
   <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
 </svg>
-              {wishlistCount > 0 && (
+              {contextWishlistCount > 0 && (
                 <span
                   className={`absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center ${
                     animateWishlist ? "animate-pop" : ""
                   }`}
                 >
-                  {wishlistCount}
+                  {contextWishlistCount}
                 </span>
               )}
             </Link>
@@ -497,13 +495,13 @@ const handleLanguageChange = (langCode: string) => {
               title="Cart"
             >
               <span className="text-base">🛒</span>
-              {cartCount > 0 && (
+              {contextCartCount > 0 && (
                 <span
                   className={`absolute -top-0.5 -right-0.5 bg-orange-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center ${
                     animateCart ? "animate-pop" : ""
                   }`}
                 >
-                  {cartCount}
+                  {contextCartCount}
                 </span>
               )}
             </button>
@@ -663,12 +661,23 @@ const handleLanguageChange = (langCode: string) => {
             className="flex items-center justify-between p-3 rounded-xl font-bold text-xs text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
           >
             <div className="flex items-center gap-2.5">
-              <span>❤️</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+              </svg>
               <span>My Wishlist</span>
             </div>
-            {wishlistCount > 0 && (
+            {contextWishlistCount > 0 && (
               <span className="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
-                {wishlistCount}
+                {contextWishlistCount}
               </span>
             )}
           </Link>
@@ -684,9 +693,9 @@ const handleLanguageChange = (langCode: string) => {
               <span>🛒</span>
               <span>My Cart</span>
             </div>
-            {cartCount > 0 && (
+            {contextCartCount > 0 && (
               <span className="bg-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
-                {cartCount}
+                {contextCartCount}
               </span>
             )}
           </button>

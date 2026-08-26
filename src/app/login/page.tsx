@@ -54,12 +54,13 @@ export default function AuthPage() {
     }
   };
 
+  // 2. HANDLE GOOGLE & GITHUB OAUTH LOGIN
   const handleOAuthLogin = async (provider: "google" | "github") => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/login/callback`,
         },
       });
       if (error) throw error;
@@ -113,6 +114,7 @@ export default function AuthPage() {
           email,
           password,
           options: {
+            emailRedirectTo: `${window.location.origin}/login/callback`,
             data: {
               full_name: name,
               role: "buyer",
@@ -124,14 +126,14 @@ export default function AuthPage() {
 
         setMessage({
           type: "success",
-          text: "Account created successfully! Switching to login...",
+          text: "Check your email inbox for the confirmation link!",
         });
 
         setTimeout(() => {
           setIsLogin(true);
           setPassword("");
           setConfirmPassword("");
-        }, 2000);
+        }, 3000);
       }
     } catch (err: any) {
       setMessage({ type: "error", text: err.message || "An unexpected error occurred." });

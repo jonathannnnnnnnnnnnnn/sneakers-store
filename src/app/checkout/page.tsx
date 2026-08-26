@@ -1,18 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-}
+import { useStore } from "@/context/StoreContext";
 
 export default function CheckoutPage() {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { cart } = useStore();
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -34,20 +27,6 @@ export default function CheckoutPage() {
     city: "",
     postalCode: "",
   });
-
-  useEffect(() => {
-    const savedCart = localStorage.getItem("sneaker_cart");
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        if (Array.isArray(parsed)) {
-          setCart(parsed);
-        }
-      } catch (e) {
-        console.error("Failed to load cart:", e);
-      }
-    }
-  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,20 +62,38 @@ export default function CheckoutPage() {
     }
   };
 
-  const handlePay = (e: React.FormEvent) => {
+  // handlePay (sends order to Stripe and saves to localStorage)
+  const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
 
     setIsProcessing(true);
 
-    const generatedOrderNum = "KICKS-" + Math.floor(100000 + Math.random() * 900000);
-    setOrderId(generatedOrderNum);
+    try {
+      localStorage.setItem("pending_order", JSON.stringify(cart));
+    } catch (err) {
+      console.error("Failed to backup cart", err);
+    }
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: cart }),
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Checkout error: " + (data.error || "Failed to create Stripe session"));
+        setIsProcessing(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
       setIsProcessing(false);
-      setIsSuccess(true);
-      localStorage.removeItem("sneaker_cart");
-    }, 2000);
+    }
   };
 
   if (isSuccess) {
@@ -343,7 +340,7 @@ export default function CheckoutPage() {
                             type="text"
                             maxLength={19}
                             placeholder="4532 •••• •••• 8892"
-                            className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500"
+                            className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 text-black"
                           />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -353,7 +350,7 @@ export default function CheckoutPage() {
                               required
                               type="text"
                               placeholder="MM/YY"
-                              className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500"
+                              className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 text-black"
                             />
                           </div>
                           <div>
@@ -363,7 +360,7 @@ export default function CheckoutPage() {
                               type="password"
                               maxLength={4}
                               placeholder="123"
-                              className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500"
+                              className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 text-black"
                             />
                           </div>
                         </div>

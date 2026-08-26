@@ -7,14 +7,7 @@ import Cart from "@/components/Cart";
 import Footer from "@/components/Footer";
 import { allProducts, Product } from "@/data/products";
 import { getProductsForSlug } from "@/lib/get-products-for-slug";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-}
+import { useStore } from "@/context/StoreContext";
 
 // 1. Group Definitions
 const BRAND_LIST = [
@@ -73,8 +66,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
   const resolvedParams = use(params);
   const categorySlug = decodeURIComponent(resolvedParams.category).toLowerCase();
 
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+  const { cart, wishlistIds, addToCart, toggleWishlist, updateQuantity } = useStore();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -98,24 +90,6 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
   useEffect(() => {
     setMaxPrice(highestCatalogPrice);
   }, [highestCatalogPrice]);
-
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("sneaker_wishlist");
-    if (savedWishlist) {
-      try {
-        const parsed = JSON.parse(savedWishlist);
-        if (Array.isArray(parsed)) setWishlistIds(parsed);
-      } catch (e) {}
-    }
-
-    const savedCart = localStorage.getItem("sneaker_cart");
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        if (Array.isArray(parsed)) setCart(parsed);
-      } catch (e) {}
-    }
-  }, []);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -197,55 +171,6 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
       if (target) observer.unobserve(target);
     };
   }, [hasMore, isLoadingMore]);
-
-  const addToCart = (product: Product) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      let updated: CartItem[];
-      if (existing) {
-        updated = prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        updated = [
-          ...prev,
-          {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image_url: product.image_url,
-            quantity: 1,
-          },
-        ];
-      }
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
-    showToast(`Added "${product.name}" to cart! 🛒`);
-  };
-
-  const toggleWishlist = (id: string) => {
-    let updated: string[];
-    if (wishlistIds.includes(id)) {
-      updated = wishlistIds.filter((favId) => favId !== id);
-      showToast("Removed from wishlist");
-    } else {
-      updated = [...wishlistIds, id];
-      showToast("Added to wishlist");
-    }
-    setWishlistIds(updated);
-    localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
-  };
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCart((prev) => {
-      const updated = prev
-        .map((item) => (item.id === id ? { ...item, quantity: item.quantity + delta } : item))
-        .filter((item) => item.quantity > 0);
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between">
@@ -404,7 +329,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                 <>
                   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
                     {displayedProducts.map((product) => {
-                      const isLiked = wishlistIds.includes(product.id);
+                      const isLiked = wishlistIds.map(String).includes(String(product.id));
                       const discountPercent = getDiscountPercent(product.id);
                       const originalPrice = product.price * (1 + discountPercent / 100);
 
@@ -420,7 +345,11 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
 
                           {/* Wishlist Button */}
 <button
-  onClick={(e) => toggleWishlist(product.id)}
+  onClick={(e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    toggleWishlist(product.id);
+  }}
   className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
 >
   <HeartIcon filled={isLiked} />
@@ -462,7 +391,10 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                             </div>
 
                             <button
-                              onClick={() => addToCart(product)}
+                              onClick={() => {
+                                addToCart(product);
+                                showToast(`Added "${product.name}" to cart!`);
+                              }}
                               className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 px-3 rounded-xl text-[10px] sm:text-xs transition-all shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap"
                             >
                               <span>🛒</span>

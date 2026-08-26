@@ -6,15 +6,8 @@ import Navbar from "@/components/Navbar";
 import Cart from "@/components/Cart";
 import Footer from "@/components/Footer";
 import { allProducts } from "@/data/products";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-  size?: number;
-}
+import { useStore } from "@/context/StoreContext";
+import { createClient } from "@/lib/supabase/client";
 
 // Reusable Heart Icon Component
 const HeartIcon = ({ filled }: { filled: boolean }) => (
@@ -32,6 +25,16 @@ const HeartIcon = ({ filled }: { filled: boolean }) => (
   </svg>
 );
 
+interface Review {
+  id: number | string;
+  user_id?: string | null;
+  name: string;
+  rating: number;
+  size: string;
+  comment: string;
+  date: string;
+}
+
 export default function ProductDetailPage({
   params,
 }: {
@@ -39,6 +42,8 @@ export default function ProductDetailPage({
 }) {
   const resolvedParams = use(params);
   const rawId = resolvedParams?.id ? decodeURIComponent(resolvedParams.id).trim() : "";
+  const { user: activeUser, cart, wishlistIds, addToCart, toggleWishlist, updateQuantity } = useStore();
+  const [supabase] = useState(() => createClient());
 
   const product = allProducts.find((p) => {
   const pId = String(p.id).trim();
@@ -47,11 +52,35 @@ export default function ProductDetailPage({
 
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [wishlistCount, setWishlistCount] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([
+    {
+      id: 1,
+      name: "David K.",
+      rating: 5,
+      size: "10.5 US",
+      comment:
+        "Arrived in 3 business days in flawless condition. Quality of the leather is top notch, fits true to size, and the color tone looks even cleaner in hand!",
+      date: "2 days ago",
+    },
+    {
+      id: 2,
+      name: "Alex M.",
+      rating: 5,
+      size: "9 US",
+      comment:
+        "Super easy checkout process with Stripe and the tracking updates were spot-on throughout. Packaging kept the shoe box pristine.",
+      date: "1 week ago",
+    },
+  ]);
+  const [newReview, setNewReview] = useState({
+    name: "",
+    rating: 5,
+    size: "",
+    comment: "",
+  });
 
   // Carousel & Touch/Swipe State
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
@@ -111,42 +140,46 @@ export default function ProductDetailPage({
     setIsMounted(true);
   }, []);
 
-  // Load cart and wishlist from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem("sneaker_cart");
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (e) {
-        console.error("Failed to load saved cart:", e);
-      }
-    }
+    if (!product?.id) return;
 
-    const savedWishlist = localStorage.getItem("sneaker_wishlist");
-    if (savedWishlist) {
-      try {
-        const wishlistArray = JSON.parse(savedWishlist);
-        if (Array.isArray(wishlistArray)) {
-          setWishlistCount(wishlistArray.length);
-          if (product) {
-            const cleanIds = wishlistArray.map((item: any) =>
-              typeof item === "object" ? item.id : item
-            );
-            setIsWishlisted(cleanIds.includes(product.id));
-          }
-        }
-      } catch (e) {
-        console.error("Failed to load wishlist:", e);
-      }
-    }
-  }, [product]);
+    let isMounted = true;
 
-  // Save cart changes to localStorage
-  useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem("sneaker_cart", JSON.stringify(cart));
-    }
-  }, [cart]);
+    const fetchReviews = async () => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("id, product_id, user_id, user_name, rating, size, comment, created_at")
+        .eq("product_id", product.id)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Failed to load product reviews:", error.message, error.details);
+        return;
+      }
+
+      if (!isMounted) return;
+
+      setReviews(
+        (data || []).map((review) => ({
+          id: review.id,
+          user_id: review.user_id,
+          name: review.user_name,
+          rating: Number(review.rating),
+          size: `${review.size} US`,
+          comment: review.comment,
+          date: review.created_at
+            ? new Date(review.created_at).toLocaleDateString()
+            : "Recently",
+        }))
+      );
+    };
+
+    fetchReviews();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [product?.id, supabase]);
 
   if (!product) {
     return (
@@ -175,22 +208,61 @@ export default function ProductDetailPage({
     setTimeout(() => setToast(null), 2500);
   };
 
-  const toggleWishlist = () => {
-    const savedWishlist = localStorage.getItem("sneaker_wishlist");
-    let wishlistArray: string[] = savedWishlist ? JSON.parse(savedWishlist) : [];
+  const handleAddReview = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    if (isWishlisted) {
-      wishlistArray = wishlistArray.filter((favId) => favId !== product.id);
-      setIsWishlisted(false);
-      showToast("Removed from Wishlist");
-    } else {
-      wishlistArray.push(product.id);
-      setIsWishlisted(true);
-      showToast("Saved to Wishlist");
+    if (!activeUser?.id) {
+      showToast("Please sign in to submit a review.");
+      return;
     }
 
-    setWishlistCount(wishlistArray.length);
-    localStorage.setItem("sneaker_wishlist", JSON.stringify(wishlistArray));
+    const reviewPayload = {
+      product_id: product.id,
+      user_id: activeUser?.id,
+      user_name: newReview.name.trim(),
+      rating: Number(newReview.rating),
+      size: newReview.size,
+      comment: newReview.comment.trim(),
+    };
+
+    const { data, error } = await supabase
+      .from("reviews")
+      .insert(reviewPayload)
+      .select("id, user_id, user_name, rating, size, comment, created_at")
+      .single();
+
+    if (error) {
+      console.error("Failed to add product review:", error.message, error.details);
+      showToast("Unable to submit review. Please try again.");
+      return;
+    }
+
+    setReviews((currentReviews) => [
+      {
+        id: data.id,
+        user_id: data.user_id,
+        name: data.user_name,
+        rating: Number(data.rating),
+        size: `${newReview.size.trim()} US`,
+        comment: data.comment,
+        date: data.created_at ? new Date(data.created_at).toLocaleDateString() : "Just now",
+      },
+      ...currentReviews,
+    ]);
+    setNewReview({ name: "", rating: 5, size: "", comment: "" });
+    setIsReviewModalOpen(false);
+  };
+
+  const handleDeleteReview = async (reviewId: number | string) => {
+    const { error } = await supabase.from("reviews").delete().eq("id", reviewId);
+
+    if (error) {
+      console.error("Failed to delete product review:", error.message, error.details);
+      showToast("Unable to delete review. Please try again.");
+      return;
+    }
+
+    setReviews((currentReviews) => currentReviews.filter((review) => review.id !== reviewId));
   };
 
   const handleAddToCart = () => {
@@ -199,51 +271,16 @@ export default function ProductDetailPage({
       return;
     }
 
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.id === product.id);
-      if (existing) {
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [
-        ...prevCart,
-        {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image_url: product.image_url,
-          quantity: 1,
-          size: selectedSize,
-        },
-      ];
-    });
+    addToCart(product);
 
-    showToast(`Added "${product.name}" (Size ${selectedSize}) to cart! 🛒`);
-  };
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCart((prevCart) => {
-      const updated = prevCart
-        .map((item) => {
-          if (item.id === id) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
-          }
-          return item;
-        })
-        .filter(Boolean) as CartItem[];
-
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
+    showToast(`Added "${product.name}" (Size US ${selectedSize}) to cart!`);
   };
 
   const totalCartItems = isMounted
     ? cart.reduce((total, item) => total + item.quantity, 0)
     : 0;
 
-  const displayWishlistCount = isMounted ? wishlistCount : 0;
+  const displayWishlistCount = isMounted ? wishlistIds.length : 0;
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between">
@@ -279,7 +316,7 @@ export default function ProductDetailPage({
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
-                className="w-full h-80 md:h-[580px] lg:h-[620px] relative bg-[#f5f5f5] rounded-2xl overflow-hidden group shadow-inner select-none cursor-grab active:cursor-grabbing"
+                className="w-full h-80 md:h-[400px] lg:h-[550px] relative bg-[#f5f5f5] rounded-2xl overflow-hidden group shadow-inner select-none cursor-grab active:cursor-grabbing"
               >
                 {/* Active Image */}
                 <img
@@ -290,10 +327,10 @@ export default function ProductDetailPage({
 
                 {/* Wishlist Button */}
 <button
-  onClick={() => toggleWishlist()}
+  onClick={() => toggleWishlist(product.id)}
   className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
 >
-  <HeartIcon filled={isWishlisted} />
+  <HeartIcon filled={wishlistIds.map(String).includes(String(product.id))} />
 </button>
 
                 {/* Carousel Arrows */}
@@ -360,55 +397,68 @@ export default function ProductDetailPage({
               )}
             </div>
 
-            {/* Right Column: Info & Actions */}
-            <div className="flex flex-col justify-start gap-2">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-orange-500">
-                    {product.gender || product.category || "Sneakers"}
-                  </span>
-                  <div className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-bold text-gray-700">
-                    <span>★ {product.rating || "4.8"}</span>
-                    <span className="text-gray-400">(42 reviews)</span>
-                  </div>
-                </div>
+  {/* Right Column: Info & Actions */}
+<div className="flex flex-col justify-between gap-6">
+  <div>
+    <div className="flex items-center justify-between">
+      <span className="text-xs font-black uppercase tracking-wider text-orange-500">
+        {product.gender || product.category || "Sneakers"}
+      </span>
+      <div className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-bold text-gray-700">
+        <span>★ {product.rating || "4.8"}</span>
+        <span className="text-gray-400">(42 reviews)</span>
+      </div>
+    </div>
 
-                <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
-                  {product.name}
-                </h1>
-                <p className="text-2xl font-bold text-black mt-3">
-                  ${product.price.toFixed(2)}
-                </p>
+    <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
+      {product.name}
+    </h1>
 
-                <p className="text-gray-500 mt-4 leading-relaxed text-sm">
-                  {product.description ||
-                    "Premium streetwear aesthetics combined with ultimate everyday comfort. Engineered for performance and clean everyday style."}
-                </p>
+    <div className="flex items-baseline gap-3 mt-3">
+      <p className="text-3xl font-black text-black">
+        ${product.price.toFixed(2)}
+      </p>
+      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+        In Stock & Ready to Ship
+      </span>
+    </div>
 
-                {/* Size Selector */}
-                <div className="mt-6">
-                  <h3 className="text-sm font-bold text-gray-900 mb-3">
-                    Select Size (US)
-                  </h3>
-                  <div className="grid grid-cols-4 gap-2">
-                    {sizes.map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`py-2 text-sm font-semibold rounded-lg border transition-all ${
-                          selectedSize === size
-                            ? "bg-black text-white border-black shadow-md"
-                            : "bg-white text-gray-900 border-gray-300 hover:border-black"
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+    <p className="text-gray-500 mt-4 leading-relaxed text-sm">
+      {product.description ||
+        "Premium streetwear aesthetics combined with ultimate everyday comfort. Engineered for performance and clean everyday style."}
+    </p>
 
-              {/* Fit Guarantee Callout */}
+    {/* Dynamic Size Selector */}
+    <div className="mt-6">
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900">
+          Select Size (US)
+        </h3>
+        {selectedSize && (
+          <span className="text-xs font-semibold text-orange-500">
+            Selected: US {selectedSize}
+          </span>
+        )}
+      </div>
+      <div className="grid grid-cols-4 gap-2">
+        {sizes.map((size) => (
+          <button
+            key={size}
+            type="button"
+            onClick={() => setSelectedSize(size)}
+            className={`py-2.5 text-xs font-extrabold rounded-xl border transition-all ${
+              selectedSize === size
+                ? "bg-black text-white border-black shadow-md scale-[1.02]"
+                : "bg-white text-gray-900 border-gray-200 hover:border-black"
+            }`}
+          >
+            US {size}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Fit Guarantee Callout */}
 <div className="mt-4 p-3.5 bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-2.5 text-xs text-gray-700 font-medium">
   <span className="text-sm">ⓘ</span>
   <span>
@@ -416,17 +466,168 @@ export default function ProductDetailPage({
   </span>
 </div>
 
-              {/* Add to Cart Button */}
-              <div className="pt-4 border-t border-gray-100">
-                <button
-                  onClick={handleAddToCart}
-                  className="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl transition-colors shadow-md active:scale-95"
-                >
-                  🛒 Add to Cart
-                </button>
-              </div>
-            </div>
+    {/* Fit Guarantee Callout */}
+    <div className="mt-6 p-3.5 bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-2.5 text-xs text-gray-700 font-medium">
+      <span className="text-sm">⚡</span>
+      <span>
+        <strong className="font-bold text-gray-900">Fast Shipping:</strong> Order in the next <span className="text-orange-600 font-bold">2 hrs 15 mins</span> to ship today.
+      </span>
+    </div>
+  </div>
+
+  {/* Actions & Payment Trust Badges */}
+  <div className="pt-4 border-t border-gray-100 flex flex-col gap-4">
+    <button
+      onClick={handleAddToCart}
+      className="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-base rounded-2xl transition-all shadow-lg shadow-orange-500/25 active:scale-95 flex items-center justify-center gap-2"
+    >
+      <span>🛒</span>
+      <span>Add to Cart — ${(product.price).toFixed(2)}</span>
+    </button>
+
+    {/* Accepted Payment Methods */}
+    <div className="flex flex-col items-center gap-2 pt-2">
+      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+        Guaranteed Safe & Secure Checkout
+      </span>
+      <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-500">
+        <span className="bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200">💳 Visa</span>
+        <span className="bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200">💳 Mastercard</span>
+        <span className="bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200"> Pay</span>
+        <span className="bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200">G Pay</span>
+        <span className="bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200">⚡ Stripe</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{/* Accordion Specs Section */}
+<div className="mt-8 border-b border-gray-100 pb-6 space-y-4">
+  <details className="group border-b border-gray-100 pb-4 cursor-pointer">
+    <summary className="flex justify-between items-center font-bold text-sm text-gray-900 list-none">
+      <span>Product Highlights & Specs</span>
+      <span className="transition group-open:rotate-180">▾</span>
+    </summary>
+    <ul className="mt-3 text-xs text-gray-600 space-y-2 list-disc list-inside leading-relaxed">
+      <li>Premium full-grain leather upper with fine suede accents for long-lasting durability.</li>
+      <li>Precision-engineered EVA midsole providing high-impact cushioning and lightweight comfort.</li>
+      <li>High-traction non-marking rubber outsole designed for multi-surface grip and stability.</li>
+      <li>Breathable moisture-wicking lining and padded collar for all-day wearability.</li>
+      <li>Includes secondary contrast laces and collector-grade original brand packaging.</li>
+    </ul>
+  </details>
+
+  <details className="group border-b border-gray-100 pb-4 cursor-pointer">
+    <summary className="flex justify-between items-center font-bold text-sm text-gray-900 list-none">
+      <span>Authenticity & Quality Guarantee</span>
+      <span className="transition group-open:rotate-180">▾</span>
+    </summary>
+    <p className="mt-3 text-xs text-gray-600 leading-relaxed">
+      Every pair in the Vault undergoes a detailed 12-point physical verification check by our expert authentication team before dispatch. We inspect stitch density, material texture, factory codes, and packaging details. Guaranteed 100% authentic, or receive 2x your money back.
+    </p>
+  </details>
+
+  <details className="group border-b border-gray-100 pb-4 cursor-pointer">
+    <summary className="flex justify-between items-center font-bold text-sm text-gray-900 list-none">
+      <span>Shipping & Returns</span>
+      <span className="transition group-open:rotate-180">▾</span>
+    </summary>
+    <p className="mt-3 text-xs text-gray-600 leading-relaxed">
+      Standard domestic delivery takes 3–5 business days. Express overnight shipping options are calculated at checkout. Enjoy 30-day hassle-free returns and exchanges on unworn items returned with original tags and packaging intact.
+    </p>
+  </details>
+</div>
+
+{/* Customer Reviews Spotlight */}
+{/* Customer Reviews Spotlight */}
+<div className="mt-12 bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-6">
+  {/* Header & Rating Overview */}
+  <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-100 gap-4">
+    <div>
+      <div className="flex items-center gap-2">
+        <h3 className="font-extrabold text-xl text-gray-900">Verified Buyer Reviews</h3>
+        <span className="bg-emerald-50 text-emerald-700 font-semibold text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-200">
+          ✓ Verified Purchases
+        </span>
+      </div>
+      <p className="text-xs text-gray-500 mt-1">4.8 out of 5 stars • Based on 42 customer reviews</p>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <span className="bg-orange-50 text-orange-600 font-bold text-xs px-3.5 py-2 rounded-full border border-orange-200">
+        98% Fit Satisfaction Rate
+      </span>
+      <button
+        onClick={() => setIsReviewModalOpen(true)}
+        className="bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs px-4 py-2 rounded-full transition"
+      >
+        Write a Review
+      </button>
+    </div>
+  </div>
+
+  {/* Rating Breakdown Bar */}
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-4 rounded-xl text-xs">
+    <div className="flex flex-col justify-center items-center md:border-r md:border-gray-200 pr-4">
+      <span className="text-4xl font-black text-gray-900">4.8</span>
+      <span className="text-orange-500 text-sm mt-1">★★★★★</span>
+      <span className="text-gray-500 text-[11px] mt-0.5">Overall Customer Rating</span>
+    </div>
+
+    <div className="col-span-2 space-y-1.5 justify-center flex flex-col">
+      {[
+        { stars: "5★", count: 36, pct: "85%" },
+        { stars: "4★", count: 4, pct: "10%" },
+        { stars: "3★", count: 2, pct: "5%" },
+        { stars: "2★", count: 0, pct: "0%" },
+        { stars: "1★", count: 0, pct: "0%" },
+      ].map((row, idx) => (
+        <div key={idx} className="flex items-center gap-2">
+          <span className="w-5 text-gray-600 font-semibold text-[11px]">{row.stars}</span>
+          <div className="flex-1 bg-gray-200 h-2 rounded-full overflow-hidden">
+            <div className="bg-orange-500 h-full rounded-full" style={{ width: row.pct }} />
           </div>
+          <span className="w-6 text-right text-gray-400 text-[10px]">{row.count}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Review Cards Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {reviews.map((review) => (
+      <div key={review.id} className="p-4 bg-gray-50/70 border border-gray-100 rounded-xl text-xs space-y-2">
+        <div className="flex justify-between items-center">
+          <div>
+            <span className="font-bold text-gray-900 block">{review.name}</span>
+            <span className="text-[10px] text-emerald-600 font-medium">Verified Buyer</span>
+          </div>
+          <div className="text-right">
+            <span className="text-orange-500 font-bold block">{"★".repeat(review.rating)}</span>
+            <span className="text-[10px] text-gray-400">{review.date}</span>
+          </div>
+        </div>
+        <p className="text-gray-600 leading-relaxed">"{review.comment}"</p>
+        <div className="pt-2 flex items-center justify-between text-[11px] text-gray-400 border-t border-gray-200/50">
+          <span>Size Purchased: {review.size}</span>
+          <div className="flex items-center gap-3">
+            <button className="hover:text-gray-600 font-medium">Helpful</button>
+            {review.user_id === activeUser?.id && (
+              <button
+                type="button"
+                onClick={() => handleDeleteReview(review.id)}
+                className="font-medium text-red-500 hover:text-red-700"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
 
           {/* Related Products Grid */}
           {relatedProducts.length > 0 && (
@@ -464,6 +665,95 @@ export default function ProductDetailPage({
           )}
         </main>
       </div>
+
+      {isReviewModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <h2 className="text-xl font-extrabold text-gray-900">Write a Review</h2>
+              <button
+                type="button"
+                onClick={() => setIsReviewModalOpen(false)}
+                className="text-xl font-bold text-gray-400 hover:text-gray-900"
+                aria-label="Close review form"
+              >
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleAddReview} className="mt-5 space-y-4">
+              <label className="block text-xs font-bold text-gray-700">
+                Name
+                <input
+                  required
+                  value={newReview.name}
+                  onChange={(event) => setNewReview({ ...newReview, name: event.target.value })}
+                  className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-normal text-gray-900 outline-none focus:border-orange-500"
+                  placeholder="Your name"
+                />
+              </label>
+
+              <fieldset>
+                <legend className="text-xs font-bold text-gray-700">Rating</legend>
+                <div className="mt-2 flex gap-2">
+                  {[1, 2, 3, 4, 5].map((rating) => (
+                    <button
+                      key={rating}
+                      type="button"
+                      onClick={() => setNewReview({ ...newReview, rating })}
+                      className={`text-2xl ${rating <= newReview.rating ? "text-orange-500" : "text-gray-300"}`}
+                      aria-label={`${rating} star${rating === 1 ? "" : "s"}`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+
+              <label className="block text-xs font-bold text-gray-700">
+                Size Purchased
+                <select
+                  required
+                  value={newReview.size}
+                  onChange={(event) => setNewReview({ ...newReview, size: event.target.value })}
+                  className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-normal text-gray-900 outline-none focus:border-orange-500"
+                >
+                  <option value="" disabled>Select a size</option>
+                  {sizes.map((size) => <option key={size} value={size}>{size}</option>)}
+                </select>
+              </label>
+
+              <label className="block text-xs font-bold text-gray-700">
+                Review
+                <textarea
+                  required
+                  rows={4}
+                  value={newReview.comment}
+                  onChange={(event) => setNewReview({ ...newReview, comment: event.target.value })}
+                  className="mt-1 w-full resize-none rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-normal text-gray-900 outline-none focus:border-orange-500"
+                  placeholder="Tell us about the fit and quality"
+                />
+              </label>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsReviewModalOpen(false)}
+                  className="rounded-xl border border-gray-200 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-bold text-white hover:bg-orange-600"
+                >
+                  Submit Review
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-gray-700">

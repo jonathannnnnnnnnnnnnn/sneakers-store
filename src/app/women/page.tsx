@@ -8,14 +8,7 @@ import Cart from "@/components/Cart";
 import ProductModal from "@/components/ProductModal";
 import Link from "next/link";
 import { allProducts, Product } from "@/data/products";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-}
+import { useStore } from "@/context/StoreContext";
 
 // Helper function to calculate a realistic dynamic discount per product ID
 const getDiscountPercent = (id: string) => {
@@ -41,8 +34,7 @@ const HeartIcon = ({ filled }: { filled: boolean }) => (
 );
 
 export default function WomenPage() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [wishlist, setWishlist] = useState<string[]>([]);
+  const { cart, wishlistIds, addToCart, toggleWishlist, updateQuantity } = useStore();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -54,89 +46,9 @@ export default function WomenPage() {
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  // Load Saved Wishlist & Cart from localStorage
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("sneaker_wishlist");
-    if (savedWishlist) {
-      try {
-        setWishlist(JSON.parse(savedWishlist));
-      } catch (e) {
-        console.error("Failed to load wishlist:", e);
-      }
-    }
-
-    const savedCart = localStorage.getItem("sneaker_cart");
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (e) {
-        console.error("Failed to load cart:", e);
-      }
-    }
-  }, []);
-
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2500);
-  };
-
-  const toggleWishlist = (productId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    let updated: string[];
-    if (wishlist.includes(productId)) {
-      updated = wishlist.filter((id) => id !== productId);
-      showToast("Removed from Wishlist");
-    } else {
-      updated = [...wishlist, productId];
-      showToast("Saved to Wishlist");
-    }
-    setWishlist(updated);
-    localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
-  };
-
-  const addToCart = (product: Product) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      let updated: CartItem[];
-      if (existing) {
-        updated = prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        updated = [
-          ...prev,
-          {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image_url: product.image_url,
-            quantity: 1,
-          },
-        ];
-      }
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
-    showToast(`Added "${product.name}" to cart! 🛒`);
-  };
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCart((prev) => {
-      const updated = prev
-        .map((item) => {
-          if (item.id === id) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
-          }
-          return item;
-        })
-        .filter(Boolean) as CartItem[];
-
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
   };
 
   // Filter for Women's products using useMemo
@@ -189,7 +101,7 @@ export default function WomenPage() {
         {/* Navbar */}
         <Navbar
           cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
-          wishlistCount={wishlist.length}
+          wishlistCount={wishlistIds.length}
           toggleCart={() => setIsCartOpen(!isCartOpen)}
           activeFilter="Women"
           onFilterChange={() => {}}
@@ -311,7 +223,10 @@ export default function WomenPage() {
                   <div className="mt-3 pt-2 border-t border-zinc-700/50 flex items-center justify-between">
                     <span className="font-black text-sm text-white">${product.price.toFixed(2)}</span>
                     <button
-                      onClick={() => addToCart(product)}
+                      onClick={() => {
+                        addToCart(product);
+                        showToast(`Added "${product.name}" to cart!`);
+                      }}
                       className="bg-white hover:bg-gray-100 text-black font-black text-[10px] px-2.5 py-1.5 rounded-lg transition-colors"
                     >
                       Quick Add
@@ -333,7 +248,7 @@ export default function WomenPage() {
           {/* Product Grid Layout */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {displayedProducts.map((product) => {
-              const isLiked = wishlist.includes(product.id);
+              const isLiked = wishlistIds.map(String).includes(String(product.id));
               const discount = getDiscountPercent(product.id);
               const originalPrice = product.price * (1 + discount / 100);
 
@@ -347,10 +262,14 @@ export default function WomenPage() {
                   </div>
 
 <button
-  onClick={(e) => toggleWishlist(product.id, e)}
+  onClick={(e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    toggleWishlist(product.id);
+  }}
   className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform"
 >
-  <HeartIcon filled={wishlist.includes(product.id)} />
+  <HeartIcon filled={wishlistIds.map(String).includes(String(product.id))} />
 </button>                  
 
                   <div>
@@ -389,7 +308,10 @@ export default function WomenPage() {
                     </div>
 
                     <button
-                      onClick={() => addToCart(product)}
+                      onClick={() => {
+                        addToCart(product);
+                        showToast(`Added "${product.name}" to cart!`);
+                      }}
                       className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 px-3 rounded-xl text-[10px] sm:text-xs transition-all shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap"
                     >
                       <span>🛒</span>
@@ -509,7 +431,9 @@ export default function WomenPage() {
       <ProductModal
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
-        onAddToCart={addToCart}
+        onAddToCart={(quantity) => {
+          for (let index = 0; index < quantity; index += 1) addToCart(selectedProduct!);
+        }}
       />
 
       {/* Value Proposition Grid */}

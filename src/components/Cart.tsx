@@ -1,19 +1,20 @@
 "use client";
 import Link from "next/link";
 
-interface CartItem {
+export interface CartItem {
   id: string;
   name: string;
   price: number;
   image_url: string;
   quantity: number;
+  size?: number;
 }
 
 interface CartProps {
   isOpen: boolean;
   onClose: () => void;
   items: CartItem[];
-  onUpdateQuantity: (id: string, delta: number) => void;
+  onUpdateQuantity: (id: string, delta: number, size?: number) => void;
 }
 
 export default function Cart({ isOpen, onClose, items, onUpdateQuantity }: CartProps) {
@@ -36,31 +37,44 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity }: CartP
             {items.length === 0 ? (
               <p className="text-gray-500 text-center py-8">Your cart is empty.</p>
             ) : (
-              items.map((item, index) => (
-                <div key={`{item.id}-${index}`} className="flex items-center justify-between gap-4 border-b pb-4">
-                  <img src={item.image_url} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-sm text-black">{item.name}</h3>
-                    <p className="text-gray-500 text-xs">${item.price.toFixed(2)}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        onClick={() => onUpdateQuantity(item.id, -1)}
-                        className="w-6 h-6 bg-gray-100 rounded hover:bg-gray-200 text-xs font-bold"
-                      >
-                        -
-                      </button>
-                      <span className="text-sm font-semibold">{item.quantity}</span>
-                      <button
-                        onClick={() => onUpdateQuantity(item.id, 1)}
-                        className="w-6 h-6 bg-gray-100 rounded hover:bg-gray-200 text-xs font-bold"
-                      >
-                        +
-                      </button>
+              items.map((item) => {
+                const itemKey = `${item.id}-${item.size || "nosize"}`;
+                return (
+                  <div key={itemKey} className="flex items-center justify-between gap-4 border-b pb-4">
+                    <img src={item.image_url} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
+                    
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-sm text-black">{item.name}</h3>
+                      
+                      {item.size && (
+                        <span className="inline-block mt-1 bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-gray-200">
+                          US {item.size}
+                        </span>
+                      )}
+
+                      <p className="text-gray-500 text-xs mt-1">${item.price.toFixed(2)}</p>
+                      
+                      <div className="flex items-center gap-2 mt-2">
+                        <button
+                          onClick={() => onUpdateQuantity(item.id, -1, item.size)}
+                          className="w-6 h-6 bg-gray-100 rounded hover:bg-gray-200 text-xs font-bold"
+                        >
+                          -
+                        </button>
+                        <span className="text-sm font-semibold">{item.quantity}</span>
+                        <button
+                          onClick={() => onUpdateQuantity(item.id, 1, item.size)}
+                          className="w-6 h-6 bg-gray-100 rounded hover:bg-gray-200 text-xs font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
+
+                    <p className="font-bold text-black">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-                  <p className="font-bold text-black">${(item.price * item.quantity).toFixed(2)}</p>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -73,9 +87,9 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity }: CartP
             </div>
 
             <Link href="/checkout" onClick={onClose} className="block w-full">
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition-colors shadow-lg">
-              Checkout
-            </button>
+              <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition-colors shadow-lg">
+                Checkout
+              </button>
             </Link>
           </div>
         )}

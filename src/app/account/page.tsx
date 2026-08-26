@@ -1,21 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Cart from "@/components/Cart";
 import { allProducts } from "@/data/products";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-}
+import { useStore } from "@/context/StoreContext";
 
 interface Address {
   fullName: string;
@@ -36,41 +29,31 @@ interface PaymentMethod {
   isDefault: boolean;
 }
 
-const mockOrders = [
-  {
-    id: "SV-88421",
-    date: "August 10, 2026",
-    status: "Delivered",
-    total: 210.0,
-    trackingNo: "1Z9999999999999999",
-    carrier: "UPS Express",
-    items: [
-      { name: "Air Jordan 1 Retro High OG", qty: 1, price: 180.0, image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500&q=80" },
-      { name: "Sneaker Care Cleaning Kit", qty: 1, price: 30.0, image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&q=80" },
-    ],
-  },
-  {
-    id: "SV-73910",
-    date: "July 24, 2026",
-    status: "In Transit",
-    total: 145.0,
-    trackingNo: "FE882104928US",
-    carrier: "FedEx Ground",
-    items: [
-      { name: "Nike Dunk Low Retro", qty: 1, price: 145.0, image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=80" }
-    ],
-  },
-];
+interface Order {
+  id: string;
+  created_at?: string;
+  date?: string;
+  status?: string;
+  total: number;
+  trackingNo?: string;
+  trackingNumber?: string;
+  carrier?: string;
+  items?: any[];
+}
 
 const BRANDS_LIST = ["Nike", "Jordan", "Adidas", "Yeezy", "New Balance", "Puma", "Asics", "Travis Scott"];
 
 export default function AccountPage() {
+  const { user, cart, wishlistIds, clearCart, updateQuantity, removeFromWishlist } = useStore();
+  const [showBanner, setShowBanner] = useState(true);
+  const searchParams = useSearchParams();
+  const isSuccess = searchParams.get("success") === "true";
+  const checkoutSessionId = searchParams.get("session_id");
+
+  const [orders, setOrders] = useState<Order[]>([]);
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"profile" | "orders" | "addresses" | "payment" | "preferences" | "wishlist">("profile");
-  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Address state
@@ -112,6 +95,15 @@ export default function AccountPage() {
 
   // UI status messages
   const [saveSuccessMsg, setSaveSuccessMsg] = useState("");
+  const clearedSuccessRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const successKey = isSuccess ? `${checkoutSessionId || "success"}:${user?.id || "guest"}` : null;
+    if (successKey && clearedSuccessRef.current !== successKey) {
+      clearedSuccessRef.current = successKey;
+      clearCart();
+    }
+  }, [checkoutSessionId, clearCart, isSuccess, user?.id]);
 
   // Initialize Supabase client
   const supabase = createBrowserClient(
@@ -120,82 +112,154 @@ export default function AccountPage() {
   );
 
   useEffect(() => {
-    // 1. Fetch Supabase Auth User & Protect Route
-    const fetchUser = async () => {
+    let isMounted = true;
+
+    const fetchUserAndOrders = async () => {
+      // 1. Check Authenticated User
       const { data } = await supabase.auth.getUser();
       if (!data?.user) {
         router.push("/login");
-      } else {
-        setUser(data.user);
-        
-        // Auto-fill address & card name if empty
-        const defaultName = data.user.user_metadata?.full_name || data.user.email?.split("@")[0] || "";
-        setSavedAddress((prev) => ({ ...prev, fullName: prev.fullName || defaultName }));
-        setNewCard((prev) => ({ ...prev, holderName: prev.holderName || defaultName }));
+        return;
       }
-      setLoading(false);
+
+      const currentUser = data.user;
+
+      const userCartKey = `sneaker_cart_${currentUser.id}`;
+
+      // 2. Handle Stripe success redirect: Create order if coming from checkout
+      if (isSuccess && checkoutSessionId) {
+        try {
+          const pendingCart =
+            localStorage.getItem("pending_order") ||
+            localStorage.getItem(userCartKey) ||
+            localStorage.getItem("sneaker_cart");
+          const items = pendingCart ? JSON.parse(pendingCart) : [];
+
+          if (items.length > 0) {
+            const totalAmount = items.reduce(
+              (sum: number, item: any) => sum + item.price * item.quantity,
+              0
+            );
+
+            // Call server endpoint
+            const response = await fetch("/api/orders/create", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userId: currentUser.id,
+                total: totalAmount,
+                items: items,
+                stripeSessionId: checkoutSessionId,
+              }),
+            });
+
+            const resData = await response.json();
+
+            if (!response.ok) {
+              console.error("🔴 Server Order Error:", resData.error);
+            } else {
+              console.log("✅ Order Inserted Successfully:", resData.order);
+            }
+          }
+        } catch (e) {
+          console.error("🔴 Error processing order:", e);
+        }
+
+        // Payment succeeded, so clear the cart even when the order already exists or API fails.
+        await clearCart();
+        localStorage.removeItem(userCartKey);
+        localStorage.removeItem("sneaker_cart");
+        localStorage.removeItem("pending_order");
+      }
+
+      // 3. Fetch User-Specific Orders from Supabase
+      const { data: userOrders, error: orderError } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .order("created_at", { ascending: false });
+
+      if (!orderError && userOrders && isMounted) {
+        setOrders(userOrders);
+      }
+
+      // 4. Fetch User Shipping Address
+      const { data: addressData, error: addressError } = await supabase
+        .from("addresses")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+      if (!addressError && addressData && isMounted) {
+        setSavedAddress({
+          fullName: addressData.fullName || "",
+          street: addressData.street || "",
+          city: addressData.city || "",
+          state: addressData.state || "",
+          zipCode: addressData.zipCode || "",
+          country: addressData.country || "United States",
+          phone: addressData.phone || "",
+        });
+      }
+
+      if (isMounted) setLoading(false);
     };
 
-    fetchUser();
+    fetchUserAndOrders();
 
-    // 2. Load Wishlist, Cart & Local Preferences
-    try {
-      const savedWishlist = localStorage.getItem("sneaker_wishlist");
-      if (savedWishlist) setWishlistIds(JSON.parse(savedWishlist));
+    return () => {
+      isMounted = false;
+    };
+  }, [checkoutSessionId, isSuccess, router, supabase]);
 
-      const savedCart = localStorage.getItem("sneaker_cart");
-      if (savedCart) setCart(JSON.parse(savedCart));
-
-      const localAddr = localStorage.getItem("vault_address");
-      if (localAddr) setSavedAddress(JSON.parse(localAddr));
-
-      const localPrefs = localStorage.getItem("vault_preferences");
-      if (localPrefs) {
-        const parsed = JSON.parse(localPrefs);
-        if (parsed.shoeSize) setShoeSize(parsed.shoeSize);
-        if (parsed.sizeSystem) setSizeSystem(parsed.sizeSystem);
-        if (parsed.selectedBrands) setSelectedBrands(parsed.selectedBrands);
-      }
-
-      const localPayments = localStorage.getItem("vault_payments");
-      if (localPayments) {
-        setPaymentMethods(JSON.parse(localPayments));
-      }
-    } catch (e) {
-      console.error("Failed to parse saved vault data", e);
-    }
-  }, [supabase, router]);
-
-  // Handle Logout
+  // Handle Logout (Preserves user storage, resets session state)
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    setUser(null);
+    localStorage.removeItem("pending_order");
+    localStorage.removeItem("sneaker_cart_guest");
+    localStorage.removeItem("sneaker_wishlist_guest");
+
     router.push("/login");
     router.refresh();
   };
 
-  const wishlistProducts = allProducts.filter((p) => wishlistIds.includes(p.id));
+  const wishlistProducts = allProducts.filter((p) => wishlistIds.map(String).includes(String(p.id)));
 
   const removeWishlist = (id: string) => {
-    const updated = wishlistIds.filter((wId) => wId !== id);
-    setWishlistIds(updated);
-    localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
-  };
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCart((prev) => {
-      const updated = prev
-        .map((item) => (item.id === id ? { ...item, quantity: item.quantity + delta } : item))
-        .filter((item) => item.quantity > 0);
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
+    removeFromWishlist(id);
   };
 
   // Save address handler
-  const handleSaveAddress = (e: React.FormEvent) => {
+  const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("vault_address", JSON.stringify(savedAddress));
+    if (!user) {
+      triggerSuccessBanner("No logged in user found!");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("addresses")
+      .upsert(
+        {
+          user_id: user.id,
+          fullName: savedAddress.fullName,
+          street: savedAddress.street,
+          city: savedAddress.city,
+          state: savedAddress.state,
+          zipCode: savedAddress.zipCode,
+          country: savedAddress.country,
+          phone: savedAddress.phone,
+        },
+        { onConflict: "user_id" }
+      )
+      .select();
+
+    if (error) {
+      console.error("Full Supabase Error Object:", error);
+      triggerSuccessBanner(`Supabase Error: ${error.message} (${error.code})`);
+      return;
+    }
+
     setIsEditingAddress(false);
     triggerSuccessBanner("Shipping address saved successfully!");
   };
@@ -203,7 +267,8 @@ export default function AccountPage() {
   // Save sneaker preferences handler
   const handleSavePreferences = () => {
     const prefs = { shoeSize, sizeSystem, selectedBrands };
-    localStorage.setItem("vault_preferences", JSON.stringify(prefs));
+    const prefsKey = user ? `vault_preferences_${user.id}` : "vault_preferences";
+    localStorage.setItem(prefsKey, JSON.stringify(prefs));
     triggerSuccessBanner("Collector preferences saved!");
   };
 
@@ -229,7 +294,8 @@ export default function AccountPage() {
     updatedMethods.push(createdCard);
 
     setPaymentMethods(updatedMethods);
-    localStorage.setItem("vault_payments", JSON.stringify(updatedMethods));
+    const pmKey = user ? `vault_payments_${user.id}` : "vault_payments";
+    localStorage.setItem(pmKey, JSON.stringify(updatedMethods));
 
     setIsAddingCard(false);
     setNewCard({ holderName: "", cardNumber: "", expiry: "", brand: "Visa", isDefault: false });
@@ -239,7 +305,8 @@ export default function AccountPage() {
   const handleDeletePaymentMethod = (id: string) => {
     const updated = paymentMethods.filter((pm) => pm.id !== id);
     setPaymentMethods(updated);
-    localStorage.setItem("vault_payments", JSON.stringify(updated));
+    const pmKey = user ? `vault_payments_${user.id}` : "vault_payments";
+    localStorage.setItem(pmKey, JSON.stringify(updated));
     triggerSuccessBanner("Payment method removed.");
   };
 
@@ -260,12 +327,15 @@ export default function AccountPage() {
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Collector";
   const userInitials = userName.substring(0, 2).toUpperCase();
 
+  const wishlistCount = wishlistIds.length;
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between">
       <div>
         <Navbar
-          cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
-          wishlistCount={wishlistIds.length}
+          cartCount={cartCount}
+          wishlistCount={wishlistCount}
           toggleCart={() => setIsCartOpen(!isCartOpen)}
         />
 
@@ -277,16 +347,22 @@ export default function AccountPage() {
         />
 
         <main className="max-w-7xl mx-auto px-4 py-8">
-          
-          {/* Notification Banner */}
-          {saveSuccessMsg && (
-            <div className="mb-6 bg-emerald-500 text-white font-extrabold text-xs py-3 px-5 rounded-2xl shadow-lg flex items-center justify-between animate-fadeIn">
-              <span>⚡ {saveSuccessMsg}</span>
-              <button onClick={() => setSaveSuccessMsg("")}>✕</button>
+          {showBanner && (saveSuccessMsg || isSuccess) && (
+            <div className="mb-6 bg-emerald-500 text-white font-semibold text-sm py-3 px-5 rounded-2xl shadow-lg flex items-center justify-between animate-fade-in">
+              <span>{saveSuccessMsg || "🎉 Payment Successful! Your order has been logged and confirmed."}</span>
+              <button 
+                onClick={() => {
+                  setShowBanner(false);
+                  setSaveSuccessMsg("");
+                  window.history.replaceState({}, "", "/account");
+                }} 
+                className="font-bold hover:opacity-75 text-lg leading-none"
+              >
+                ✕
+              </button>
             </div>
           )}
 
-          {/* User Profile Header Card */}
           <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 mb-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-5">
               {user?.user_metadata?.avatar_url ? (
@@ -336,11 +412,10 @@ export default function AccountPage() {
             )}
           </div>
 
-          {/* Navigation Tabs */}
           <div className="flex border-b border-gray-200 mb-8 gap-6 sm:gap-8 overflow-x-auto no-scrollbar">
             {[
               { id: "profile", label: "Overview" },
-              { id: "orders", label: `Orders (${mockOrders.length})` },
+              { id: "orders", label: `Orders (${orders.length})` },
               { id: "addresses", label: "Shipping Address" },
               { id: "payment", label: `Payment Methods (${paymentMethods.length})` },
               { id: "preferences", label: "Sole Profile" },
@@ -360,7 +435,6 @@ export default function AccountPage() {
             ))}
           </div>
 
-          {/* TAB 1: OVERVIEW & PROFILE */}
           {activeTab === "profile" && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
@@ -415,8 +489,8 @@ export default function AccountPage() {
                   Vault Metrics
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-orange-50 p-4 rounded-xl border border-orange-100">
-                    <span className="text-2xl font-black text-orange-500">{mockOrders.length}</span>
+                  <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
+                    <span className="text-3xl font-black text-orange-600">{orders.length}</span>
                     <span className="block text-[10px] font-bold text-gray-500 uppercase">Total Orders</span>
                   </div>
                   <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
@@ -428,60 +502,82 @@ export default function AccountPage() {
             </div>
           )}
 
-          {/* TAB 2: ORDERS */}
           {activeTab === "orders" && (
             <div className="space-y-4">
-              {mockOrders.map((order) => (
-                <div key={order.id} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                  <div className="flex flex-wrap items-center justify-between border-b border-gray-100 pb-3 mb-4 gap-2">
-                    <div>
-                      <span className="font-black text-sm text-gray-900 mr-3">{order.id}</span>
-                      <span className="text-xs text-gray-400 font-medium">{order.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold text-gray-400">{order.carrier}</span>
-                      <span
-                        className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
-                          order.status === "Delivered"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : "bg-amber-100 text-amber-700"
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Order Items list */}
-                  <div className="space-y-3 mb-4">
-                    {order.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-xs font-semibold text-gray-800 gap-3">
-                        <div className="flex items-center gap-3">
-                          <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded-xl bg-gray-100 shrink-0" />
-                          <div>
-                            <p className="font-bold text-gray-900">{item.name}</p>
-                            <p className="text-[10px] text-gray-400 font-bold">Qty: {item.qty}</p>
-                          </div>
-                        </div>
-                        <span className="font-black text-gray-900">${item.price.toFixed(2)}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-wrap justify-between items-center pt-3 border-t border-gray-100 gap-2">
-                    <div className="text-xs text-gray-400">
-                      Tracking Number: <span className="font-mono text-gray-700 font-bold">{order.trackingNo}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-black text-sm text-gray-900">Total: <span className="text-orange-500">${order.total.toFixed(2)}</span></span>
-                    </div>
-                  </div>
+              {orders.length === 0 ? (
+                <div className="text-center py-16 bg-white rounded-3xl border border-gray-200">
+                  <span className="text-4xl block mb-2">📦</span>
+                  <p className="text-gray-500 font-semibold text-sm">No orders found for this account.</p>
+                  <Link
+                    href="/"
+                    className="mt-4 inline-block bg-orange-500 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs"
+                  >
+                    Start Shopping
+                  </Link>
                 </div>
-              ))}
+              ) : (
+                orders.map((order) => (
+                  <div key={order.id} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+                    <div className="flex flex-wrap items-center justify-between border-b border-gray-100 pb-3 mb-4 gap-2">
+                      <div>
+                        <span className="font-black text-sm text-gray-900 mr-3">{order.id}</span>
+                        <span className="text-xs text-gray-400 font-medium">
+                          {order.date || (order.created_at ? new Date(order.created_at).toLocaleDateString() : "")}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-gray-400">{order.carrier || "Standard Shipping"}</span>
+                        <span
+                          className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
+                            order.status === "Delivered" || order.status === "DELIVERED"
+                              ? "bg-emerald-100 text-emerald-700"
+                              : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {order.status || "PROCESSING"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 mb-4">
+                      {order.items?.map((item: any, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between text-xs font-semibold text-gray-800 gap-3">
+                          <div className="flex items-center gap-3">
+                            <img 
+                              src={item.image_url || item.image || "/placeholder.jpg"} 
+                              alt={item.name} 
+                              className="w-12 h-12 object-cover rounded-xl bg-gray-100 shrink-0" 
+                            />
+                            <div>
+                              <p className="font-bold text-gray-900">{item.name}</p>
+                              <p className="text-[10px] text-gray-400 font-bold">
+                                Qty: {item.quantity || item.qty || 1}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="font-black text-gray-900">
+                            ${(item.price * (item.quantity || item.qty || 1)).toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap justify-between items-center pt-3 border-t border-gray-100 gap-2">
+                      <div className="text-xs text-gray-400">
+                        Tracking Number: <span className="font-mono text-gray-700 font-bold">{order.trackingNo || order.trackingNumber || "Pending"}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="font-black text-sm text-gray-900">
+                          Total: <span className="text-orange-500">${Number(order.total).toFixed(2)}</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
 
-          {/* TAB 3: SHIPPING ADDRESS */}
           {activeTab === "addresses" && (
             <div className="max-w-2xl bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between mb-6">
@@ -595,7 +691,6 @@ export default function AccountPage() {
             </div>
           )}
 
-          {/* TAB 4: PAYMENT METHODS */}
           {activeTab === "payment" && (
             <div className="max-w-2xl bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
               <div className="flex items-center justify-between">
@@ -613,7 +708,6 @@ export default function AccountPage() {
                 )}
               </div>
 
-              {/* Add New Card Form */}
               {isAddingCard && (
                 <form onSubmit={handleAddPaymentMethod} className="bg-gray-50 p-5 rounded-2xl border border-orange-200 space-y-4 text-xs animate-fadeIn">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
@@ -710,7 +804,6 @@ export default function AccountPage() {
                 </form>
               )}
 
-              {/* Saved Cards List */}
               {paymentMethods.length === 0 ? (
                 <div className="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                   <p className="text-gray-500 font-bold text-xs">No saved payment methods found.</p>
@@ -763,7 +856,6 @@ export default function AccountPage() {
             </div>
           )}
 
-          {/* TAB 5: SOLE PROFILE / PREFERENCES */}
           {activeTab === "preferences" && (
             <div className="max-w-2xl bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
               <div>
@@ -772,7 +864,6 @@ export default function AccountPage() {
               </div>
 
               <div className="space-y-6">
-                {/* Size Selection */}
                 <div>
                   <label className="block font-bold text-xs text-gray-700 mb-2">Preferred Shoe Size</label>
                   <div className="flex items-center gap-3">
@@ -796,7 +887,6 @@ export default function AccountPage() {
                   </div>
                 </div>
 
-                {/* Brands Selection */}
                 <div>
                   <label className="block font-bold text-xs text-gray-700 mb-2">Favorite Sneaker Brands</label>
                   <div className="flex flex-wrap gap-2">
@@ -830,7 +920,6 @@ export default function AccountPage() {
             </div>
           )}
 
-          {/* TAB 6: WISHLIST */}
           {activeTab === "wishlist" && (
             <div>
               {wishlistProducts.length === 0 ? (
@@ -869,7 +958,6 @@ export default function AccountPage() {
               )}
             </div>
           )}
-
         </main>
       </div>
 

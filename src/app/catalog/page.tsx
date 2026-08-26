@@ -7,14 +7,7 @@ import Navbar from "@/components/Navbar";
 import Cart from "@/components/Cart";
 import Footer from "@/components/Footer";
 import { allProducts, Product } from "@/data/products";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-}
+import { useStore } from "@/context/StoreContext";
 
 const brandList = [
   "NIKE",
@@ -38,10 +31,9 @@ export default function CatalogPage() {
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { cart, wishlistIds, addToCart, toggleWishlist, updateQuantity } = useStore();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [wishlist, setWishlist] = useState<string[]>([]);
 
   // Infinite Scroll States
   const ITEMS_PER_PAGE = 12;
@@ -49,77 +41,9 @@ export default function CatalogPage() {
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("sneaker_wishlist");
-    if (savedWishlist) {
-      try { setWishlist(JSON.parse(savedWishlist)); } catch (e) {}
-    }
-    const savedCart = localStorage.getItem("sneaker_cart");
-    if (savedCart) {
-      try { setCart(JSON.parse(savedCart)); } catch (e) {}
-    }
-  }, []);
-
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2500);
-  };
-
-  const toggleWishlist = (productId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    let updated: string[];
-    if (wishlist.includes(productId)) {
-      updated = wishlist.filter((id) => id !== productId);
-      showToast("Removed from Wishlist");
-    } else {
-      updated = [...wishlist, productId];
-      showToast("Saved to Wishlist ❤️");
-    }
-    setWishlist(updated);
-    localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
-  };
-
-  const addToCart = (product: Product) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      let updated: CartItem[];
-      if (existing) {
-        updated = prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        updated = [
-          ...prev,
-          {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image_url: product.image_url,
-            quantity: 1,
-          },
-        ];
-      }
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
-    showToast(`Added "${product.name}" to cart!`);
-  };
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCart((prev) => {
-      const updated = prev
-        .map((item) => {
-          if (item.id === id) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
-          }
-          return item;
-        })
-        .filter(Boolean) as CartItem[];
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
   };
 
   // Filtered master collection
@@ -185,7 +109,7 @@ export default function CatalogPage() {
       <div>
         <Navbar
           cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
-          wishlistCount={wishlist.length}
+          wishlistCount={wishlistIds.length}
           toggleCart={() => setIsCartOpen(!isCartOpen)}
           activeFilter={selectedCategory}
           onFilterChange={(cat) => setSelectedCategory(cat)}
@@ -245,7 +169,7 @@ export default function CatalogPage() {
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
                 {displayedProducts.map((product) => {
-                  const isLiked = wishlist.includes(product.id);
+                  const isLiked = wishlistIds.map(String).includes(String(product.id));
                   const discount = getDiscountPercent(product.id);
                   const originalPrice = product.price * (1 + discount / 100);
 
@@ -259,7 +183,11 @@ export default function CatalogPage() {
                       </div>
 
                       <button
-                        onClick={(e) => toggleWishlist(product.id, e)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          toggleWishlist(product.id);
+                        }}
                         className="absolute top-3 right-3 bg-white/90 p-1.5 sm:p-2 rounded-full shadow-md z-10 hover:scale-110 transition-transform text-xs sm:text-sm"
                       >
                         {isLiked ? "❤️" : "🤍"}
@@ -301,7 +229,10 @@ export default function CatalogPage() {
                         </div>
 
                         <button
-                          onClick={() => addToCart(product)}
+                          onClick={() => {
+                            addToCart(product);
+                            showToast(`Added "${product.name}" to cart!`);
+                          }}
                           className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 px-3 rounded-xl text-[10px] sm:text-xs transition-all shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap"
                         >
                           <span>🛒</span>

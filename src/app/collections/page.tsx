@@ -7,14 +7,7 @@ import Cart from "@/components/Cart";
 import Footer from "@/components/Footer";
 import { allProducts } from "@/data/products";
 import { CATEGORY_COUNTS, BRAND_COUNTS } from "@/lib/product-counts";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  quantity: number;
-}
+import { useStore } from "@/context/StoreContext";
 
 // Helper to reliably find a matching image while avoiding misplaced tech items
 const getCollectionImage = (type: "category" | "brand", query: string) => {
@@ -87,44 +80,15 @@ const BRAND_COLLECTIONS = [
 ];
 
 export default function CollectionsPage() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [wishlistCount, setWishlistCount] = useState(0);
+  const { cart, wishlistIds, updateQuantity } = useStore();
   const [isCartOpen, setIsCartOpen] = useState(false);
-
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("sneaker_wishlist");
-    if (savedWishlist) {
-      try {
-        const parsed = JSON.parse(savedWishlist);
-        if (Array.isArray(parsed)) setWishlistCount(parsed.length);
-      } catch (e) {}
-    }
-
-    const savedCart = localStorage.getItem("sneaker_cart");
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        if (Array.isArray(parsed)) setCart(parsed);
-      } catch (e) {}
-    }
-  }, []);
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCart((prev) => {
-      const updated = prev
-        .map((item) => (item.id === id ? { ...item, quantity: item.quantity + delta } : item))
-        .filter((item) => item.quantity > 0);
-      localStorage.setItem("sneaker_cart", JSON.stringify(updated));
-      return updated;
-    });
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between scroll-smooth">
       <div>
         <Navbar
           cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
-          wishlistCount={wishlistCount}
+          wishlistCount={wishlistIds.length}
           toggleCart={() => setIsCartOpen(!isCartOpen)}
           activeFilter="Collections"
         />
