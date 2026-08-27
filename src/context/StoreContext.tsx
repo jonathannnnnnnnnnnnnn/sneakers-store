@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { allProducts, Product } from "@/data/products";
+import toast from "react-hot-toast";
 
 export interface CartItem {
   id: string;
@@ -279,6 +280,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     } else {
       localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
     }
+
+    toast.success("Added to Wishlist!");
   };
 
   const toggleWishlist = async (id: string) => {
@@ -306,6 +309,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     } else {
       localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
     }
+
+    toast.success("Removed from Wishlist");
   };
 
   const removeFromWishlist = async (id: string) => {

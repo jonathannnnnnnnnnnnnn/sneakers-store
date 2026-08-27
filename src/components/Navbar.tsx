@@ -66,6 +66,11 @@ export default function Navbar({
   const { user, cart, wishlistIds } = useStore();
   const contextCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const contextWishlistCount = wishlistIds.length;
+  const isAdmin = Boolean(
+    user?.email &&
+      process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
+      user.email.toLowerCase() === process.env.NEXT_PUBLIC_ADMIN_EMAIL.toLowerCase()
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -446,6 +451,29 @@ const handleLanguageChange = (langCode: string) => {
                         >
                           👤 My Account & Profile
                         </Link>
+                        {isAdmin && (
+                          <Link
+                            href="/admin"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-800 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            >
+                              <path d="M12 3 4.5 6v5.5c0 4.6 3.1 7.8 7.5 9.5 4.4-1.7 7.5-4.9 7.5-9.5V6L12 3Z" />
+                              <path d="m9.5 12 1.7 1.7 3.5-3.5" />
+                            </svg>
+                            <span>Admin Dashboard</span>
+                          </Link>
+                        )}
                         <button
                           onClick={handleSignOut}
                           className="w-full text-left px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 transition-colors border-t border-gray-100"

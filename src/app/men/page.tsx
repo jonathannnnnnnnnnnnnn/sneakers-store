@@ -9,6 +9,7 @@ import ProductModal from "@/components/ProductModal";
 import Link from "next/link";
 import { allProducts, Product } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
+import { toast as notify } from "react-hot-toast";
 
 // Helper function to calculate a realistic dynamic discount per product ID
 const getDiscountPercent = (id: string) => {
@@ -224,7 +225,7 @@ export default function MenPage() {
                     <button
                       onClick={() => {
                         addToCart(product);
-                        showToast(`Added "${product.name}" to cart!`);
+                        notify.success("Added to Cart! 🛒");
                       }}
                       className="bg-white text-black hover:bg-orange-500 hover:text-white font-black text-[10px] px-2.5 py-1.5 rounded-lg transition-colors"
                     >

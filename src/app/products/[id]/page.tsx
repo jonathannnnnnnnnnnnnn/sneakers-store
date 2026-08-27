@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { allProducts } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
 import { createClient } from "@/lib/supabase/client";
+import { toast as notify } from "react-hot-toast";
 
 // Reusable Heart Icon Component
 const HeartIcon = ({ filled }: { filled: boolean }) => (
@@ -273,7 +274,7 @@ export default function ProductDetailPage({
 
     addToCart(product);
 
-    showToast(`Added "${product.name}" (Size US ${selectedSize}) to cart!`);
+    notify.success("Added to Cart! 🛒");
   };
 
   const totalCartItems = isMounted

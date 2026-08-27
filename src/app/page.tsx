@@ -8,6 +8,7 @@ import ProductModal from "@/components/ProductModal";
 import Footer from "@/components/Footer";
 import { allProducts, Product } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
+import toast from "react-hot-toast";
 
 const getDiscountPercent = (id: string) => {
   const hash = id.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
@@ -38,7 +39,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,11 +79,6 @@ export default function Home() {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory, selectedBrand, searchQuery]);
-
-  const showToast = (msg: string) => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 2500);
-  };
 
   const scrollRow = (
     ref: React.RefObject<HTMLDivElement | null>,
@@ -322,7 +317,7 @@ export default function Home() {
                   className="w-44 h-32 object-cover rounded-2xl border border-zinc-800 shadow-md"
                 />
                 <button
-                  onClick={() => showToast("Added to Drop Radar alerts!")}
+                  onClick={() => toast.success("Added to Drop Radar alerts!")}
                   className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white font-extrabold px-6 py-4 rounded-2xl text-xs sm:text-sm transition-all shadow-lg active:scale-95 whitespace-nowrap"
                 >
                   Notify Me At Drop 🔔
@@ -422,7 +417,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           addToCart(product);
-                          showToast(`Added "${product.name}" to cart!`);
+                          toast.success("Added to Cart! 🛒");
                         }}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1"
                       >
@@ -528,7 +523,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           addToCart(product);
-                          showToast(`Added "${product.name}" to cart!`);
+                          toast.success("Added to Cart! 🛒");
                         }}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1"
                       >
@@ -718,7 +713,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           addToCart(product);
-                          showToast(`Added "${product.name}" to cart!`);
+                          toast.success("Added to Cart! 🛒");
                         }}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 px-3 rounded-xl text-[10px] sm:text-xs transition-all shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap"
                       >
@@ -788,13 +783,6 @@ export default function Home() {
           </section>
         </main>
       </div>
-
-      {toast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-gray-700">
-          <span className="text-orange-400 font-bold">✓</span>
-          <span className="text-sm font-semibold">{toast}</span>
-        </div>
-      )}
 
       <ProductModal
         product={selectedProduct}

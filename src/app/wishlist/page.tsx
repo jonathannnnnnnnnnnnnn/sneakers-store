@@ -7,6 +7,7 @@ import Cart from "@/components/Cart";
 import Footer from "@/components/Footer";
 import { allProducts, Product } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
+import { toast as notify } from "react-hot-toast";
 
 export default function WishlistPage() {
   const { cart, wishlistIds, addToCart, updateQuantity, removeFromWishlist, clearWishlist } = useStore();
@@ -36,7 +37,7 @@ export default function WishlistPage() {
   // Add item to Cart
   const handleAddToCart = (product: Product) => {
     addToCart(product);
-    showToast(`Added "${product.name}" to cart! 🛒`);
+    notify.success("Added to Cart! 🛒");
   };
 
   return (

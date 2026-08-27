@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { allProducts, Product } from "@/data/products";
 import { getProductsForSlug } from "@/lib/get-products-for-slug";
 import { useStore } from "@/context/StoreContext";
+import { toast as notify } from "react-hot-toast";
 
 // 1. Group Definitions
 const BRAND_LIST = [
@@ -393,7 +394,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                             <button
                               onClick={() => {
                                 addToCart(product);
-                                showToast(`Added "${product.name}" to cart!`);
+                                notify.success("Added to Cart! 🛒");
                               }}
                               className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 px-3 rounded-xl text-[10px] sm:text-xs transition-all shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap"
                             >

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import { StoreProvider } from "@/context/StoreContext";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <StoreProvider>
           {children}
+          <Toaster position="bottom-right" />
         </StoreProvider>
       </body>
     </html>
