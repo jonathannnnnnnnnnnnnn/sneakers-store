@@ -62,15 +62,16 @@ export default function Navbar({
   activeFilter,
   onSignOut,
 }: NavbarProps) {
+  const { userProfile } = useStore();
   const router = useRouter();
   const { user, cart, wishlistIds } = useStore();
   const contextCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const contextWishlistCount = wishlistIds.length;
-  const isAdmin = Boolean(
-    user?.email &&
-      process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
-      user.email.toLowerCase() === process.env.NEXT_PUBLIC_ADMIN_EMAIL.toLowerCase()
-  );
+const isAdmin = userProfile?.role === "admin" || Boolean(
+  user?.email &&
+  process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
+  user.email.toLowerCase() === process.env.NEXT_PUBLIC_ADMIN_EMAIL.toLowerCase()
+);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);

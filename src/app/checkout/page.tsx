@@ -285,7 +285,7 @@ export default function CheckoutPage() {
                         }`}
                       >
                         <div>
-                          <p className="text-sm font-bold">Standard Delivery</p>
+                          <p className="text-sm text-black font-bold">Standard Delivery</p>
                           <p className="text-xs text-gray-500">3 - 5 business days</p>
                         </div>
                         <span className="font-extrabold text-sm text-orange-500">$15.00</span>
@@ -298,7 +298,7 @@ export default function CheckoutPage() {
                         }`}
                       >
                         <div>
-                          <p className="text-sm font-bold">Express Courier</p>
+                          <p className="text-sm text-black font-bold">Express Courier</p>
                           <p className="text-xs text-gray-500">1 - 2 business days</p>
                         </div>
                         <span className="font-extrabold text-sm text-orange-500">$25.00</span>

@@ -13,8 +13,16 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface UserProfile {
+  id: string;
+  email: string;
+  full_name?: string;
+  role: "admin" | "user";
+}
+
 interface StoreContextType {
   user: any;
+  userProfile: UserProfile | null;
   cart: CartItem[];
   wishlistIds: string[];
   clearCart: () => Promise<void>;
@@ -29,9 +37,9 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  // Initialize client once outside render loops
   const [supabase] = useState(() => createClient());
   const [user, setUser] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
 
@@ -40,13 +48,31 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     let authListener: { subscription: { unsubscribe: () => void } } | null = null;
     let initialAuthResolved = false;
 
+    const fetchUserProfile = async (userId: string) => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, email, full_name, role")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Failed to load user profile:", error.message);
+        return null;
+      }
+      return data as UserProfile | null;
+    };
+
     const loadUserData = async (activeUser: any) => {
       if (!isMounted) return;
 
       if (activeUser) {
+        const profile = await fetchUserProfile(activeUser.id);
+        if (isMounted) setUserProfile(profile);
+
         await fetchCart(activeUser.id);
         await fetchWishlist(activeUser.id);
       } else {
+        if (isMounted) setUserProfile(null);
         // Guest fallback from LocalStorage
         const savedCart = localStorage.getItem("sneaker_cart");
         const savedWishlist = localStorage.getItem("sneaker_wishlist");
@@ -74,11 +100,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         .eq("user_id", userId);
 
       if (error) {
-        console.error(
-          "Failed to load cart from Supabase:",
-          `message: ${error.message || "Unknown error"}`,
-          `details: ${error.details || "No details provided"}`
-        );
+        console.error("Failed to load cart from Supabase:", error.message);
         return;
       }
 
@@ -110,11 +132,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         .eq("user_id", userId);
 
       if (error) {
-        console.error(
-          "Failed to load wishlist from Supabase:",
-          `message: ${error.message || "Unknown error"}`,
-          `details: ${error.details || "No details provided"}`
-        );
+        console.error("Failed to load wishlist from Supabase:", error.message);
         return;
       }
 
@@ -125,15 +143,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     };
 
     const initializeStore = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        const authError = error as { message?: string; details?: string };
-        console.error(
-          "Failed to resolve authenticated user:",
-          `message: ${authError.message || "Unknown error"}`,
-          `details: ${authError.details || "No details provided"}`
-        );
-      }
+const { data, error } = await supabase.auth.getUser();
+if (error && error.name !== "AuthSessionMissingError") {
+  console.error("Failed to resolve authenticated user:", error.message);
+}
 
       const activeUser = data?.user || null;
       if (!isMounted) return;
@@ -144,13 +157,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
       if (!isMounted) return;
 
-      // Listen only after initial hydration so INITIAL_SESSION cannot overwrite it.
       const listener = supabase.auth.onAuthStateChange((_event, session) => {
         if (!isMounted || !initialAuthResolved || _event === "INITIAL_SESSION") return;
 
         const nextUser = session?.user || null;
         setUser(nextUser);
         if (_event === "SIGNED_OUT") {
+          setUserProfile(null);
           setCart([]);
           setWishlistIds([]);
         } else {
@@ -166,7 +179,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       isMounted = false;
       authListener?.subscription.unsubscribe();
     };
-  }, []); // Run ONCE on mount
+  }, []);
 
   // Add to Cart
   const addToCart = async (product: Product) => {
@@ -206,7 +219,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Update Quantity
   const updateQuantity = async (id: string, delta: number) => {
     setCart((prev) => {
       const updated = prev
@@ -244,39 +256,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const clearCart = async () => {
     setCart([]);
-
     if (user) {
-      const { error } = await supabase.from("cart_items").delete().eq("user_id", user.id);
-      if (error) {
-        console.error(
-          "Failed to clear cart from Supabase:",
-          `message: ${error.message || "Unknown error"}`,
-          `details: ${error.details || "No details provided"}`
-        );
-      }
+      await supabase.from("cart_items").delete().eq("user_id", user.id);
     } else {
       localStorage.removeItem("sneaker_cart");
     }
   };
 
-  // Wishlist Operations
   const addToWishlist = async (id: string) => {
     if (wishlistIds.includes(id)) return;
-
     const updated = [...wishlistIds, id];
     setWishlistIds(updated);
 
     if (user) {
-      const { error } = await supabase
+      await supabase
         .from("wishlist_items")
         .upsert({ user_id: user.id, product_id: id }, { onConflict: "user_id, product_id" });
-      if (error) {
-        console.error(
-          "Failed to add item to wishlist in Supabase:",
-          `message: ${error.message || "Unknown error"}`,
-          `details: ${error.details || "No details provided"}`
-        );
-      }
     } else {
       localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
     }
@@ -289,23 +284,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       await addToWishlist(id);
       return;
     }
-
     const updated = wishlistIds.filter((favId) => favId !== id);
     setWishlistIds(updated);
 
     if (user) {
-      const { error } = await supabase
+      await supabase
         .from("wishlist_items")
         .delete()
         .eq("user_id", user.id)
         .eq("product_id", id);
-      if (error) {
-        console.error(
-          "Failed to remove item from wishlist in Supabase:",
-          `message: ${error.message || "Unknown error"}`,
-          `details: ${error.details || "No details provided"}`
-        );
-      }
     } else {
       localStorage.setItem("sneaker_wishlist", JSON.stringify(updated));
     }
@@ -337,6 +324,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     <StoreContext.Provider
       value={{
         user,
+        userProfile,
         cart,
         wishlistIds,
         clearCart,
