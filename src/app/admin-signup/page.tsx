@@ -18,8 +18,15 @@ export default function AdminSignupPage() {
   const handleAdminSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (passkey !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
-      toast.error("Invalid Secret Admin Passkey!");
+    const passkeyResponse = await fetch("/api/admin/verify-passkey", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ passkey }),
+    });
+
+    if (!passkeyResponse.ok) {
+      const data = await passkeyResponse.json();
+      toast.error(data.error || "Invalid Secret Admin Passkey!");
       return;
     }
 
