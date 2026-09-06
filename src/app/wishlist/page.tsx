@@ -1,0 +1,168 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Cart from "@/components/Cart";
+import Footer from "@/components/Footer";
+import { allProducts, Product, slugify } from "@/data/products";
+import { useStore } from "@/context/StoreContext";
+import { toast as notify } from "react-hot-toast";
+import { CheckCircle2, Heart, ShoppingCart, X } from "lucide-react";
+
+export default function WishlistPage() {
+  const { cart, wishlistIds, addToCart, updateQuantity, removeFromWishlist, clearWishlist } = useStore();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  };
+
+  // Only match products that actually exist in allProducts and wishlistIds
+  const favoriteProducts = allProducts.filter((p) => wishlistIds.map(String).includes(String(p.id)));
+
+  // Remove single item from Wishlist
+  const removeItem = async (id: string) => {
+    await removeFromWishlist(id);
+    showToast("Removed from wishlist");
+  };
+
+  // Clear entire Wishlist
+  const handleClearWishlist = async () => {
+    await clearWishlist();
+    showToast("Wishlist cleared");
+  };
+
+  // Add item to Cart
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+    notify.success("Added to Cart! 🛒");
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between">
+      <div>
+        <Navbar
+          cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
+          wishlistCount={favoriteProducts.length}
+          toggleCart={() => setIsCartOpen(!isCartOpen)}
+          activeFilter="All"
+        />
+
+        <Cart
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          items={cart}
+          onUpdateQuantity={updateQuantity}
+        />
+
+        <main className="max-w-6xl mx-auto px-3 sm:px-4 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-black">
+                YOUR FAVORITES{" "}
+                <Heart className="h-10 w-10 inline-block text-red-500" fill="currentColor" strokeWidth={2} />
+              </h1>
+              <p className="text-gray-500 text-xs sm:text-sm mt-1">
+                {favoriteProducts.length} {favoriteProducts.length === 1 ? "item" : "items"} saved in your wishlist
+              </p>
+            </div>
+
+            {favoriteProducts.length > 0 && (
+              <button
+                onClick={handleClearWishlist}
+                className="text-xs font-bold text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl transition-colors"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
+
+          {favoriteProducts.length === 0 ? (
+            <div className="text-center py-20 bg-white rounded-3xl border border-gray-200 shadow-sm max-w-lg mx-auto px-4">
+              <div className="w-12 h-12 text-gray-300 mx-auto mb-4">
+                <Heart className="h-full w-full" strokeWidth={1.5} />
+              </div>
+              <h2 className="text-xl font-bold mb-2">Your wishlist is empty</h2>
+              <p className="text-gray-500 text-sm mb-6">
+                Explore our catalog and click the heart icon on any drop to save it here.
+              </p>
+              <Link
+                href="/"
+                className="bg-black hover:bg-orange-500 text-white font-extrabold px-8 py-3.5 rounded-2xl text-sm transition-all shadow-md inline-block active:scale-95"
+              >
+                Browse Catalog →
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+              {favoriteProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-2xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all relative group flex flex-col justify-between"
+                >
+                  <button
+                    onClick={() => removeItem(product.id)}
+                    className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-white/90 hover:bg-red-500 hover:text-white text-gray-400 p-1.5 rounded-full shadow-md z-10 transition-colors w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-xs font-bold"
+                    title="Remove from wishlist"
+                  >
+                    <X className="h-4 w-4" strokeWidth={2} />
+                  </button>
+
+                  <div>
+                    <Link href={`/products/${slugify(product.name)}`}>
+                      <div className="w-full h-36 sm:h-48 relative rounded-xl overflow-hidden bg-gray-100 mb-2 sm:mb-3">
+                        <img
+                          src={product.image_url}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <span className="text-[10px] font-extrabold text-orange-500 uppercase tracking-wider block">
+                        {product.company || product.category}
+                      </span>
+                      <h3 className="font-bold text-gray-900 text-xs sm:text-sm line-clamp-1 mt-0.5">
+                        {product.name}
+                      </h3>
+                    </Link>
+                  </div>
+
+                  <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between gap-1.5">
+                    <div>
+                      <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-gray-400 font-bold block">
+                        Price
+                      </span>
+                      <p className="text-black font-black text-xs sm:text-base leading-none">
+                        ${product.price.toFixed(2)}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-1.5 px-2.5 sm:px-3 rounded-xl text-xs transition-all shadow-sm active:scale-95 flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <ShoppingCart className="h-4 w-4" strokeWidth={2} />
+                      <span className="hidden sm:inline">Add to Cart</span>
+                      <span className="sm:hidden">Add</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
+
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-gray-700">
+          <CheckCircle2 className="h-4 w-4 text-orange-400" strokeWidth={2} />
+          <span className="text-sm font-semibold">{toast}</span>
+        </div>
+      )}
+
+      <Footer />
+    </div>
+  );
+}
