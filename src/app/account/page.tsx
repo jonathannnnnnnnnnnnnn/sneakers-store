@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { startTransition, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import Cart from "@/components/Cart";
 import { allProducts, slugify } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
-import { Heart } from "lucide-react";
+import { Check, Heart, Pencil, X } from "lucide-react";
 
 interface Address {
   fullName: string;
@@ -28,6 +28,7 @@ interface PaymentMethod {
   expiry: string;
   holderName: string;
   isDefault: boolean;
+  isHardcodedTestCard?: boolean;
 }
 
 interface Order {
@@ -43,6 +44,17 @@ interface Order {
 }
 
 const BRANDS_LIST = ["Nike", "Jordan", "Adidas", "Yeezy", "New Balance", "Puma", "Asics", "Travis Scott"];
+const STRIPE_TEST_CARD_ID = "stripe-universal-test-card";
+const STRIPE_TEST_CARD_HOLDER_KEY = "stripe_test_card_holder";
+const STRIPE_TEST_CARD: PaymentMethod = {
+  id: STRIPE_TEST_CARD_ID,
+  brand: "Visa",
+  last4: "4242",
+  expiry: "12/34",
+  holderName: "Test Cardholder",
+  isDefault: true,
+  isHardcodedTestCard: true,
+};
 const AVATAR_PRESETS = [
   "https://api.dicebear.com/9.x/notionists/svg?seed=sole-orange",
   "https://api.dicebear.com/9.x/notionists/svg?seed=sole-blue",
@@ -68,7 +80,7 @@ const isLuhnValid = (cardNumber: string) => {
 const isValidExpiry = (expiry: string) => /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry);
 
 export default function AccountPage() {
-  const { user, cart, wishlistIds, clearCart, updateQuantity, removeFromWishlist } = useStore();
+  const { user, cart, wishlistIds, clearCart, updateQuantity, removeFromWishlist, refreshUserProfile } = useStore();
   const [showBanner, setShowBanner] = useState(true);
   const searchParams = useSearchParams();
   const isSuccess = searchParams.get("success") === "true";
@@ -96,10 +108,14 @@ export default function AccountPage() {
   const [shoeSize, setShoeSize] = useState("10.5");
   const [sizeSystem, setSizeSystem] = useState<"US" | "EU" | "UK">("US");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["Nike", "Jordan"]);
+  const [preferencesUserId, setPreferencesUserId] = useState<string | null>(null);
 
   // Payment Methods State & Add-Card Form State
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [isAddingCard, setIsAddingCard] = useState(false);
+  const [editingTestCard, setEditingTestCard] = useState(false);
+  const [testCardHolderName, setTestCardHolderName] = useState(STRIPE_TEST_CARD.holderName);
+  const [testCardHolderDraft, setTestCardHolderDraft] = useState(STRIPE_TEST_CARD.holderName);
   const [paymentMethodError, setPaymentMethodError] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isSavingAvatar, setIsSavingAvatar] = useState(false);
@@ -123,6 +139,52 @@ export default function AccountPage() {
       clearCart();
     }
   }, [checkoutSessionId, clearCart, isSuccess, user?.id]);
+
+  useEffect(() => {
+    if (!user?.id || preferencesUserId === user.id) return;
+
+    const prefsKey = `vault_preferences_${user.id}`;
+    const savedPreferences = localStorage.getItem(prefsKey);
+
+    if (savedPreferences) {
+      try {
+        const preferences = JSON.parse(savedPreferences) as {
+          shoeSize?: unknown;
+          sizeSystem?: unknown;
+          selectedBrands?: unknown;
+        };
+
+        startTransition(() => {
+          if (typeof preferences.shoeSize === "string") {
+            setShoeSize(preferences.shoeSize);
+          }
+          if (preferences.sizeSystem === "US" || preferences.sizeSystem === "EU" || preferences.sizeSystem === "UK") {
+            setSizeSystem(preferences.sizeSystem);
+          }
+          if (Array.isArray(preferences.selectedBrands)) {
+            setSelectedBrands(
+              preferences.selectedBrands.filter(
+                (brand): brand is string => typeof brand === "string" && BRANDS_LIST.includes(brand)
+              )
+            );
+          }
+        });
+      } catch {
+        localStorage.removeItem(prefsKey);
+      }
+    }
+
+    startTransition(() => setPreferencesUserId(user.id));
+  }, [preferencesUserId, user?.id]);
+
+  useEffect(() => {
+    if (!user?.id || preferencesUserId !== user.id) return;
+
+    localStorage.setItem(
+      `vault_preferences_${user.id}`,
+      JSON.stringify({ shoeSize, sizeSystem, selectedBrands })
+    );
+  }, [preferencesUserId, selectedBrands, shoeSize, sizeSystem, user?.id]);
 
   // Initialize Supabase client
   const [supabase] = useState(() =>
@@ -228,12 +290,22 @@ export default function AccountPage() {
 
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
-        .select("avatar_url")
+        .select("avatar_url, preferred_brands, shoe_size")
         .eq("id", currentUser.id)
         .maybeSingle();
 
       if (!profileError && profileData?.avatar_url && isMounted) {
         setAvatarUrl(profileData.avatar_url);
+      }
+      if (!profileError && profileData && isMounted) {
+        if (Array.isArray(profileData.preferred_brands)) {
+          setSelectedBrands(profileData.preferred_brands.filter((brand): brand is string =>
+            typeof brand === "string" && BRANDS_LIST.includes(brand)
+          ));
+        }
+        if (profileData.shoe_size !== null && profileData.shoe_size !== undefined) {
+          setShoeSize(String(profileData.shoe_size));
+        }
       }
 
       const fetchPaymentMethods = () =>
@@ -256,15 +328,52 @@ export default function AccountPage() {
           ? "Saved cards are temporarily unavailable while Supabase refreshes its schema cache. Please try again shortly."
           : `Unable to load saved cards: ${paymentError.message}`;
         setPaymentMethodError(message);
+        const savedTestCardHolder = localStorage.getItem(`${STRIPE_TEST_CARD_HOLDER_KEY}_${currentUser.id}`);
+        const testCard = {
+          ...STRIPE_TEST_CARD,
+          holderName: savedTestCardHolder?.trim() || STRIPE_TEST_CARD.holderName,
+        };
+        setTestCardHolderName(testCard.holderName);
+        setTestCardHolderDraft(testCard.holderName);
+        setPaymentMethods([testCard]);
       } else if (paymentData && isMounted) {
-        setPaymentMethods(paymentData.map((payment) => ({
-          id: payment.id,
+        const savedTestCardHolder = localStorage.getItem(`${STRIPE_TEST_CARD_HOLDER_KEY}_${currentUser.id}`);
+        const savedPaymentMethods = paymentData.map((payment) => ({
+          id:
+            payment.card_brand === STRIPE_TEST_CARD.brand &&
+            payment.last4 === STRIPE_TEST_CARD.last4 &&
+            payment.expiry === STRIPE_TEST_CARD.expiry &&
+            payment.card_holder === STRIPE_TEST_CARD.holderName
+              ? STRIPE_TEST_CARD_ID
+              : payment.id,
           brand: payment.card_brand,
           last4: payment.last4,
           expiry: payment.expiry,
-          holderName: payment.card_holder,
+          holderName:
+            payment.card_brand === STRIPE_TEST_CARD.brand &&
+            payment.last4 === STRIPE_TEST_CARD.last4 &&
+            payment.expiry === STRIPE_TEST_CARD.expiry &&
+            payment.card_holder === STRIPE_TEST_CARD.holderName
+              ? savedTestCardHolder?.trim() || STRIPE_TEST_CARD.holderName
+              : payment.card_holder,
           isDefault: payment.is_default,
-        })));
+          isHardcodedTestCard:
+            payment.card_brand === STRIPE_TEST_CARD.brand &&
+            payment.last4 === STRIPE_TEST_CARD.last4 &&
+            payment.expiry === STRIPE_TEST_CARD.expiry &&
+            payment.card_holder === STRIPE_TEST_CARD.holderName,
+        }));
+        const testCard = {
+          ...STRIPE_TEST_CARD,
+          holderName: savedTestCardHolder?.trim() || STRIPE_TEST_CARD.holderName,
+        };
+
+        setTestCardHolderName(testCard.holderName);
+        setTestCardHolderDraft(testCard.holderName);
+        setPaymentMethods([
+          testCard,
+          ...savedPaymentMethods.filter((payment) => payment.id !== STRIPE_TEST_CARD_ID),
+        ]);
       }
 
       if (isMounted) setLoading(false);
@@ -330,10 +439,29 @@ export default function AccountPage() {
   };
 
   // Save sneaker preferences handler
-  const handleSavePreferences = () => {
+  const handleSavePreferences = async () => {
+    if (!user) {
+      triggerSuccessBanner("No logged in user found!");
+      return;
+    }
+
     const prefs = { shoeSize, sizeSystem, selectedBrands };
-    const prefsKey = user ? `vault_preferences_${user.id}` : "vault_preferences";
-    localStorage.setItem(prefsKey, JSON.stringify(prefs));
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        preferred_brands: selectedBrands,
+        shoe_size: shoeSize,
+      })
+      .eq("id", user.id);
+
+    if (error) {
+      console.error("Failed to save collector preferences:", error.message);
+      triggerSuccessBanner(`Unable to save collector preferences: ${error.message}`);
+      return;
+    }
+
+    localStorage.setItem(`vault_preferences_${user.id}`, JSON.stringify(prefs));
+    await refreshUserProfile();
     triggerSuccessBanner("Collector preferences saved!");
   };
 
@@ -402,6 +530,8 @@ export default function AccountPage() {
   };
 
   const handleDeletePaymentMethod = async (id: string) => {
+    if (id === STRIPE_TEST_CARD_ID) return;
+
     const { error } = await supabase.from("payment_methods").delete().eq("id", id);
     if (error) {
       setPaymentMethodError(`Unable to remove card: ${error.message}`);
@@ -409,6 +539,20 @@ export default function AccountPage() {
     }
     setPaymentMethods((methods) => methods.filter((payment) => payment.id !== id));
     triggerSuccessBanner("Payment method removed.");
+  };
+
+  const handleSaveTestCardHolder = () => {
+    const nextHolderName = testCardHolderDraft.trim();
+    if (!nextHolderName || !user) return;
+
+    localStorage.setItem(`${STRIPE_TEST_CARD_HOLDER_KEY}_${user.id}`, nextHolderName);
+    setTestCardHolderName(nextHolderName);
+    setTestCardHolderDraft(nextHolderName);
+    setPaymentMethods((methods) => methods.map((method) => (
+      method.id === STRIPE_TEST_CARD_ID ? { ...method, holderName: nextHolderName } : method
+    )));
+    setEditingTestCard(false);
+    triggerSuccessBanner("Test cardholder name saved.");
   };
 
   const saveAvatarUrl = async (nextAvatarUrl: string) => {
@@ -1039,20 +1183,72 @@ export default function AccountPage() {
                               Default
                             </span>
                           )}
-                          <button
-                            onClick={() => handleDeletePaymentMethod(pm.id)}
-                            className="bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg border border-red-500/30 transition-colors"
-                            title="Remove Card"
-                          >
-                            🗑️ Delete
-                          </button>
+                          {!pm.isHardcodedTestCard && (
+                            <button
+                              onClick={() => handleDeletePaymentMethod(pm.id)}
+                              className="bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg border border-red-500/30 transition-colors"
+                              title="Remove Card"
+                            >
+                              🗑️ Delete
+                            </button>
+                          )}
                         </div>
                       </div>
                       <p className="font-mono text-base tracking-widest mb-4">•••• •••• •••• {pm.last4}</p>
                       <div className="flex justify-between text-[10px] text-gray-400 font-bold uppercase">
                         <div>
                           <span className="block text-[8px] text-gray-500">CARD HOLDER</span>
-                          {pm.holderName}
+                          {pm.isHardcodedTestCard && editingTestCard ? (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <input
+                                type="text"
+                                value={testCardHolderDraft}
+                                onChange={(event) => setTestCardHolderDraft(event.target.value)}
+                                className="w-36 rounded-md border border-gray-600 bg-gray-700 px-2 py-1 text-[10px] font-bold text-white outline-none focus:border-orange-400"
+                                aria-label="Test cardholder name"
+                                autoFocus
+                              />
+                              <button
+                                type="button"
+                                onClick={handleSaveTestCardHolder}
+                                className="rounded-md bg-emerald-500/20 p-1 text-emerald-300 hover:bg-emerald-500 hover:text-white"
+                                title="Save cardholder name"
+                                aria-label="Save cardholder name"
+                              >
+                                <Check size={13} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setTestCardHolderDraft(testCardHolderName);
+                                  setEditingTestCard(false);
+                                }}
+                                className="rounded-md bg-gray-700 p-1 text-gray-300 hover:bg-gray-600 hover:text-white"
+                                title="Cancel editing cardholder name"
+                                aria-label="Cancel editing cardholder name"
+                              >
+                                <X size={13} />
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <span>{pm.holderName}</span>
+                              {pm.isHardcodedTestCard && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setTestCardHolderDraft(pm.holderName);
+                                    setEditingTestCard(true);
+                                  }}
+                                  className="rounded-md p-1 text-gray-400 hover:bg-gray-700 hover:text-orange-400"
+                                  title="Edit test cardholder name"
+                                  aria-label="Edit test cardholder name"
+                                >
+                                  <Pencil size={13} />
+                                </button>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div>
                           <span className="block text-[8px] text-gray-500">EXPIRES</span>

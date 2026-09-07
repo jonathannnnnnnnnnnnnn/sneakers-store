@@ -22,11 +22,14 @@ export interface UserProfile {
   shoe_size?: number | string | null;
   preferred_brand?: string | null;
   brand_interest?: string | null;
+  default_shoe_size?: number | string | null;
+  preferred_brands?: string[] | null;
 }
 
 interface StoreContextType {
   user: any;
   userProfile: UserProfile | null;
+  refreshUserProfile: () => Promise<void>;
   cart: CartItem[];
   wishlistIds: string[];
   clearCart: () => Promise<void>;
@@ -46,6 +49,27 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+
+  const refreshUserProfile = async () => {
+    const { data: activeUser } = await supabase.auth.getUser();
+    if (!activeUser.user) {
+      setUserProfile(null);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", activeUser.user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to refresh user profile:", error.message);
+      return;
+    }
+
+    setUserProfile(data as UserProfile | null);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -386,6 +410,7 @@ if (error && error.name !== "AuthSessionMissingError") {
       value={{
         user,
         userProfile,
+        refreshUserProfile,
         cart,
         wishlistIds,
         clearCart,

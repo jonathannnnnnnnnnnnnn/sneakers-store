@@ -13,7 +13,16 @@ interface SavedPaymentMethod {
   last4: string;
   expiry: string;
   is_default: boolean;
+  card_holder?: string;
 }
+
+const STRIPE_TEST_CARD = {
+  card_brand: "Visa",
+  last4: "4242",
+  expiry: "12/34",
+  card_holder: "Test Cardholder",
+  is_default: false,
+};
 
 const getCardBrand = (cardNumber: string) => {
   const digits = cardNumber.replace(/\D/g, "");
@@ -51,6 +60,7 @@ export default function CheckoutPage() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; percent: number } | null>(null);
   const [promoError, setPromoError] = useState("");
+  const [savedPaymentMethods, setSavedPaymentMethods] = useState<SavedPaymentMethod[]>([]);
   const [savedPaymentMethod, setSavedPaymentMethod] = useState<SavedPaymentMethod | null>(null);
   const [paymentMethodError, setPaymentMethodError] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -62,6 +72,14 @@ export default function CheckoutPage() {
   const maskedSavedCard = savedPaymentMethod
     ? `•••• •••• •••• ${savedPaymentMethod.last4}`
     : "";
+
+  const selectSavedPaymentMethod = (method: SavedPaymentMethod | null) => {
+    setSavedPaymentMethod(method);
+    setCardExpiry(method?.expiry || "");
+    setCardNumber("");
+    setCardCvv("");
+    setIsReplacingSavedCard(false);
+  };
 
   // Form State
   const [formData, setFormData] = useState({
@@ -97,20 +115,58 @@ export default function CheckoutPage() {
       const fullName = address?.fullName || userProfile?.full_name || user.user_metadata?.full_name || "";
       const nameParts = fullName.trim().split(/\s+/).filter(Boolean);
 
-      const { data: payment, error: paymentError } = await supabase
+      const { data: existingPayments, error: paymentError } = await supabase
         .from("payment_methods")
-        .select("id, card_brand, last4, expiry, is_default")
+        .select("id, card_brand, last4, expiry, card_holder, is_default")
         .eq("user_id", user.id)
-        .eq("is_default", true)
-        .maybeSingle();
+        .order("is_default", { ascending: false });
 
       if (paymentError) {
         console.error("Failed to load saved payment method:", paymentError.message);
         setPaymentMethodError("Saved payment method could not be loaded. You can still enter a new card.");
-      } else if (payment) {
-        setSavedPaymentMethod(payment);
-        setCardExpiry(payment.expiry || "");
-        setIsReplacingSavedCard(false);
+      } else if (existingPayments) {
+        let payments = existingPayments;
+        const hasStripeTestCard = existingPayments.some(
+          (payment) =>
+            payment.card_brand === STRIPE_TEST_CARD.card_brand &&
+            payment.last4 === STRIPE_TEST_CARD.last4 &&
+            payment.expiry === STRIPE_TEST_CARD.expiry &&
+            payment.card_holder === STRIPE_TEST_CARD.card_holder
+        );
+
+        if (!hasStripeTestCard) {
+          const { error: seedError } = await supabase.from("payment_methods").insert({
+            user_id: user.id,
+            ...STRIPE_TEST_CARD,
+          });
+
+          if (seedError) {
+            console.error("Failed to seed Stripe test payment method:", seedError.message);
+          } else {
+            const { data: refreshedPayments, error: refreshError } = await supabase
+              .from("payment_methods")
+              .select("id, card_brand, last4, expiry, card_holder, is_default")
+              .eq("user_id", user.id)
+              .order("is_default", { ascending: false });
+
+            if (refreshError) {
+              console.error("Failed to reload saved payment methods after seeding:", refreshError.message);
+            } else if (refreshedPayments) {
+              payments = refreshedPayments;
+            }
+          }
+        }
+
+        setSavedPaymentMethods(payments);
+        if (payments.length === 1) {
+          selectSavedPaymentMethod(payments[0]);
+        } else {
+          setSavedPaymentMethod(null);
+          setCardNumber("");
+          setCardExpiry("");
+          setCardCvv("");
+          setIsReplacingSavedCard(false);
+        }
       }
 
       setFormData((current) => ({
@@ -489,6 +545,32 @@ export default function CheckoutPage() {
 
                     {paymentMethod === "card" ? (
                       <div className="space-y-3">
+                        {savedPaymentMethods.length > 1 && (
+                          <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 space-y-2">
+                            <p className="text-xs font-bold text-orange-800">
+                              You have {savedPaymentMethods.length} saved cards. Choose one to use for this transaction.
+                            </p>
+                            <label className="block text-xs font-bold text-gray-600" htmlFor="saved-payment-method">
+                              Saved payment method
+                            </label>
+                            <select
+                              id="saved-payment-method"
+                              value={savedPaymentMethod?.id || ""}
+                              onChange={(event) => {
+                                const selectedMethod = savedPaymentMethods.find((method) => method.id === event.target.value) || null;
+                                selectSavedPaymentMethod(selectedMethod);
+                              }}
+                              className="w-full p-3 border border-orange-200 rounded-xl text-sm text-black outline-none focus:border-orange-500"
+                            >
+                              <option value="">Choose a saved card</option>
+                              {savedPaymentMethods.map((method) => (
+                                <option key={method.id} value={method.id}>
+                                  {method.card_brand} ending in {method.last4}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
                         <div>
                           <div className="flex items-center justify-between">
                             <label className="text-xs font-bold text-gray-600 uppercase">Card Number</label>

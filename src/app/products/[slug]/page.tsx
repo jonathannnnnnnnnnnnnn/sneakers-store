@@ -163,6 +163,7 @@ export default function ProductDetailPage({
 
     const preferredSize = Number(
       userProfile?.shoe_size ??
+        userProfile?.default_shoe_size ??
         activeUser.user_metadata?.shoe_size ??
         activeUser.user_metadata?.shoeSize
     );
@@ -184,13 +185,16 @@ export default function ProductDetailPage({
   }
 
   // Related products logic
-  const preferredBrand = (
-    userProfile?.preferred_brand ||
-    userProfile?.brand_interest ||
-    activeUser?.user_metadata?.preferred_brand ||
-    activeUser?.user_metadata?.brand_interest ||
-    ""
-  ).trim().toLowerCase();
+  const preferredBrands = (
+    userProfile?.preferred_brands?.length
+      ? userProfile.preferred_brands
+      : [
+          userProfile?.preferred_brand,
+          userProfile?.brand_interest,
+          activeUser?.user_metadata?.preferred_brand,
+          activeUser?.user_metadata?.brand_interest,
+        ].filter((brand): brand is string => Boolean(brand))
+  ).map((brand) => brand.trim().toLowerCase());
 
   const relatedProducts = allProducts
     .filter(
@@ -199,12 +203,12 @@ export default function ProductDetailPage({
         (p.category === product.category || p.gender === product.gender)
     )
     .sort((a, b) => {
-      if (!preferredBrand) return 0;
+      if (preferredBrands.length === 0) return 0;
 
       const aBrand = (a as typeof a & { brand?: string }).brand;
       const bBrand = (b as typeof b & { brand?: string }).brand;
-      const aMatches = (a.company || aBrand || "").toLowerCase().includes(preferredBrand);
-      const bMatches = (b.company || bBrand || "").toLowerCase().includes(preferredBrand);
+      const aMatches = preferredBrands.some((brand) => (a.company || aBrand || "").toLowerCase().includes(brand));
+      const bMatches = preferredBrands.some((brand) => (b.company || bBrand || "").toLowerCase().includes(brand));
       return Number(bMatches) - Number(aMatches);
     })
     .slice(0, 4);
