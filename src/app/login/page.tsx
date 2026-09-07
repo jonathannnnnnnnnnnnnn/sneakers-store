@@ -5,8 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import { authSchema, signupSchema } from "@/lib/validation";
+import { useStore } from "@/context/StoreContext";
+import Navbar from "@/components/Navbar";
+import Cart from "@/components/Cart";
 
 export default function AuthPage() {
+  const { cart, updateQuantity } = useStore();
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -147,18 +152,17 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100/80 px-4 py-12">
-      
-      {/* Brand Header Badge */}
-      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl px-6 py-3 mb-6 flex items-center gap-3">
-        <div className="bg-orange-500 text-white font-black text-base w-8 h-8 rounded-xl flex items-center justify-center shadow-md">
-          ⚡
-        </div>
-        <div className="flex flex-col leading-none">
-          <span className="font-black text-xl tracking-wider text-gray-900">
-            SOLE<span className="text-orange-500">VAULT.</span>
-          </span>
-        </div>
-      </div>
+      <Navbar
+        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
+        wishlistCount={0}
+        toggleCart={() => setIsCartOpen((isOpen) => !isOpen)}
+      />
+      <Cart
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        items={cart}
+        onUpdateQuantity={updateQuantity}
+      />
 
       {/* Main Auth Card */}
       <div className="max-w-md w-full bg-white p-8 sm:p-10 rounded-3xl shadow-xl border border-gray-100 space-y-6">

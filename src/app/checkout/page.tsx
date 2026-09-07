@@ -280,7 +280,8 @@ export default function CheckoutPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50">
+        <div className="flex flex-col items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center">
           <div className="w-16 h-16 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center mx-auto text-2xl font-bold mb-4">
             ✓
@@ -313,12 +314,14 @@ export default function CheckoutPage() {
             Continue Shopping →
           </Link>
         </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50">
+      <div className="py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <Link href="/" className="text-sm font-bold text-gray-500 hover:text-orange-500 mb-6 inline-block">
           ← Back to store
@@ -754,6 +757,7 @@ export default function CheckoutPage() {
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

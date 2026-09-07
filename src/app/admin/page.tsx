@@ -336,7 +336,8 @@ const handleToggleRole = async (targetUser: UserProfile) => {
   };
 
   return (
-    <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+    <div className="min-h-screen bg-slate-950 text-white">
+      <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
       {/* Header */}
       <header className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -846,6 +847,7 @@ const handleToggleRole = async (targetUser: UserProfile) => {
           </form>
         </div>
       )}
-    </main>
+      </main>
+    </div>
   );
 }

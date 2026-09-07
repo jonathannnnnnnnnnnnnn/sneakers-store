@@ -71,7 +71,17 @@ const { data: authData, error: authError } = await supabase.auth.signUp({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
+    <div className="relative min-h-screen flex items-center justify-center bg-black text-white px-4">
+      <header className="absolute inset-x-0 top-0 flex justify-center py-6">
+        <div className="flex items-center gap-2" aria-label="SoleVault">
+          <div className="bg-orange-500 text-white font-black text-sm w-8 h-8 rounded-xl flex items-center justify-center shadow-sm">
+            ⚡
+          </div>
+          <span className="font-black text-xl tracking-wider text-white">
+            SOLE<span className="text-orange-500">VAULT.</span>
+          </span>
+        </div>
+      </header>
       <div className="max-w-md w-full p-8 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl">
         <h2 className="text-2xl font-bold mb-2 text-center text-red-500">
           Admin Portal Registration
