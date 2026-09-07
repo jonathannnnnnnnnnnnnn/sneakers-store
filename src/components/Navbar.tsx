@@ -174,6 +174,7 @@ const isAdmin = userProfile?.role === "admin" || Boolean(
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Collector";
   const userInitials = userName.substring(0, 2).toUpperCase();
+  const avatarUrl = userProfile?.avatar_url || user?.user_metadata?.avatar_url;
 
  const getInitialLang = () => {
   if (typeof window !== "undefined") {
@@ -426,9 +427,17 @@ const handleLanguageChange = (langCode: string) => {
                 title="Account"
               >
                 {user ? (
-                  <div className="w-7 h-7 rounded-full bg-orange-500 text-white font-black text-[10px] flex items-center justify-center border border-orange-600 shadow-sm">
-                    {userInitials}
-                  </div>
+                  avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt=""
+                      className="h-7 w-7 rounded-full border border-orange-600 object-cover shadow-sm"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-orange-500 text-white font-black text-[10px] flex items-center justify-center border border-orange-600 shadow-sm">
+                      {userInitials}
+                    </div>
+                  )
                 ) : (
                   <CircleUserRound className="h-5 w-5" strokeWidth={2} />
                 )}

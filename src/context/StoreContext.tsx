@@ -17,6 +17,7 @@ export interface UserProfile {
   id: string;
   email: string;
   full_name?: string;
+  avatar_url?: string | null;
   role: "admin" | "user";
   shoe_size?: number | string | null;
   preferred_brand?: string | null;
@@ -72,6 +73,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         const profile = await fetchUserProfile(activeUser.id);
         if (isMounted) setUserProfile(profile);
 
+        await mergeGuestCart(activeUser.id);
         await fetchCart(activeUser.id);
         await fetchWishlist(activeUser.id);
       } else {
@@ -94,6 +96,62 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           }
         }
       }
+    };
+
+    const mergeGuestCart = async (userId: string) => {
+      const savedCart = localStorage.getItem("sneaker_cart");
+      if (!savedCart) return;
+
+      let guestItems: CartItem[];
+      try {
+        const parsed = JSON.parse(savedCart);
+        guestItems = Array.isArray(parsed)
+          ? parsed.filter((item): item is CartItem =>
+              item &&
+              typeof item.id === "string" &&
+              Number.isFinite(item.quantity) &&
+              item.quantity > 0
+            )
+          : [];
+      } catch (error) {
+        console.error("Failed to parse guest cart for merging:", error);
+        return;
+      }
+
+      if (guestItems.length === 0) {
+        localStorage.removeItem("sneaker_cart");
+        return;
+      }
+
+      const { data: databaseItems, error: fetchError } = await supabase
+        .from("cart_items")
+        .select("product_id, quantity")
+        .eq("user_id", userId);
+
+      if (fetchError) {
+        console.error("Failed to load cart for guest merge:", fetchError.message);
+        return;
+      }
+
+      const quantitiesByProduct = new Map(
+        (databaseItems || []).map((item) => [String(item.product_id), item.quantity])
+      );
+      const mergedItems = guestItems.map((item) => ({
+        user_id: userId,
+        product_id: item.id,
+        quantity: (quantitiesByProduct.get(String(item.id)) || 0) + item.quantity,
+      }));
+
+      const { error: mergeError } = await supabase
+        .from("cart_items")
+        .upsert(mergedItems, { onConflict: "user_id,product_id" });
+
+      if (mergeError) {
+        console.error("Failed to merge guest cart:", mergeError.message);
+        return;
+      }
+
+      localStorage.removeItem("sneaker_cart");
     };
 
     const fetchCart = async (userId: string) => {

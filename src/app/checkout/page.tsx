@@ -1,13 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/context/StoreContext";
+import { createClient } from "@/lib/supabase/client";
 import { Lock } from "lucide-react";
 import { shippingSchema } from "@/lib/validation";
 
+interface SavedPaymentMethod {
+  id: string;
+  card_brand: string;
+  last4: string;
+  expiry: string;
+  is_default: boolean;
+}
+
+const getCardBrand = (cardNumber: string) => {
+  const digits = cardNumber.replace(/\D/g, "");
+  if (/^4/.test(digits)) return "Visa";
+  if (/^(5[1-5]|2[2-7])/.test(digits)) return "Mastercard";
+  if (/^3[47]/.test(digits)) return "American Express";
+  if (/^(6011|65|64[4-9])/.test(digits)) return "Discover";
+  return "";
+};
+
+const isLuhnValid = (cardNumber: string) => {
+  const digits = cardNumber.replace(/\D/g, "");
+  if (digits.length < 13) return false;
+
+  let sum = 0;
+  for (let index = digits.length - 1; index >= 0; index -= 1) {
+    let digit = Number(digits[index]);
+    if ((digits.length - 1 - index) % 2 === 1) digit *= 2;
+    sum += digit > 9 ? digit - 9 : digit;
+  }
+  return sum % 10 === 0;
+};
+
 export default function CheckoutPage() {
-  const { cart } = useStore();
+  const { cart, user, userProfile } = useStore();
+  const [supabase] = useState(() => createClient());
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -19,6 +51,17 @@ export default function CheckoutPage() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; percent: number } | null>(null);
   const [promoError, setPromoError] = useState("");
+  const [savedPaymentMethod, setSavedPaymentMethod] = useState<SavedPaymentMethod | null>(null);
+  const [paymentMethodError, setPaymentMethodError] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [cardCvv, setCardCvv] = useState("");
+  const [isReplacingSavedCard, setIsReplacingSavedCard] = useState(false);
+  const detectedCardBrand = getCardBrand(cardNumber);
+  const cardNumberIsValid = isLuhnValid(cardNumber);
+  const maskedSavedCard = savedPaymentMethod
+    ? `•••• •••• •••• ${savedPaymentMethod.last4}`
+    : "";
 
   // Form State
   const [formData, setFormData] = useState({
@@ -28,9 +71,67 @@ export default function CheckoutPage() {
     address: "",
     city: "",
     postalCode: "",
+    country: "",
     phone: "",
   });
   const [shippingErrors, setShippingErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!user) return;
+
+    let isMounted = true;
+
+    const loadCheckoutDetails = async () => {
+      const { data: address, error } = await supabase
+        .from("addresses")
+        .select("fullName, street, city, zipCode, country, phone")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Failed to load saved shipping address:", error.message);
+      }
+
+      if (!isMounted) return;
+
+      const fullName = address?.fullName || userProfile?.full_name || user.user_metadata?.full_name || "";
+      const nameParts = fullName.trim().split(/\s+/).filter(Boolean);
+
+      const { data: payment, error: paymentError } = await supabase
+        .from("payment_methods")
+        .select("id, card_brand, last4, expiry, is_default")
+        .eq("user_id", user.id)
+        .eq("is_default", true)
+        .maybeSingle();
+
+      if (paymentError) {
+        console.error("Failed to load saved payment method:", paymentError.message);
+        setPaymentMethodError("Saved payment method could not be loaded. You can still enter a new card.");
+      } else if (payment) {
+        setSavedPaymentMethod(payment);
+        setCardExpiry(payment.expiry || "");
+        setIsReplacingSavedCard(false);
+      }
+
+      setFormData((current) => ({
+        ...current,
+        firstName: current.firstName || nameParts[0] || "",
+        lastName: current.lastName || nameParts.slice(1).join(" "),
+        email: current.email || user.email || "",
+        address: current.address || address?.street || "",
+        city: current.city || address?.city || "",
+        postalCode: current.postalCode || address?.zipCode || "",
+        country: current.country || address?.country || "",
+        phone: current.phone || (address?.phone ?? ""),
+      }));
+    };
+
+    loadCheckoutDetails();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [supabase, user, userProfile?.full_name]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,7 +144,7 @@ export default function CheckoutPage() {
 
     const result = shippingSchema.safeParse(formData);
     if (!result.success) {
-      setShippingErrors(Object.fromEntries(result.error.issues.map((issue) => [String(issue.path[0]), issue.message])));
+      setShippingErrors(Object.fromEntries(result.error.issues.map((issue: any) => [String(issue.path[0]), issue.message])));
       return;
     }
 
@@ -91,7 +192,20 @@ export default function CheckoutPage() {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: cart }),
+        body: JSON.stringify({
+          items: cart,
+          customer: {
+            name: `${formData.firstName} ${formData.lastName}`.trim(),
+            email: formData.email,
+            phone: formData.phone,
+            address: {
+              line1: formData.address,
+              city: formData.city,
+              postal_code: formData.postalCode,
+              country: formData.country,
+            },
+          },
+        }),
       });
 
       const data = await response.json();
@@ -282,6 +396,18 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
+                  <div>
+                    <label className="text-xs font-bold text-gray-600 uppercase">Country</label>
+                    <input
+                      type="text"
+                      name="country"
+                      value={formData.country}
+                      onChange={handleInputChange}
+                      placeholder="Select country"
+                      className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    />
+                  </div>
+
                   <button
                     type="submit"
                     className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-4 rounded-2xl transition-all shadow-lg active:scale-95 text-sm flex items-center justify-center gap-2"
@@ -364,14 +490,37 @@ export default function CheckoutPage() {
                     {paymentMethod === "card" ? (
                       <div className="space-y-3">
                         <div>
-                          <label className="text-xs font-bold text-gray-600 uppercase">Card Number</label>
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-gray-600 uppercase">Card Number</label>
+                            {detectedCardBrand && (
+                              <span className="text-xs font-black text-orange-600">{detectedCardBrand}</span>
+                            )}
+                          </div>
                           <input
                             required
                             type="text"
                             maxLength={19}
-                            placeholder="4532 •••• •••• 8892"
+                            inputMode="numeric"
+                            value={!isReplacingSavedCard && maskedSavedCard ? maskedSavedCard : cardNumber}
+                            onFocus={() => {
+                              if (maskedSavedCard && !isReplacingSavedCard) {
+                                setIsReplacingSavedCard(true);
+                                setCardNumber("");
+                              }
+                            }}
+                            onChange={(event) => {
+                              setIsReplacingSavedCard(true);
+                              setCardNumber(event.target.value.replace(/[^0-9 ]/g, ""));
+                            }}
+                            placeholder="Card number"
                             className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 text-black"
                           />
+                          {cardNumber && (
+                            <p className={`mt-1 text-xs ${cardNumberIsValid ? "text-emerald-600" : "text-gray-500"}`}>
+                              {cardNumberIsValid ? "Valid card number" : "Enter a valid card number"}
+                            </p>
+                          )}
+                          {paymentMethodError && <p role="alert" className="mt-1 text-xs text-red-600">{paymentMethodError}</p>}
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
@@ -380,6 +529,8 @@ export default function CheckoutPage() {
                               required
                               type="text"
                               placeholder="MM/YY"
+                              value={cardExpiry}
+                              onChange={(event) => setCardExpiry(event.target.value)}
                               className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 text-black"
                             />
                           </div>
@@ -390,6 +541,8 @@ export default function CheckoutPage() {
                               type="password"
                               maxLength={4}
                               placeholder="123"
+                              value={cardCvv}
+                              onChange={(event) => setCardCvv(event.target.value.replace(/\D/g, ""))}
                               className="w-full mt-1 p-3 border border-gray-200 rounded-xl text-sm outline-none focus:border-orange-500 text-black"
                             />
                           </div>

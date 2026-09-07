@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
   try {
-    const { items } = await req.json();
+    const { items, customer } = await req.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json(
@@ -13,6 +13,10 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    const customerEmail = typeof customer?.email === "string"
+      ? customer.email.trim().toLowerCase()
+      : "";
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
@@ -40,6 +44,14 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
+      customer_email: customerEmail || undefined,
+      metadata: {
+        customer_name: customer?.name || "",
+        customer_phone: customer?.phone || "",
+        shipping_address: customer?.address
+          ? JSON.stringify(customer.address)
+          : "",
+      },
       success_url: `${baseUrl}/account?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/checkout?canceled=true`,
     });

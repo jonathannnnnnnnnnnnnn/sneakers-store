@@ -43,6 +43,29 @@ interface Order {
 }
 
 const BRANDS_LIST = ["Nike", "Jordan", "Adidas", "Yeezy", "New Balance", "Puma", "Asics", "Travis Scott"];
+const AVATAR_PRESETS = [
+  "https://api.dicebear.com/9.x/notionists/svg?seed=sole-orange",
+  "https://api.dicebear.com/9.x/notionists/svg?seed=sole-blue",
+  "https://api.dicebear.com/9.x/notionists/svg?seed=sole-green",
+  "https://api.dicebear.com/9.x/notionists/svg?seed=sole-red",
+  "https://api.dicebear.com/9.x/notionists/svg?seed=sole-purple",
+  "https://api.dicebear.com/9.x/notionists/svg?seed=sole-yellow",
+];
+
+const isLuhnValid = (cardNumber: string) => {
+  const digits = cardNumber.replace(/\D/g, "");
+  if (digits.length !== 16) return false;
+
+  let sum = 0;
+  for (let index = digits.length - 1; index >= 0; index -= 1) {
+    let digit = Number(digits[index]);
+    if ((digits.length - 1 - index) % 2 === 1) digit *= 2;
+    sum += digit > 9 ? digit - 9 : digit;
+  }
+  return sum % 10 === 0;
+};
+
+const isValidExpiry = (expiry: string) => /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry);
 
 export default function AccountPage() {
   const { user, cart, wishlistIds, clearCart, updateQuantity, removeFromWishlist } = useStore();
@@ -65,7 +88,7 @@ export default function AccountPage() {
     city: "",
     state: "",
     zipCode: "",
-    country: "United States",
+    country: "",
     phone: "",
   });
 
@@ -75,17 +98,12 @@ export default function AccountPage() {
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["Nike", "Jordan"]);
 
   // Payment Methods State & Add-Card Form State
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
-    {
-      id: "pm_1",
-      brand: "Visa",
-      last4: "4242",
-      expiry: "12/28",
-      holderName: "Collector Standard",
-      isDefault: true,
-    },
-  ]);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [isAddingCard, setIsAddingCard] = useState(false);
+  const [paymentMethodError, setPaymentMethodError] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [isSavingAvatar, setIsSavingAvatar] = useState(false);
+  const [avatarError, setAvatarError] = useState("");
   const [newCard, setNewCard] = useState({
     holderName: "",
     cardNumber: "",
@@ -107,9 +125,11 @@ export default function AccountPage() {
   }, [checkoutSessionId, clearCart, isSuccess, user?.id]);
 
   // Initialize Supabase client
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  const [supabase] = useState(() =>
+    createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
   );
 
   useEffect(() => {
@@ -117,13 +137,16 @@ export default function AccountPage() {
 
     const fetchUserAndOrders = async () => {
       // 1. Check Authenticated User
-      const { data } = await supabase.auth.getUser();
-      if (!data?.user) {
+      const { data, error: userError } = await supabase.auth.getUser();
+      if (userError || !data?.user) {
         router.push("/login");
         return;
       }
 
       const currentUser = data.user;
+      if (isMounted) {
+        setAvatarUrl(currentUser.user_metadata?.avatar_url || "");
+      }
 
       const userCartKey = `sneaker_cart_${currentUser.id}`;
 
@@ -198,9 +221,50 @@ export default function AccountPage() {
           city: addressData.city || "",
           state: addressData.state || "",
           zipCode: addressData.zipCode || "",
-          country: addressData.country || "United States",
+          country: addressData.country || "",
           phone: addressData.phone || "",
         });
+      }
+
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+      if (!profileError && profileData?.avatar_url && isMounted) {
+        setAvatarUrl(profileData.avatar_url);
+      }
+
+      const fetchPaymentMethods = () =>
+        supabase
+          .from("payment_methods")
+          .select("id, card_brand, last4, expiry, card_holder, is_default")
+          .eq("user_id", currentUser.id)
+          .order("is_default", { ascending: false });
+
+      let { data: paymentData, error: paymentError } = await fetchPaymentMethods();
+
+      // PostgREST can briefly serve a stale schema cache after a new table is created.
+      if (paymentError?.code === "PGRST205") {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        ({ data: paymentData, error: paymentError } = await fetchPaymentMethods());
+      }
+
+      if (paymentError && isMounted) {
+        const message = paymentError.code === "PGRST205"
+          ? "Saved cards are temporarily unavailable while Supabase refreshes its schema cache. Please try again shortly."
+          : `Unable to load saved cards: ${paymentError.message}`;
+        setPaymentMethodError(message);
+      } else if (paymentData && isMounted) {
+        setPaymentMethods(paymentData.map((payment) => ({
+          id: payment.id,
+          brand: payment.card_brand,
+          last4: payment.last4,
+          expiry: payment.expiry,
+          holderName: payment.card_holder,
+          isDefault: payment.is_default,
+        })));
       }
 
       if (isMounted) setLoading(false);
@@ -224,7 +288,7 @@ export default function AccountPage() {
     router.refresh();
   };
 
-  const wishlistProducts = allProducts.filter((p) => wishlistIds.map(String).includes(String(p.id)));
+  const wishlistProducts = allProducts.filter((p: any) => wishlistIds.map(String).includes(String(p.id)));
 
   const removeWishlist = (id: string) => {
     removeFromWishlist(id);
@@ -274,41 +338,139 @@ export default function AccountPage() {
   };
 
   // Payment Methods Handlers
-  const handleAddPaymentMethod = (e: React.FormEvent) => {
+  const handleAddPaymentMethod = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
+
     const cleanNumber = newCard.cardNumber.replace(/\s+/g, "");
-    const last4 = cleanNumber.slice(-4) || "0000";
+    const last4 = cleanNumber.slice(-4);
+    if (!isLuhnValid(cleanNumber)) {
+      setPaymentMethodError("Enter a valid 16-digit card number.");
+      return;
+    }
+    if (!isValidExpiry(newCard.expiry)) {
+      setPaymentMethodError("Enter expiry as MM/YY.");
+      return;
+    }
+    setPaymentMethodError("");
 
     const createdCard: PaymentMethod = {
-      id: `pm_${Date.now()}`,
+      id: "",
       brand: newCard.brand,
       last4,
-      expiry: newCard.expiry || "12/28",
-      holderName: newCard.holderName || "Collector",
+      expiry: newCard.expiry,
+      holderName: newCard.holderName,
       isDefault: newCard.isDefault || paymentMethods.length === 0,
     };
 
-    let updatedMethods = [...paymentMethods];
     if (createdCard.isDefault) {
-      updatedMethods = updatedMethods.map((pm) => ({ ...pm, isDefault: false }));
+      const { error } = await supabase
+        .from("payment_methods")
+        .update({ is_default: false })
+        .eq("user_id", user.id);
+      if (error) {
+        triggerSuccessBanner(`Unable to save card: ${error.message}`);
+        return;
+      }
     }
-    updatedMethods.push(createdCard);
 
-    setPaymentMethods(updatedMethods);
-    const pmKey = user ? `vault_payments_${user.id}` : "vault_payments";
-    localStorage.setItem(pmKey, JSON.stringify(updatedMethods));
+    const { data, error } = await supabase
+      .from("payment_methods")
+      .insert({
+        user_id: user.id,
+        card_brand: createdCard.brand,
+        last4: createdCard.last4,
+        expiry: createdCard.expiry,
+        card_holder: createdCard.holderName,
+        is_default: createdCard.isDefault,
+      })
+      .select("id, card_brand, last4, expiry, card_holder, is_default")
+      .single();
 
+    if (error || !data) {
+      setPaymentMethodError(`Unable to save card: ${error?.message || "Unknown error"}`);
+      return;
+    }
+
+    setPaymentMethods((methods) => [
+      ...methods.map((payment) => ({ ...payment, isDefault: createdCard.isDefault ? false : payment.isDefault })),
+      { id: data.id, brand: data.card_brand, last4: data.last4, expiry: data.expiry, holderName: data.card_holder, isDefault: data.is_default },
+    ]);
     setIsAddingCard(false);
     setNewCard({ holderName: "", cardNumber: "", expiry: "", brand: "Visa", isDefault: false });
     triggerSuccessBanner("New payment card added to your Vault!");
   };
 
-  const handleDeletePaymentMethod = (id: string) => {
-    const updated = paymentMethods.filter((pm) => pm.id !== id);
-    setPaymentMethods(updated);
-    const pmKey = user ? `vault_payments_${user.id}` : "vault_payments";
-    localStorage.setItem(pmKey, JSON.stringify(updated));
+  const handleDeletePaymentMethod = async (id: string) => {
+    const { error } = await supabase.from("payment_methods").delete().eq("id", id);
+    if (error) {
+      setPaymentMethodError(`Unable to remove card: ${error.message}`);
+      return;
+    }
+    setPaymentMethods((methods) => methods.filter((payment) => payment.id !== id));
     triggerSuccessBanner("Payment method removed.");
+  };
+
+  const saveAvatarUrl = async (nextAvatarUrl: string) => {
+    if (!user) return;
+
+    setIsSavingAvatar(true);
+    setAvatarError("");
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({ avatar_url: nextAvatarUrl })
+      .eq("id", user.id);
+
+    if (profileError) {
+      setAvatarError(`Unable to save avatar: ${profileError.message}`);
+      setIsSavingAvatar(false);
+      return;
+    }
+
+    const { error: authError } = await supabase.auth.updateUser({
+      data: { avatar_url: nextAvatarUrl },
+    });
+
+    if (authError) {
+      setAvatarError(`Avatar saved to profile, but header update failed: ${authError.message}`);
+    } else {
+      setAvatarUrl(nextAvatarUrl);
+      triggerSuccessBanner("Profile picture updated.");
+    }
+    setIsSavingAvatar(false);
+  };
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setAvatarError("Choose an image file.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarError("Choose an image smaller than 5 MB.");
+      return;
+    }
+    if (!user) return;
+
+    setIsSavingAvatar(true);
+    setAvatarError("");
+    const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${user.id}/avatar-${Date.now()}.${extension}`;
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(path, file, { contentType: file.type, upsert: true });
+
+    if (uploadError) {
+      setAvatarError(`Unable to upload avatar: ${uploadError.message}`);
+      setIsSavingAvatar(false);
+      return;
+    }
+
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    setIsSavingAvatar(false);
+    await saveAvatarUrl(data.publicUrl);
   };
 
   const toggleBrand = (brand: string) => {
@@ -366,9 +528,9 @@ export default function AccountPage() {
 
           <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 mb-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-5">
-              {user?.user_metadata?.avatar_url ? (
+              {avatarUrl ? (
                 <img
-                  src={user.user_metadata.avatar_url}
+                  src={avatarUrl}
                   alt={userName}
                   className="w-20 h-20 rounded-2xl object-cover border-2 border-orange-500 shadow-md"
                 />
@@ -443,6 +605,37 @@ export default function AccountPage() {
                   <span>Account Info</span>
                   <span className="text-xs text-orange-500">ID verified</span>
                 </h3>
+                <div>
+                  <span className="text-gray-400 font-bold block mb-2">PROFILE PICTURE</span>
+                  <div className="flex items-center gap-3">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="Profile avatar" className="h-14 w-14 rounded-full border-2 border-orange-500 object-cover" />
+                    ) : (
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 font-black text-white">
+                        {userInitials}
+                      </div>
+                    )}
+                    <label className="cursor-pointer rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-bold text-gray-700 hover:border-orange-400">
+                      {isSavingAvatar ? "Uploading..." : "Upload image"}
+                      <input type="file" accept="image/*" className="sr-only" disabled={isSavingAvatar} onChange={handleAvatarUpload} />
+                    </label>
+                  </div>
+                  {avatarError && <p role="alert" className="mt-2 text-xs font-medium text-red-600">{avatarError}</p>}
+                  <div className="mt-3 grid grid-cols-6 gap-2">
+                    {AVATAR_PRESETS.map((presetUrl, index) => (
+                      <button
+                        key={presetUrl}
+                        type="button"
+                        title={`Choose avatar ${index + 1}`}
+                        disabled={isSavingAvatar}
+                        onClick={() => saveAvatarUrl(presetUrl)}
+                        className={`h-9 w-9 overflow-hidden rounded-full border-2 ${avatarUrl === presetUrl ? "border-orange-500" : "border-transparent hover:border-orange-300"}`}
+                      >
+                        <img src={presetUrl} alt="" className="h-full w-full" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="space-y-3 text-xs">
                   <div>
                     <span className="text-gray-400 font-bold block">DISPLAY NAME</span>
@@ -670,6 +863,16 @@ export default function AccountPage() {
                       />
                     </div>
                   </div>
+                  <div>
+                    <label className="block font-bold text-gray-600 mb-1">Country</label>
+                    <input
+                      type="text"
+                      value={savedAddress.country}
+                      onChange={(e) => setSavedAddress({ ...savedAddress, country: e.target.value })}
+                      placeholder="Select country"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 font-semibold text-gray-900 outline-none focus:border-orange-500"
+                    />
+                  </div>
                   <div className="flex gap-3 pt-2">
                     <button
                       type="submit"
@@ -708,6 +911,12 @@ export default function AccountPage() {
                   </button>
                 )}
               </div>
+
+              {paymentMethodError && (
+                <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600">
+                  {paymentMethodError}
+                </p>
+              )}
 
               {isAddingCard && (
                 <form onSubmit={handleAddPaymentMethod} className="bg-gray-50 p-5 rounded-2xl border border-orange-200 space-y-4 text-xs animate-fadeIn">
@@ -755,7 +964,7 @@ export default function AccountPage() {
                         maxLength={19}
                         placeholder="•••• •••• •••• 1234"
                         value={newCard.cardNumber}
-                        onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })}
+                        onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value.replace(/[^0-9 ]/g, "") })}
                         className="w-full bg-white border border-gray-200 rounded-xl p-3 font-semibold text-gray-900 outline-none focus:border-orange-500"
                       />
                     </div>
@@ -770,7 +979,7 @@ export default function AccountPage() {
                         placeholder="MM/YY"
                         maxLength={5}
                         value={newCard.expiry}
-                        onChange={(e) => setNewCard({ ...newCard, expiry: e.target.value })}
+                        onChange={(e) => setNewCard({ ...newCard, expiry: e.target.value.replace(/[^0-9/]/g, "") })}
                         className="w-full bg-white border border-gray-200 rounded-xl p-3 font-semibold text-gray-900 outline-none focus:border-orange-500"
                       />
                     </div>
@@ -936,7 +1145,7 @@ export default function AccountPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {wishlistProducts.map((product) => (
+                  {wishlistProducts.map((product: any) => (
                     <div key={product.id} className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm relative group">
                       <button
                         onClick={() => removeWishlist(product.id)}
